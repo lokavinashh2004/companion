@@ -1,0 +1,134 @@
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: env(safe-area-inset-top);
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.stepText {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.label {
+  margin: var(--space-2) 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: var(--tap);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.option:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+.optionSelected {
+  border-color: var(--primary);
+  background: var(--surface-alt);
+}
+.optionTitle {
+  font-weight: 700;
+}
+.optionDesc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.med {
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.medLegend {
+  padding: 0 var(--space-1);
+  font-weight: 700;
+}
+.timeRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+.timeRow > :first-child {
+  flex: 1;
+}
+
+.steps {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.platforms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.platform {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+}
+.iosFirst .ios {
+  order: -1;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  position: sticky;
+  bottom: 0;
+  padding: var(--space-3) 0 calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--bg);
+}

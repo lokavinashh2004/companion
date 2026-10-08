@@ -1,0 +1,24 @@
+# Runs every check on each push and pull request. Vercel and Render deploy on their own.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - run: npm run install:all
+      - run: npm run verify
+      - run: npm --prefix backend run build
+      - run: npm --prefix frontend run build

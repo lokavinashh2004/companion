@@ -1,0 +1,47 @@
+# Render Blueprint for the backend (free web service).
+# In Render: New → Blueprint → pick this repo (Render reads render.yaml at the repo root).
+# Secrets marked sync: false are entered once in the Render dashboard (never committed).
+services:
+  - type: web
+    name: companion-backend
+    runtime: node
+    plan: free
+    region: singapore          # closest Render region to India
+    rootDir: backend
+    buildCommand: npm ci --include=dev && npm run build && npm run prefetch-model
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: MODEL_DIR
+        value: ./models
+      - key: LLM_DAILY_BUDGET
+        value: "50"
+      - key: ALLOWED_ORIGINS        # your Vercel URL(s), comma-separated
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false
+      - key: MONGODB_URI            # MongoDB Atlas connection string (free M0 cluster)
+        sync: false
+      - key: MONGODB_DB
+        value: companion
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: USDA_API_KEY
+        sync: false
+      - key: CRON_SECRET
+        sync: false
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        sync: false
+      - key: MED_ACTION_SECRET
+        sync: false

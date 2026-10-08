@@ -1,0 +1,10 @@
+{
+  "insightsPage": {
+    "recap": "Your weekly recap",
+    "trends": "Trends",
+    "labsHint": "Values from your reports, over time.",
+    "openLabs": "Open lab results",
+    "cycleLabel": "Cycle {{n}}",
+    "patternHint": "Gentle patterns from your own logs, not a diagnosis."
+  }
+}

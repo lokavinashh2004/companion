@@ -1,0 +1,328 @@
+/* Chat pieces: bubbles, action cards, composer, crisis card, photo sheet, month picker. */
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 100%;
+}
+.itemMine {
+  align-items: flex-end;
+}
+.itemBot {
+  align-items: flex-start;
+}
+
+.bubble {
+  max-width: min(85%, 560px);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.bubbleMine {
+  background: var(--bubble-user);
+  color: var(--on-bubble-user);
+  border-bottom-right-radius: var(--radius-sm);
+}
+.bubbleBot {
+  background: var(--bubble-bot);
+  color: var(--on-bubble-bot);
+  border-bottom-left-radius: var(--radius-sm);
+}
+.bubbleSoft {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  font-size: 0.95rem;
+}
+
+.status {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0 var(--space-2);
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(92%, 420px);
+}
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.cardDone {
+  border-style: dashed;
+  color: var(--text-muted);
+  padding: var(--space-3);
+}
+.cardAsk {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-color: var(--primary);
+}
+.cardIcon {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--calm);
+  color: var(--on-calm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardIconPeriod {
+  background: var(--predicted);
+  color: var(--primary);
+}
+.cardText {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+.cardHint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.cardAction {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+.cardConfirm {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.cardAction:disabled,
+.cardConfirm:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Composer: one rounded box holding camera, text and send */
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  padding: 3px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.composer:focus-within {
+  border-color: var(--primary);
+}
+.camera {
+  flex: none;
+  color: var(--text-muted);
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  max-height: 9.5em;
+  resize: none;
+  padding: 10px var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  line-height: 1.4;
+  overflow-y: auto;
+}
+.input:focus-visible {
+  outline: none;
+}
+.send {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: calc(var(--radius-lg) - 4px);
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.send:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.send:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* Crisis */
+.crisis {
+  width: 100%;
+}
+.crisisActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.callLink {
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface);
+  font-weight: 700;
+  text-decoration: none;
+}
+.callLink:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* Photo sheet */
+.pickRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.fileButton {
+  flex: 1 1 180px;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.fileButtonAlt {
+  background: var(--chip);
+  color: var(--on-chip);
+}
+.fileButton:focus-within {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+.analyzing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+}
+.foodList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.foodItem {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  grid-template-areas:
+    'name name remove'
+    'qty unit unit';
+  gap: var(--space-2);
+  align-items: end;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+.foodName {
+  grid-area: name;
+}
+.foodQty {
+  grid-area: qty;
+}
+.foodUnit {
+  grid-area: unit;
+}
+.foodRemove {
+  grid-area: remove;
+}
+
+/* Month picker */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.calendarTitle {
+  font-weight: 700;
+  text-align: center;
+}
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+.weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.day {
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.day:hover:not(:disabled) {
+  background: var(--surface-alt);
+}
+.day:disabled {
+  color: var(--border);
+  cursor: default;
+}
+.day:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: -2px;
+}
+.daySelected,
+.daySelected:hover:not(:disabled) {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+}

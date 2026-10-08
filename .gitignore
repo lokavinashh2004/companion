@@ -1,0 +1,18 @@
+# Dependencies and builds
+node_modules/
+dist/
+dev-dist/
+*.tsbuildinfo
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Backend runtime files
+backend/models/
+backend/eval/
+
+# OS / editor
+.DS_Store
+*.pem

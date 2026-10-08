@@ -1,0 +1,21 @@
+// Every table holding her data (all cascade from app_users). Used by export, delete and the DB test.
+export const USER_TABLES = [
+  'profile',
+  'profile_facts',
+  'chat_messages',
+  'push_log',
+  'food_logs',
+  'period_logs',
+  'cycle_predictions',
+  'symptom_logs',
+  'mood_logs',
+  'lifestyle_logs',
+  'weight_logs',
+  'medications',
+  'med_intake',
+  'lab_results',
+  'daily_summaries',
+  'insights',
+  'push_subscriptions',
+  'reminder_log',
+] as const;

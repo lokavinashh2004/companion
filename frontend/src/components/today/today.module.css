@@ -1,0 +1,89 @@
+.score {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+}
+.idea {
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--calm);
+  color: var(--on-calm);
+}
+.meal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.mealTitle {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  border-bottom: 1px solid var(--border);
+}
+.item:last-child {
+  border-bottom: 0;
+}
+.itemText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.qty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--on-chip);
+}
+.kcal {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.big {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+.label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.flat {
+  margin: 0;
+}

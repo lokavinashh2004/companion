@@ -1,0 +1,20 @@
+{
+  "todayPage": {
+    "waterUndo": "−250 ml",
+    "waterUndoLabel": "Remove 250 ml",
+    "tellChat": "Tell me in chat",
+    "addMeds": "Add medicines",
+    "doseLabel": "{{name}} · {{time}}",
+    "weightLabel": "Weight (kg)",
+    "weightHint": "Only for your own trend. Skip it any week.",
+    "weightInvalid": "Please enter a weight between 20 and 300 kg.",
+    "weightSaved": "Weight saved ✓",
+    "seeInsights": "See your insights",
+    "openCycle": "Open cycle",
+    "addSleep": "Add sleep",
+    "skipSleep": "Skip sleep",
+    "pickOne": "Pick at least one thing to log.",
+    "kcalTotal": "About {{count}} kcal so far",
+    "moodNow": "Feeling {{value}} of 5"
+  }
+}

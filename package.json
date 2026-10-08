@@ -1,0 +1,12 @@
+{
+  "name": "companion",
+  "private": true,
+  "description": "Companion: PCOS tracker and bilingual friend. frontend/ deploys to Vercel, backend/ to Render.",
+  "scripts": {
+    "install:all": "npm --prefix backend ci && npm --prefix frontend ci",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "api:types": "npm --prefix backend run openapi && npm --prefix frontend run api:types",
+    "verify": "npm --prefix backend run typecheck && npm --prefix backend test && npm --prefix frontend run typecheck && npm --prefix frontend run lint && npm --prefix frontend test && npm --prefix frontend run check:locales && sh backend/scripts/check-secrets.sh"
+  }
+}

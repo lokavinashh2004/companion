@@ -1,0 +1,182 @@
+/* Shared styles for the "Me" area (Me hub, Settings, Remembers, Medicines, Labs, Insights). */
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+}
+.linkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+}
+.linkRow:last-child {
+  border-bottom: 0;
+}
+.linkRow:hover .linkLabel {
+  color: var(--primary);
+}
+.linkRow:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.linkIcon {
+  font-size: 1.25rem;
+  width: 1.75rem;
+  text-align: center;
+}
+.linkLabel {
+  flex: 1;
+  min-width: 0;
+}
+.chevron {
+  color: var(--text-muted);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.sectionTitle {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.badgeWithin {
+  background: var(--calm);
+  color: var(--on-calm);
+}
+.badgeOutside {
+  background: var(--surface-alt);
+  color: var(--text);
+  border-color: var(--warning);
+}
+
+.resultRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.resultRow:last-child {
+  border-bottom: 0;
+}
+.resultMain {
+  flex: 1;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+.value {
+  font-weight: 600;
+}
+
+.factRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.factRow:last-child {
+  border-bottom: 0;
+}
+.factText {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.medRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.medRow:last-child {
+  border-bottom: 0;
+}
+.medName {
+  font-weight: 600;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.details summary {
+  cursor: pointer;
+  padding: var(--space-2) 0;
+  font-weight: 600;
+}
+
+.steps {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat:last-child {
+  border-bottom: 0;
+}
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.insightGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+@media (min-width: 900px) {
+  .insightGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  .span2 {
+    grid-column: 1 / -1;
+  }
+}
+
+.error {
+  color: var(--danger);
+  margin: 0;
+  font-size: 0.875rem;
+}

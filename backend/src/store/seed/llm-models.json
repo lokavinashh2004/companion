@@ -1,0 +1,122 @@
+{
+ "_about": [
+  "Starter list of OpenRouter :free models (unverified: openrouter.ai was unreachable from the build machine).",
+  "Regenerate with npm run models:seed; run npm run models:eval to add tamil_script / tanglish caps."
+ ],
+ "models": [
+  {
+   "model_id": "google/gemini-2.0-flash-exp:free",
+   "priority": 1,
+   "caps": [
+    "chat",
+    "json",
+    "vision"
+   ],
+   "enabled": true,
+   "supports_response_format": true,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "deepseek/deepseek-chat-v3-0324:free",
+   "priority": 2,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": true,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "meta-llama/llama-4-maverick:free",
+   "priority": 3,
+   "caps": [
+    "chat",
+    "json",
+    "vision"
+   ],
+   "enabled": true,
+   "supports_response_format": true,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "google/gemma-3-27b-it:free",
+   "priority": 4,
+   "caps": [
+    "chat",
+    "json",
+    "vision"
+   ],
+   "enabled": true,
+   "supports_response_format": false,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "meta-llama/llama-3.3-70b-instruct:free",
+   "priority": 5,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": true,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "qwen/qwen3-235b-a22b:free",
+   "priority": 6,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": false,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "mistralai/mistral-small-3.2-24b-instruct:free",
+   "priority": 7,
+   "caps": [
+    "chat",
+    "json",
+    "vision"
+   ],
+   "enabled": true,
+   "supports_response_format": true,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "z-ai/glm-4.5-air:free",
+   "priority": 8,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": false,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "moonshotai/kimi-k2:free",
+   "priority": 9,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": false,
+   "notes": "unverified starter"
+  },
+  {
+   "model_id": "openai/gpt-oss-20b:free",
+   "priority": 10,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": true,
+   "supports_response_format": false,
+   "notes": "unverified starter"
+  }
+ ]
+}

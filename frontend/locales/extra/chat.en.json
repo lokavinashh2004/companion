@@ -1,0 +1,15 @@
+{
+  "chatPage": {
+    "loadEarlier": "Load earlier messages",
+    "removed": "Removed: {{label}}",
+    "undoAria": "Undo: {{label}}",
+    "conversation": "Conversation with {{name}}",
+    "quickReplies": "Quick replies",
+    "languages": "Tamil · English · Tanglish",
+    "closePanel": "Close chat",
+    "openPanel": "Talk to Companion",
+    "quickChat": "Quick chat",
+    "privacyNote": "Only you can see your logs. Export or delete them any time from Me.",
+    "periodHint": "This updates your cycle and the next-period range."
+  }
+}

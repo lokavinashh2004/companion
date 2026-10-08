@@ -1,0 +1,58 @@
+{
+  "mePage": {
+    "privacyNote": "Everything here is private to you.",
+    "saveName": "Save name",
+    "nameInvalid": "Use 1 to 30 characters.",
+    "saveTimes": "Save times",
+    "notifications": {
+      "title": "Notifications",
+      "checking": "Checking this browser…",
+      "offBody": "Turn on notifications for gentle check-ins and medicine reminders on this device.",
+      "turnOn": "Turn on",
+      "onBody": "Notifications are on for this device.",
+      "test": "Send a test",
+      "turnOff": "Turn off",
+      "deniedBody": "Notifications are blocked for this site. To allow them, open the site settings in your browser (the icon next to the address bar), set Notifications to Allow, then reload this page.",
+      "installBody": "On iPhone, notifications work only from the home-screen app:",
+      "installStep1": "In Safari, tap the Share button.",
+      "installStep2": "Choose “Add to Home Screen”.",
+      "installStep3": "Open Companion from the new icon and turn notifications on here.",
+      "unsupportedBody": "This browser can't show notifications. Try Chrome, Edge or Firefox, or the home-screen app on iPhone.",
+      "notConfiguredBody": "Notifications aren't set up for this website yet.",
+      "failed": "Couldn't change notifications. Please try again.",
+      "results": {
+        "sent": "Test sent. It should appear in a moment.",
+        "no_subscription": "This device isn't subscribed yet. Turn notifications off and on again.",
+        "quiet_hours": "It's your quiet hours, so nothing was sent.",
+        "cap": "You've reached today's notification limit.",
+        "error": "The test couldn't be delivered. Please try again.",
+        "disabled": "Notifications aren't set up on the server yet."
+      }
+    },
+    "facts": {
+      "length": "Use 3 to 300 characters.",
+      "editLabel": "Edit this note"
+    },
+    "meds": {
+      "edit": "Edit medicine",
+      "nameRequired": "Add a name.",
+      "maxTimes": "Up to 8 reminder times.",
+      "duplicateTime": "That time is already added.",
+      "noTimes": "No reminder times",
+      "removeTime": "Remove {{time}}",
+      "newTime": "New reminder time",
+      "stopTitle": "Stop {{name}}?",
+      "stopBody": "Reminders stop and today is saved as the stop date. Your history stays.",
+      "stopped": "Stopped medicines ({{count}})",
+      "stoppedOn": "Stopped on {{date}}"
+    },
+    "labs": {
+      "valueInvalid": "Enter a number.",
+      "dateInvalid": "Pick a date that isn't in the future.",
+      "customRequired": "Add the test name.",
+      "deleteConfirm": "Delete this result?",
+      "trend": "{{name}} over time",
+      "insightsLink": "See insights"
+    }
+  }
+}

@@ -1,0 +1,190 @@
+/* Soft, warm pastel theme. Same palette as the app (contrast ≥ 4.5:1, checked in theme.test.ts). */
+:root {
+  --bg: #fff9f7;
+  --surface: #ffffff;
+  --surface-alt: #f8edf1;
+  --border: #eadce1;
+  --text: #2b2228;
+  --text-muted: #5e5159;
+  --primary: #a63f64;
+  --on-primary: #ffffff;
+  --accent: #3e6e66;
+  --bubble-user: #a63f64;
+  --on-bubble-user: #ffffff;
+  --bubble-bot: #f3e6eb;
+  --on-bubble-bot: #2b2228;
+  --period: #d9667f;
+  --predicted: #f6d3dc;
+  --success: #2f6b4f;
+  --warning: #8a5a00;
+  --danger: #a3262e;
+  --calm: #e7f0ee;
+  --on-calm: #24423d;
+  --chip: #fff4f7;
+  --chip-border: #e8c3d0;
+  --chat-bg: #fffbfa;
+  --on-chip: #4a2e3b;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --tap: 48px;
+  --font: 'Noto Sans', 'Noto Sans Tamil', system-ui, sans-serif;
+  --font-ta: 'Noto Sans Tamil', 'Noto Sans', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #18141a;
+    --surface: #221c25;
+    --surface-alt: #2c2430;
+    --border: #3b3240;
+    --text: #f5eef2;
+    --text-muted: #c9bcc4;
+    --primary: #f09ab5;
+    --on-primary: #2a0e19;
+    --accent: #8fcbc0;
+    --bubble-user: #7c3552;
+    --on-bubble-user: #fff5f8;
+    --bubble-bot: #2e2632;
+    --on-bubble-bot: #f5eef2;
+    --period: #e27a92;
+    --predicted: #4a2f3a;
+    --success: #8fd3ae;
+    --warning: #f2c46d;
+    --danger: #ff9b9b;
+    --calm: #22312e;
+    --on-calm: #d4ede7;
+    --chip: #33293a;
+    --chip-border: #4a3a50;
+    --chat-bg: #1d181f;
+    --on-chip: #f2e4ec;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #18141a;
+  --surface: #221c25;
+  --surface-alt: #2c2430;
+  --border: #3b3240;
+  --text: #f5eef2;
+  --text-muted: #c9bcc4;
+  --primary: #f09ab5;
+  --on-primary: #2a0e19;
+  --accent: #8fcbc0;
+  --bubble-user: #7c3552;
+  --on-bubble-user: #fff5f8;
+  --bubble-bot: #2e2632;
+  --on-bubble-bot: #f5eef2;
+  --period: #e27a92;
+  --predicted: #4a2f3a;
+  --success: #8fd3ae;
+  --warning: #f2c46d;
+  --danger: #ff9b9b;
+  --calm: #22312e;
+  --on-calm: #d4ede7;
+  --chip: #33293a;
+  --chip-border: #4a3a50;
+  --chat-bg: #1d181f;
+  --on-chip: #f2e4ec;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+html[lang='ta'] body {
+  font-family: var(--font-ta);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+h2 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--primary);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 10;
+  background: var(--surface);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

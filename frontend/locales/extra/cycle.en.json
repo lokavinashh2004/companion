@@ -1,0 +1,19 @@
+{
+  "cyclePage": {
+    "cyclesUsed_one": "Based on {{count}} past cycle",
+    "cyclesUsed_other": "Based on {{count}} past cycles",
+    "calendar": "Period calendar",
+    "legend": "Legend",
+    "legendToday": "Today",
+    "saved": "Saved ✓",
+    "saveError": "Couldn't save that. Please check the dates and try again.",
+    "startHint": "Log the first day of your period.",
+    "endHint": "Your period has been ongoing since {{date}}.",
+    "editTitle": "Edit period",
+    "lastedDays": "How many days did it last?",
+    "endDate": "End date",
+    "saveEnd": "Save end date",
+    "confirmDelete": "Yes, delete",
+    "range": "{{start}} → {{end}}"
+  }
+}

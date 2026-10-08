@@ -1,0 +1,3439 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Companion API",
+    "version": "0.2.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "firebase": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Firebase ID token"
+      }
+    },
+    "schemas": {
+      "Health": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "store": {
+            "type": "string",
+            "enum": [
+              "memory",
+              "mongo"
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "version",
+          "store"
+        ]
+      },
+      "Me": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          }
+        },
+        "required": [
+          "uid",
+          "email",
+          "profile"
+        ]
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "companion_name": {
+            "type": "string"
+          },
+          "display_language": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "en",
+              "ta",
+              "tanglish"
+            ]
+          },
+          "ui_language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "ta"
+            ]
+          },
+          "persona_tone": {
+            "type": "string",
+            "enum": [
+              "bestie",
+              "calm",
+              "coach"
+            ]
+          },
+          "tamil_address_form": {
+            "type": "string",
+            "enum": [
+              "casual",
+              "respectful"
+            ]
+          },
+          "calorie_display": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "diet_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "typical_cycle_length": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "onboarding_done": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "morning_checkin": {
+            "type": "string"
+          },
+          "evening_checkin": {
+            "type": "string"
+          },
+          "quiet_start": {
+            "type": "string"
+          },
+          "quiet_end": {
+            "type": "string"
+          },
+          "water_nudges": {
+            "type": "boolean"
+          },
+          "weight_tracking": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "companion_name",
+          "display_language",
+          "ui_language",
+          "persona_tone",
+          "tamil_address_form",
+          "calorie_display",
+          "goals",
+          "diet_type",
+          "allergies",
+          "typical_cycle_length",
+          "onboarding_done",
+          "timezone",
+          "morning_checkin",
+          "evening_checkin",
+          "quiet_start",
+          "quiet_end",
+          "water_nudges",
+          "weight_tracking"
+        ]
+      },
+      "ProfilePatch": {
+        "type": "object",
+        "properties": {
+          "companion_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "display_language": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "en",
+              "ta",
+              "tanglish"
+            ]
+          },
+          "ui_language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "ta"
+            ]
+          },
+          "persona_tone": {
+            "type": "string",
+            "enum": [
+              "bestie",
+              "calm",
+              "coach"
+            ]
+          },
+          "tamil_address_form": {
+            "type": "string",
+            "enum": [
+              "casual",
+              "respectful"
+            ]
+          },
+          "calorie_display": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "goals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "maxItems": 10
+          },
+          "diet_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "maxItems": 20
+          },
+          "typical_cycle_length": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 15,
+            "maximum": 120
+          },
+          "timezone": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "morning_checkin": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+          },
+          "evening_checkin": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+          },
+          "quiet_start": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+          },
+          "quiet_end": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+          },
+          "water_nudges": {
+            "type": "boolean"
+          },
+          "weight_tracking": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Onboarding": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "object",
+            "properties": {
+              "companion_name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 30
+              },
+              "display_language": {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "en",
+                  "ta",
+                  "tanglish"
+                ]
+              },
+              "ui_language": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "ta"
+                ]
+              },
+              "persona_tone": {
+                "type": "string",
+                "enum": [
+                  "bestie",
+                  "calm",
+                  "coach"
+                ]
+              },
+              "tamil_address_form": {
+                "type": "string",
+                "enum": [
+                  "casual",
+                  "respectful"
+                ]
+              },
+              "calorie_display": {
+                "type": "string",
+                "enum": [
+                  "show",
+                  "hide"
+                ]
+              },
+              "goals": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 60
+                },
+                "maxItems": 10
+              },
+              "diet_type": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 40
+              },
+              "allergies": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "maxItems": 20
+              },
+              "typical_cycle_length": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 15,
+                "maximum": 120
+              },
+              "timezone": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "morning_checkin": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+              },
+              "evening_checkin": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+              },
+              "quiet_start": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+              },
+              "quiet_end": {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d)?$"
+              },
+              "water_nudges": {
+                "type": "boolean"
+              },
+              "weight_tracking": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "medications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MedInput"
+            },
+            "maxItems": 15
+          },
+          "last_period_start": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": [
+          "profile",
+          "medications",
+          "last_period_start"
+        ],
+        "additionalProperties": false
+      },
+      "MedInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "dose": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          },
+          "schedule_times": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "maxItems": 8
+          }
+        },
+        "required": [
+          "name",
+          "dose",
+          "schedule_times"
+        ],
+        "additionalProperties": false
+      },
+      "ChatList": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatMessage"
+            }
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "messages",
+          "has_more"
+        ]
+      },
+      "ChatMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant",
+              "system"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "done",
+              "queued",
+              "failed"
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MessageMeta"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "role",
+          "content",
+          "status",
+          "meta"
+        ]
+      },
+      "MessageMeta": {
+        "type": "object",
+        "properties": {
+          "reply_to": {
+            "type": "string"
+          },
+          "logs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string",
+                  "enum": [
+                    "food_logs",
+                    "symptom_logs",
+                    "mood_logs",
+                    "med_intake",
+                    "lifestyle_logs"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "table",
+                "id",
+                "label"
+              ]
+            }
+          },
+          "pending": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "period_start",
+                    "period_end"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "flow": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "spotting",
+                    "light",
+                    "medium",
+                    "heavy",
+                    null
+                  ]
+                },
+                "pain": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "date",
+                "flow",
+                "pain"
+              ]
+            }
+          },
+          "flags": {
+            "type": "object",
+            "properties": {
+              "crisis": {
+                "type": "boolean"
+              },
+              "red_flag": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crisis",
+              "red_flag"
+            ]
+          },
+          "fallback": {
+            "type": "boolean"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "undone": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "confirmed": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SendResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "done",
+              "queued"
+            ]
+          },
+          "message": {
+            "$ref": "#/components/schemas/ChatMessage"
+          },
+          "reply": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatMessage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notice": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatMessage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "crisis": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "message",
+          "reply",
+          "notice",
+          "crisis"
+        ]
+      },
+      "SendMessage": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "client_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "text",
+          "client_id"
+        ]
+      },
+      "MessageUpdated": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/ChatMessage"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "UndoLogRequest": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "log_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message_id",
+          "log_id"
+        ]
+      },
+      "PeriodChipRequest": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5
+          }
+        },
+        "required": [
+          "message_id",
+          "index"
+        ]
+      },
+      "PhotoResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "unavailable"
+            ]
+          },
+          "is_food": {
+            "type": "boolean"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "estimated_grams": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "quantity",
+                "unit",
+                "estimated_grams"
+              ]
+            }
+          }
+        },
+        "required": [
+          "status",
+          "is_food",
+          "items"
+        ]
+      },
+      "PhotoRequest": {
+        "type": "object",
+        "properties": {
+          "image_base64": {
+            "type": "string",
+            "minLength": 100,
+            "maxLength": 3000000
+          },
+          "meal": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "breakfast",
+              "lunch",
+              "snack",
+              "dinner",
+              "other",
+              null
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "image_base64"
+        ]
+      },
+      "FoodLogs": {
+        "type": "object",
+        "properties": {
+          "logs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FoodLog"
+            }
+          }
+        },
+        "required": [
+          "logs"
+        ]
+      },
+      "FoodLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "meal": {
+            "type": "string",
+            "enum": [
+              "breakfast",
+              "lunch",
+              "snack",
+              "dinner",
+              "other"
+            ]
+          },
+          "item_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grams": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "kcal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "protein_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "carbs_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "fiber_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "added_sugar_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "veg_g": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "gi_band": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "unknown"
+            ]
+          },
+          "is_estimate": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "text",
+              "photo",
+              "manual"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "day",
+          "meal",
+          "item_name",
+          "quantity",
+          "unit",
+          "grams",
+          "kcal",
+          "protein_g",
+          "carbs_g",
+          "fiber_g",
+          "added_sugar_g",
+          "veg_g",
+          "gi_band",
+          "is_estimate",
+          "source"
+        ]
+      },
+      "LogFoods": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "quantity": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 50
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 20
+                },
+                "grams": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 1,
+                  "maximum": 2000,
+                  "default": null
+                }
+              },
+              "required": [
+                "name",
+                "quantity",
+                "unit"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12
+          },
+          "meal": {
+            "type": "string",
+            "enum": [
+              "breakfast",
+              "lunch",
+              "snack",
+              "dinner",
+              "other"
+            ]
+          },
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "photo",
+              "manual"
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "meal",
+          "day",
+          "source"
+        ]
+      },
+      "Ok": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "Today": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "calorie_display": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/CycleStatus"
+          },
+          "prediction": {
+            "$ref": "#/components/schemas/Prediction"
+          },
+          "foods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FoodLog"
+            }
+          },
+          "score": {
+            "$ref": "#/components/schemas/Score"
+          },
+          "moods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "mood": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "energy": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "stress": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "mood",
+                "energy",
+                "stress"
+              ]
+            }
+          },
+          "symptoms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "symptom": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "symptom",
+                "severity"
+              ]
+            }
+          },
+          "lifestyle": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "water_ml": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "sleep_hours": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "exercise_minutes": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "steps": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "water_ml",
+              "sleep_hours",
+              "exercise_minutes",
+              "steps"
+            ]
+          },
+          "meds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "medication": {
+                  "$ref": "#/components/schemas/Medication"
+                },
+                "doses": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dose"
+                  }
+                }
+              },
+              "required": [
+                "medication",
+                "doses"
+              ]
+            }
+          },
+          "weight_due": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "day",
+          "calorie_display",
+          "status",
+          "prediction",
+          "foods",
+          "score",
+          "moods",
+          "symptoms",
+          "lifestyle",
+          "meds",
+          "weight_due"
+        ]
+      },
+      "CycleStatus": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "none",
+              "period",
+              "cycle",
+              "late"
+            ]
+          },
+          "cycle_day": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "period_day": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "days_late": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "phase": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "menstrual",
+              "follicular",
+              "luteal",
+              "late",
+              "unknown",
+              null
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "cycle_day",
+          "period_day",
+          "days_late",
+          "phase"
+        ]
+      },
+      "Prediction": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "earliest": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "likely": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "latest": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "cycles_used": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "earliest",
+          "likely",
+          "latest",
+          "confidence",
+          "cycles_used"
+        ]
+      },
+      "Score": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "score": {
+            "type": "integer"
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "protein",
+                "fiber",
+                "low_gi",
+                "low_sugar",
+                "veggies"
+              ]
+            }
+          },
+          "idea": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "add_protein",
+              "add_fiber",
+              "add_veggies",
+              "swap_low_gi",
+              null
+            ]
+          },
+          "kcal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "score",
+          "highlights",
+          "idea",
+          "kcal"
+        ]
+      },
+      "Medication": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dose": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "schedule_times": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "start_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "dose",
+          "schedule_times",
+          "active",
+          "start_date",
+          "end_date"
+        ]
+      },
+      "Dose": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "taken": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "time",
+          "taken"
+        ]
+      },
+      "Water": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "ml": {
+            "type": "integer",
+            "minimum": -2000,
+            "maximum": 2000
+          }
+        },
+        "required": [
+          "day",
+          "ml"
+        ]
+      },
+      "QuickLog": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "mood": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 5
+          },
+          "energy": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 5
+          },
+          "stress": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 5
+          },
+          "symptoms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "acne",
+                "hair_fall",
+                "hirsutism",
+                "bloating",
+                "cramps",
+                "cravings",
+                "fatigue",
+                "headache",
+                "pelvic_pain",
+                "breast_tenderness",
+                "spotting",
+                "fainting",
+                "other"
+              ]
+            },
+            "maxItems": 12
+          },
+          "sleep_hours": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 24
+          }
+        },
+        "required": [
+          "day"
+        ]
+      },
+      "Weight": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "weight_kg": {
+            "type": "number",
+            "minimum": 20,
+            "maximum": 300
+          }
+        },
+        "required": [
+          "day",
+          "weight_kg"
+        ]
+      },
+      "Cycle": {
+        "type": "object",
+        "properties": {
+          "today": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CycleStatus"
+          },
+          "prediction": {
+            "$ref": "#/components/schemas/Prediction"
+          },
+          "periods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Period"
+            }
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Insight"
+            }
+          }
+        },
+        "required": [
+          "today",
+          "status",
+          "prediction",
+          "periods",
+          "insights"
+        ]
+      },
+      "Period": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "flow": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "spotting",
+              "light",
+              "medium",
+              "heavy",
+              null
+            ]
+          },
+          "pain": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "auto_closed": {
+            "type": "boolean"
+          },
+          "length_days": {
+            "type": "integer"
+          },
+          "cycle_length": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "start_date",
+          "end_date",
+          "flow",
+          "pain",
+          "auto_closed",
+          "length_days",
+          "cycle_length"
+        ]
+      },
+      "Insight": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "delay",
+              "weekly",
+              "red_flag",
+              "pattern"
+            ]
+          },
+          "payload": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "dismissed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "day",
+          "type",
+          "payload",
+          "dismissed"
+        ]
+      },
+      "LogPeriod": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "start",
+              "end"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "flow": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "spotting",
+              "light",
+              "medium",
+              "heavy",
+              null
+            ]
+          },
+          "pain": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "kind",
+          "date"
+        ]
+      },
+      "PeriodPatch": {
+        "type": "object",
+        "properties": {
+          "end_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "flow": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "spotting",
+              "light",
+              "medium",
+              "heavy",
+              null
+            ]
+          },
+          "pain": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 10
+          },
+          "auto_closed": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "Medications": {
+        "type": "object",
+        "properties": {
+          "medications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Medication"
+            }
+          }
+        },
+        "required": [
+          "medications"
+        ]
+      },
+      "MedPatch": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "dose": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          },
+          "schedule_times": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "maxItems": 8
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DoseTaken": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+          },
+          "taken": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "day",
+          "time",
+          "taken"
+        ]
+      },
+      "Labs": {
+        "type": "object",
+        "properties": {
+          "labs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lab"
+            }
+          }
+        },
+        "required": [
+          "labs"
+        ]
+      },
+      "Lab": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "test_date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "test_name": {
+            "type": "string",
+            "enum": [
+              "testosterone",
+              "AMH",
+              "LH",
+              "FSH",
+              "fasting_insulin",
+              "HbA1c",
+              "TSH",
+              "vitamin_D",
+              "other"
+            ]
+          },
+          "test_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reference_range": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "within_range": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "test_date",
+          "test_name",
+          "test_label",
+          "value",
+          "unit",
+          "reference_range",
+          "within_range"
+        ]
+      },
+      "LabInput": {
+        "type": "object",
+        "properties": {
+          "test_date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "test_name": {
+            "type": "string",
+            "enum": [
+              "testosterone",
+              "AMH",
+              "LH",
+              "FSH",
+              "fasting_insulin",
+              "HbA1c",
+              "TSH",
+              "vitamin_D",
+              "other"
+            ]
+          },
+          "test_label": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 60
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 20
+          },
+          "reference_range": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "test_date",
+          "test_name",
+          "test_label",
+          "value",
+          "unit",
+          "reference_range"
+        ],
+        "additionalProperties": false
+      },
+      "Facts": {
+        "type": "object",
+        "properties": {
+          "facts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fact"
+            }
+          }
+        },
+        "required": [
+          "facts"
+        ]
+      },
+      "Fact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "fact": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "preference",
+              "person",
+              "event",
+              "health",
+              "other"
+            ]
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fact",
+          "category",
+          "updated_at"
+        ]
+      },
+      "FactPatch": {
+        "type": "object",
+        "properties": {
+          "fact": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "fact"
+        ]
+      },
+      "Insights": {
+        "type": "object",
+        "properties": {
+          "insights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Insight"
+            }
+          },
+          "cycle_lengths": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "balance_trend": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "day",
+                "value"
+              ]
+            }
+          },
+          "mood_trend": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "day",
+                "value"
+              ]
+            }
+          },
+          "weight_trend": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "day",
+                "value"
+              ]
+            }
+          },
+          "week": {
+            "type": "object",
+            "properties": {
+              "days_with_food_logged": {
+                "type": "integer"
+              },
+              "avg_balance_score": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "avg_mood": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "avg_sleep_hours": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "exercise_minutes_total": {
+                "type": "number"
+              },
+              "medication_doses_taken": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "days_with_food_logged",
+              "avg_balance_score",
+              "avg_mood",
+              "avg_sleep_hours",
+              "exercise_minutes_total",
+              "medication_doses_taken"
+            ]
+          }
+        },
+        "required": [
+          "insights",
+          "cycle_lengths",
+          "balance_trend",
+          "mood_trend",
+          "weight_trend",
+          "week"
+        ]
+      },
+      "PushSubscription": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "maxLength": 1000,
+            "format": "uri"
+          },
+          "keys": {
+            "type": "object",
+            "properties": {
+              "p256dh": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "auth": {
+                "type": "string",
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "p256dh",
+              "auth"
+            ]
+          }
+        },
+        "required": [
+          "endpoint",
+          "keys"
+        ]
+      },
+      "PushEndpoint": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "maxLength": 1000,
+            "format": "uri"
+          }
+        },
+        "required": [
+          "endpoint"
+        ]
+      },
+      "PushTestResult": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "MedAction": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 1000
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "taken",
+              "snooze"
+            ]
+          }
+        },
+        "required": [
+          "token",
+          "action"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is up",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The signed-in user and her profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "profile"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfilePatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/onboarding": {
+      "post": {
+        "tags": [
+          "profile"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Onboarding"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Onboarding saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/messages": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "before",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages, oldest first (the latest page, or older than `before`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reply, or a queued notice if no model is available right now",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/undo": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UndoLogRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The log was removed (or restored, for water/sleep/exercise)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageUpdated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/confirm-period": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PeriodChipRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Period start/end logged from a confirm chip",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageUpdated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/undo-period": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PeriodChipRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A confirmed period chip was undone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageUpdated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/food/photo": {
+      "post": {
+        "tags": [
+          "food"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhotoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Detected items (not saved)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/food/logs": {
+      "post": {
+        "tags": [
+          "food"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogFoods"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved through the same food pipeline as chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FoodLogs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/food/logs/{id}": {
+      "delete": {
+        "tags": [
+          "food"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/today": {
+      "get": {
+        "tags": [
+          "today"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "required": false,
+            "name": "day",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One day's logs with the server-computed balance score and cycle status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Today"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/today/water": {
+      "post": {
+        "tags": [
+          "today"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Water"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Water updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/today/quick-log": {
+      "post": {
+        "tags": [
+          "today"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuickLog"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/today/weight": {
+      "post": {
+        "tags": [
+          "today"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Weight"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Weight saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cycle": {
+      "get": {
+        "tags": [
+          "cycle"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Periods, the predicted range and active cycle insights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cycle"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cycle/periods": {
+      "post": {
+        "tags": [
+          "cycle"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogPeriod"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Period start or end logged",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Period"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cycle/periods/{id}": {
+      "patch": {
+        "tags": [
+          "cycle"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PeriodPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Period"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "cycle"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meds": {
+      "get": {
+        "tags": [
+          "medicines"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All medicines (active first)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medications"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "medicines"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medication"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meds/{id}": {
+      "patch": {
+        "tags": [
+          "medicines"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated. Setting active=false records the stop date (it counts as a medication change for delay insights).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medication"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meds/{id}/dose": {
+      "post": {
+        "tags": [
+          "medicines"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoseTaken"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dose marked taken / not taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/labs": {
+      "get": {
+        "tags": [
+          "labs"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lab results, oldest first",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Labs"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "labs"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lab"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/labs/{id}": {
+      "delete": {
+        "tags": [
+          "labs"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/facts": {
+      "get": {
+        "tags": [
+          "memory"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Active remembered facts, newest first",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Facts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/facts/{id}": {
+      "patch": {
+        "tags": [
+          "memory"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Edited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fact"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "memory"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forgotten",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/insights": {
+      "get": {
+        "tags": [
+          "insights"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trends and insight cards",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Insights"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/insights/{id}/dismiss": {
+      "post": {
+        "tags": [
+          "insights"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dismissed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/push/subscription": {
+      "post": {
+        "tags": [
+          "push"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushSubscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved for this device",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "push"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushEndpoint"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/push/test": {
+      "post": {
+        "tags": [
+          "push"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sends a test notification to her devices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushTestResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/med-action": {
+      "post": {
+        "tags": [
+          "push"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/tick": {
+      "post": {
+        "tags": [
+          "jobs"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "x-cron-secret",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Runs due jobs: reminders + retries every call; daily/weekly jobs once per period",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{name}": {
+      "post": {
+        "tags": [
+          "jobs"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "reminders",
+                "retry-queue",
+                "cycle-check",
+                "daily-summary",
+                "model-health"
+              ]
+            },
+            "required": true,
+            "name": "name",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "x-cron-secret",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Runs one job now (manual trigger)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

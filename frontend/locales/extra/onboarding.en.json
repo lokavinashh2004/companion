@@ -1,0 +1,25 @@
+{
+  "onboardingPage": {
+    "selectedDate": "Selected: {{date}}",
+    "noDate": "No date picked. That's okay, you can skip this.",
+    "notSureSkip": "Not sure, skip",
+    "setLength": "Pick a number of days",
+    "medNumber": "Medicine {{n}}",
+    "timeNumber": "Time {{n}}",
+    "pushOn": "Notifications are on. You'll only get gentle reminders.",
+    "pushDenied": "Notifications are blocked in this browser. You can allow them in the browser's site settings, then turn them on in Settings.",
+    "pushOff": "No problem. You can turn notifications on later in Settings.",
+    "pushUnsupported": "This browser can't show notifications. Your check-ins will still be waiting for you in chat.",
+    "pushNotConfigured": "Notifications aren't ready yet. You can turn them on later in Settings.",
+    "pushNeedsInstall": "On iPhone, notifications work after you add Companion to your Home Screen:",
+    "installTitle": "Keep Companion on your home screen",
+    "installBody": "Add it like an app. It opens full screen and is one tap away whenever you want to talk.",
+    "androidTitle": "On Android (Chrome)",
+    "androidStep1": "Tap the ⋮ menu at the top right.",
+    "androidStep2": "Tap \"Install app\" or \"Add to Home screen\".",
+    "iosTitle": "On iPhone (Safari)",
+    "iosStep1": "Open this site in Safari and tap the Share button (the square with an arrow).",
+    "iosStep2": "Choose \"Add to Home Screen\".",
+    "iosStep3": "Open Companion from the new icon on your Home Screen."
+  }
+}
