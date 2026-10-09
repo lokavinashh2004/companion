@@ -24,6 +24,7 @@ export interface AppDeps {
 
 export const DEFAULT_PROFILE: Omit<ProfileDoc, 'id' | 'created_at' | 'user_id'> = {
   companion_name: 'Companion',
+  display_name: null,
   display_language: 'auto',
   ui_language: 'en',
   persona_tone: 'bestie',
@@ -77,6 +78,7 @@ export function todayFor(s: Services, p: ProfileDoc): string {
 export function toProfile(p: ProfileDoc) {
   return {
     companion_name: p.companion_name,
+    display_name: p.display_name || null,
     display_language: p.display_language,
     ui_language: p.ui_language,
     persona_tone: p.persona_tone,

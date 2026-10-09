@@ -1,3 +1,8 @@
+/* Dashboard: one column on phones, two cards side by side once there's room, and a side column on wide screens.
+   Sized by the page's own width (container queries), so it adapts whether or not the chat panel is open. */
+.dash {
+  container-type: inline-size;
+}
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -10,6 +15,34 @@
   gap: var(--space-4);
   min-width: 0;
 }
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+@container (min-width: 560px) {
+  .pair,
+  .side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+@container (min-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  }
+  .side {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+.cheer {
+  font-weight: 500;
+  margin-left: var(--space-3);
+}
+
 .link {
   display: inline-flex;
   align-items: center;
@@ -22,8 +55,62 @@
 .link:hover {
   text-decoration: underline;
 }
-@media (min-width: 900px) {
-  .grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
+
+/* "Ask Companion anything": a dark ink banner into the chat */
+.ask {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 72px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  color: #fff;
+  text-decoration: none;
+  background:
+    radial-gradient(240px 120px at 85% 120%, rgb(236 72 153 / 0.45), transparent 70%),
+    linear-gradient(100deg, #1b1453 0%, #3b1f9e 55%, #6a36e0 100%);
+  box-shadow: var(--shadow-lift);
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+.ask:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 46px -16px rgb(91 47 214 / 0.65);
+}
+.ask:focus-visible {
+  outline-color: var(--text);
+}
+.askMark {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, #8fb2ff 0%, #6a3cf0 55%, #3a1b9c 100%);
+  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.12), 0 0 20px rgb(143 178 255 / 0.6);
+}
+.askText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.askTitle {
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+.askBody {
+  font-size: 0.85rem;
+  color: rgb(255 255 255 / 0.78);
+}
+.askArrow {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255 255 255 / 0.14);
 }

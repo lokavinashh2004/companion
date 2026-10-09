@@ -52,7 +52,9 @@ const services: Services = {
 };
 
 const apiUrl = (env.PUBLIC_API_URL ?? env.RENDER_EXTERNAL_URL ?? `http://localhost:${env.PORT}`).replace(/\/$/, '');
-const app = createApp({ auth, services, allowedOrigins: allowedOrigins(env), apiUrl });
+const origins = allowedOrigins(env);
+console.log(`CORS allowed origins: ${origins.join(', ') || '(none)'}`);
+const app = createApp({ auth, services, allowedOrigins: origins, apiUrl });
 
 serve({ fetch: app.fetch, port: env.PORT, hostname: '0.0.0.0' }, (info) => {
   console.log(`companion-backend listening on :${info.port} (${env.NODE_ENV})`);

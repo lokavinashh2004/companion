@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "backend", "run", "dev"],
+      "port": 8787
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev", "--", "--port", "5173", "--strictPort"],
+      "port": 5173
+    },
+    {
+      "name": "harness",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "exec", "--", "vite", "--config", "frontend/.harness/vite.config.ts"],
+      "port": 5174
+    }
+  ]
+}

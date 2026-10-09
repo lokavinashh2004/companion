@@ -33,6 +33,7 @@ function SettingsForm({ profile }: { profile: Profile }) {
   const theme = useTheme();
   const [saved, setSaved] = useState(false);
 
+  const [yourName, setYourName] = useState(profile.display_name ?? '');
   const [name, setName] = useState(profile.companion_name);
   const [nameError, setNameError] = useState<string | null>(null);
 
@@ -52,6 +53,12 @@ function SettingsForm({ profile }: { profile: Profile }) {
   const changeLanguage = (v: UiLanguage) => {
     void setUiLanguage(v);
     save({ ui_language: v });
+  };
+
+  const saveYourName = () => {
+    const v = yourName.trim();
+    if (v === (profile.display_name ?? '')) return;
+    save({ display_name: v || null });
   };
 
   const saveName = () => {
@@ -100,6 +107,21 @@ function SettingsForm({ profile }: { profile: Profile }) {
             { value: 'en', label: t('settings.english') },
             { value: 'ta', label: t('settings.tamil') },
           ]}
+        />
+      </Card>
+
+      <Card title={t('profileName.title')}>
+        <Field
+          label={t('profileName.label')}
+          hint={t('profileName.hint')}
+          value={yourName}
+          maxLength={30}
+          autoComplete="given-name"
+          onChange={(e) => setYourName(e.target.value)}
+          onBlur={saveYourName}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') saveYourName();
+          }}
         />
       </Card>
 

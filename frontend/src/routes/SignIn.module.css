@@ -1,0 +1,12 @@
+.mark {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, #8fb2ff 0%, #6a3cf0 55%, #3a1b9c 100%);
+  color: #fff;
+  box-shadow: 0 0 0 6px rgb(124 58 237 / 0.14), 0 0 36px rgb(124 58 237 / 0.55);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-5);
+}

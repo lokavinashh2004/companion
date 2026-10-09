@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/Icon';
 import { Button, cx, EmptyState, ErrorState, IconButton, Loading, Notice } from '@/components/ui';
 import type { ChatMessage } from '@/lib/api';
+import { playChime, useChatSound } from '@/lib/chime';
 import { uuid } from '@/lib/format';
 import { loadOlderMessages, useConfirmPeriod, useMe, useMessages, useSendMessage, useUndoLog, useUndoPeriod } from '@/lib/queries';
 import { useOnline } from '@/lib/useOnline';
@@ -31,6 +32,8 @@ export function ChatPanel({ variant = 'page', onClose }: { variant?: ChatVariant
   const confirmPeriod = useConfirmPeriod();
   const undoPeriod = useUndoPeriod();
   const online = useOnline();
+  const muted = useChatSound((st) => st.muted);
+  const toggleSound = useChatSound((st) => st.toggle);
 
   const [text, setText] = useState('');
   const [older, setOlder] = useState<ChatMessage[]>([]);
@@ -86,6 +89,7 @@ export function ChatPanel({ variant = 'page', onClose }: { variant?: ChatVariant
         onSuccess: (r) => {
           setSent((prev) => [...prev, r.message, ...(r.reply ? [r.reply] : []), ...(r.notice ? [r.notice] : [])]);
           if (r.crisis) setCrisisFromSend(r.message.id);
+          if (r.reply) playChime();
           setPending(null);
         },
         onError: () => {
@@ -144,7 +148,7 @@ export function ChatPanel({ variant = 'page', onClose }: { variant?: ChatVariant
       {variant !== 'sheet' ? (
         <header className={s.header}>
           <span className={s.avatar} aria-hidden="true">
-            <Icon name="heart" size={18} />
+            <Icon name="sparkle" size={20} />
           </span>
           <div className={s.headerText}>
             {variant === 'page' ? <h1 className={s.title}>{name}</h1> : <h2 className={s.title}>{name}</h2>}
@@ -152,9 +156,12 @@ export function ChatPanel({ variant = 'page', onClose }: { variant?: ChatVariant
               {send.isPending ? t('chat.typing') : t('chatPage.languages')}
             </span>
           </div>
+          <IconButton label={muted ? t('chatPage.unmute') : t('chatPage.mute')} className={s.headerButton} aria-pressed={muted} onClick={toggleSound}>
+            <Icon name={muted ? 'soundOff' : 'sound'} size={18} />
+          </IconButton>
           {onClose ? (
-            <IconButton label={t('chatPage.closePanel')} className={s.close} onClick={onClose}>
-              <Icon name="close" />
+            <IconButton label={t('chatPage.minimise')} className={s.headerButton} onClick={onClose}>
+              <Icon name="minimise" size={18} />
             </IconButton>
           ) : null}
         </header>

@@ -10,6 +10,9 @@
     "openPanel": "Talk to Companion",
     "quickChat": "Quick chat",
     "privacyNote": "Only you can see your logs. Export or delete them any time from Me.",
-    "periodHint": "This updates your cycle and the next-period range."
+    "periodHint": "This updates your cycle and the next-period range.",
+    "mute": "Mute reply sound",
+    "unmute": "Turn reply sound on",
+    "minimise": "Minimise chat"
   }
 }

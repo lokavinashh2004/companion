@@ -67,6 +67,12 @@
           "companion_name": {
             "type": "string"
           },
+          "display_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "display_language": {
             "type": "string",
             "enum": [
@@ -156,6 +162,7 @@
         },
         "required": [
           "companion_name",
+          "display_name",
           "display_language",
           "ui_language",
           "persona_tone",
@@ -181,6 +188,13 @@
           "companion_name": {
             "type": "string",
             "minLength": 1,
+            "maxLength": 30
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "null"
+            ],
             "maxLength": 30
           },
           "display_language": {
@@ -291,6 +305,13 @@
               "companion_name": {
                 "type": "string",
                 "minLength": 1,
+                "maxLength": 30
+              },
+              "display_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "maxLength": 30
               },
               "display_language": {

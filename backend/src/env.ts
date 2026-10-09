@@ -58,8 +58,25 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   return env;
 }
 
-export function allowedOrigins(env: Pick<Env, 'ALLOWED_ORIGINS'>): string[] {
-  return env.ALLOWED_ORIGINS.split(',')
-    .map((s) => s.trim().replace(/\/$/, ''))
-    .filter(Boolean);
+/** The deployed frontend. Always allowed, so a mistyped ALLOWED_ORIGINS on Render can't lock the app out. */
+export const PRODUCTION_ORIGIN = 'https://companion-psi-eight.vercel.app';
+
+/**
+ * ALLOWED_ORIGINS → exact origins (scheme://host[:port]) the browser will send in the Origin header.
+ * Tolerates what dashboards tend to add: quotes, spaces, trailing slashes, a path, upper case.
+ */
+export function allowedOrigins(env: Pick<Env, 'ALLOWED_ORIGINS' | 'NODE_ENV'>): string[] {
+  const out = new Set<string>();
+  for (const raw of env.ALLOWED_ORIGINS.split(/[,\s]+/)) {
+    const v = raw.trim().replace(/^['"]+|['"]+$/g, '');
+    if (!v) continue;
+    try {
+      const origin = new URL(v).origin;
+      if (origin !== 'null') out.add(origin);
+    } catch {
+      console.warn(`ALLOWED_ORIGINS: ignoring "${v}" (not a URL like https://example.com)`);
+    }
+  }
+  if (env.NODE_ENV === 'production') out.add(PRODUCTION_ORIGIN);
+  return [...out];
 }

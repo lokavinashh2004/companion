@@ -164,7 +164,9 @@ describe('cycle check', () => {
 
 describe('daily summary', () => {
   it('summarises an active day once, and retires facts the model marks outdated', async () => {
-    const h = await harness({ now: ist('23:40') });
+    // The store stamps created_at from the real clock (never backwards), so run this day on today's date in IST.
+    const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+    const h = await harness({ now: ist('23:40', day) });
     await onboard(h);
     const u = h.store.user('uidA');
     await u.facts.insertOne({ fact: 'Has an exam on Friday', category: 'event', source_message_id: null, active: true, embedding: null, updated_at: '2026-10-01' });
@@ -172,11 +174,11 @@ describe('daily summary', () => {
     await h.json('/chat/messages', { token: A, body: { text: 'exam went well', client_id: crypto.randomUUID() } });
     h.llm.queue.push({ summary: 'She finished her exam and felt relieved. Follow up on results next week.', facts_to_retire: ['Has an exam on Friday'] });
     const r = await job(h, 'daily-summary');
-    expect(r.body.result).toEqual(expect.arrayContaining(['2026-10-08:ok_retired_1']));
+    expect(r.body.result).toEqual(expect.arrayContaining([`${day}:ok_retired_1`]));
     expect(await u.daily_summaries.count()).toBe(1);
     expect(await u.facts.count({ active: true })).toBe(0);
     const again = await job(h, 'daily-summary');
-    expect(again.body.result).toEqual(expect.arrayContaining(['2026-10-08:exists']));
+    expect(again.body.result).toEqual(expect.arrayContaining([`${day}:exists`]));
   });
 });
 

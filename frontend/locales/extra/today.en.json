@@ -15,6 +15,30 @@
     "skipSleep": "Skip sleep",
     "pickOne": "Pick at least one thing to log.",
     "kcalTotal": "About {{count}} kcal so far",
-    "moodNow": "Feeling {{value}} of 5"
+    "moodNow": "Feeling {{value}} of 5",
+    "greetMorning": "Good morning",
+    "greetAfternoon": "Good afternoon",
+    "greetEvening": "Good evening",
+    "tagline": "Small steps. Big progress.",
+    "cheer": "You're doing great!",
+    "balanceLabel": "Balance",
+    "meals": "Meals",
+    "glassesOf": "of {{total}} glasses",
+    "feeling": "How are you feeling?",
+    "logMood": "Log mood {{value}} of 5",
+    "markTaken": "Mark taken",
+    "periodTracker": "Period tracker",
+    "cycleSummary": "Cycle day {{day}} of about {{length}} days",
+    "insightsTitle": "Quick insights",
+    "steps": "Steps",
+    "stress": "Stress",
+    "stressLevel": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "askTitle": "Ask {{name}} anything",
+    "askBody": "Get personalised advice, reminders and support.",
+    "greetWithName": "{{greeting}}, {{name}}"
   }
 }

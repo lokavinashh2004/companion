@@ -5,6 +5,7 @@ import { create } from 'zustand';
 
 import { ChatPanel } from '@/components/chat/ChatPanel';
 import { Icon, type IconName } from '@/components/Icon';
+import { TopBar } from '@/components/shell/TopBar';
 import { Notice, Sheet } from '@/components/ui';
 import { useApiStatus } from '@/lib/api';
 import { useMediaQuery } from '@/lib/useMediaQuery';
@@ -47,7 +48,7 @@ export function Layout() {
         <nav className={s.nav} aria-label={t('common.appName')}>
           <span className={s.brand}>
             <span className={s.brandMark} aria-hidden="true">
-              <Icon name="heart" size={18} />
+              <Icon name="sparkle" size={20} />
             </span>
             {t('common.appName')}
           </span>
@@ -64,6 +65,7 @@ export function Layout() {
         <div className={s.content}>
           {!online ? <Notice tone="warn">{t('common.offline')}</Notice> : null}
           {waking ? <Notice>{t('common.wakingUp')}</Notice> : null}
+          <TopBar className={onChat ? s.topbarChat : undefined} />
           <Outlet />
         </div>
         {showPanel ? (

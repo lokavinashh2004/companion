@@ -444,6 +444,9 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `chatPage.quickChat` | Quick chat | விரைவு அரட்டை |
 | [ ] | `chatPage.privacyNote` | Only you can see your logs. Export or delete them any time from Me. | உங்கள் பதிவுகளை நீங்கள் மட்டுமே பார்க்க முடியும். Me பக்கத்தில் எப்போது வேண்டுமானாலும் ஏற்றுமதி செய்யலாம் அல்லது நீக்கலாம். |
 | [ ] | `chatPage.periodHint` | This updates your cycle and the next-period range. | இது உங்கள் சுழற்சியையும் அடுத்த மாதவிடாய் வரம்பையும் புதுப்பிக்கும். |
+| [ ] | `chatPage.mute` | Mute reply sound | பதில் ஒலியை அணை |
+| [ ] | `chatPage.unmute` | Turn reply sound on | பதில் ஒலியை இயக்கு |
+| [ ] | `chatPage.minimise` | Minimise chat | அரட்டையைச் சுருக்கு |
 | [ ] | `cyclePage.cyclesUsed_one` | Based on {{count}} past cycle | கடந்த {{count}} சுழற்சியின் அடிப்படையில் |
 | [ ] | `cyclePage.cyclesUsed_other` | Based on {{count}} past cycles | கடந்த {{count}} சுழற்சிகளின் அடிப்படையில் |
 | [ ] | `cyclePage.calendar` | Period calendar | மாதவிடாய் நாள்காட்டி |
@@ -530,6 +533,34 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `onboardingPage.iosStep1` | Open this site in Safari and tap the Share button (the square with an arrow). | இந்த தளத்தை Safari-ல் திறந்து, பகிர் பட்டனை (அம்புக்குறி உள்ள சதுரம்) தட்டு. |
 | [ ] | `onboardingPage.iosStep2` | Choose "Add to Home Screen". | "முகப்புத் திரையில் சேர்" என்பதை தேர்வு செய். |
 | [ ] | `onboardingPage.iosStep3` | Open Companion from the new icon on your Home Screen. | முகப்புத் திரையில் வந்த புது ஐகானில் இருந்து Companion-ஐ திற. |
+| [ ] | `profileName.title` | Your name | உங்கள் பெயர் |
+| [ ] | `profileName.label` | What should I call you? (optional) | உங்களை எப்படி அழைக்கட்டும்? (விருப்பம்) |
+| [ ] | `profileName.hint` | Only used to greet you in the app. It is never sent to the AI. | செயலியில் வாழ்த்த மட்டுமே பயன்படும். AI-க்கு ஒருபோதும் அனுப்பப்படாது. |
+| [ ] | `reminders.bell` | Reminders | நினைவூட்டல்கள் |
+| [ ] | `reminders.bellCount_one` | Reminders: {{count}} needs attention | நினைவூட்டல்கள்: {{count}} கவனிக்க வேண்டியது |
+| [ ] | `reminders.bellCount_other` | Reminders: {{count}} need attention | நினைவூட்டல்கள்: {{count}} கவனிக்க வேண்டியவை |
+| [ ] | `reminders.title` | Today's reminders | இன்றைய நினைவூட்டல்கள் |
+| [ ] | `reminders.empty` | Nothing needs you right now. | இப்போது எதுவும் தேவையில்லை. |
+| [ ] | `reminders.openToday` | Open Today | இன்று பக்கத்தைத் திற |
+| [ ] | `reminders.doseMissed` | {{name}} not taken yet | {{name}} இன்னும் எடுக்கவில்லை |
+| [ ] | `reminders.doseMissedBody` | It was due at {{time}}. | {{time}}-க்கு எடுக்க வேண்டியது. |
+| [ ] | `reminders.doseDue` | {{name}} later today | {{name}} இன்று பின்னர் |
+| [ ] | `reminders.doseDueBody` | Due at {{time}}. | {{time}}-க்கு எடுக்க வேண்டும். |
+| [ ] | `reminders.waterBehind` | Time for some water | தண்ணீர் குடிக்கும் நேரம் |
+| [ ] | `reminders.waterBehindBody` | {{litres}} L so far of your {{goal}} L goal. | உங்கள் {{goal}} லி இலக்கில் இதுவரை {{litres}} லி. |
+| [ ] | `reminders.waterGoal` | {{litres}} L of water today! | இன்று {{litres}} லி தண்ணீர்! |
+| [ ] | `reminders.waterGoalBody` | Goal reached. Keep sipping through the day. | இலக்கை அடைந்தீர்கள். நாள் முழுதும் கொஞ்சம் கொஞ்சமாகக் குடியுங்கள். |
+| [ ] | `reminders.periodLate_one` | Period {{count}} day past the predicted range | கணித்த வரம்பைத் தாண்டி {{count}} நாள் |
+| [ ] | `reminders.periodLate_other` | Period {{count}} days past the predicted range | கணித்த வரம்பைத் தாண்டி {{count}} நாட்கள் |
+| [ ] | `reminders.periodLateBody` | PCOS cycles often vary. Log it when it starts. | PCOS சுழற்சிகள் அடிக்கடி மாறும். தொடங்கியதும் பதிவு செய்யுங்கள். |
+| [ ] | `reminders.periodToday` | Your period may start from today | இன்று முதல் மாதவிடாய் தொடங்கலாம் |
+| [ ] | `reminders.periodSoon_one` | Your period may start in {{count}} day | {{count}} நாளில் மாதவிடாய் தொடங்கலாம் |
+| [ ] | `reminders.periodSoon_other` | Your period may start in {{count}} days | {{count}} நாட்களில் மாதவிடாய் தொடங்கலாம் |
+| [ ] | `reminders.allClear` | You're all caught up | எல்லாம் சரியாக உள்ளது |
+| [ ] | `reminders.allClearBody` | Small steps add up. Tell me anything in chat whenever you like. | சிறிய அடிகள் சேர்ந்து பெரிதாகும். எப்போது வேண்டுமானாலும் அரட்டையில் சொல்லுங்கள். |
+| [ ] | `reminders.addGlass` | + Add a glass | + ஒரு குவளை சேர் |
+| [ ] | `shell.account` | Your account | உங்கள் கணக்கு |
+| [ ] | `shell.you` | You | நீங்கள் |
 | [ ] | `todayPage.waterUndo` | −250 ml | −250 மி.லி |
 | [ ] | `todayPage.waterUndoLabel` | Remove 250 ml | 250 மி.லி நீக்கவும் |
 | [ ] | `todayPage.tellChat` | Tell me in chat | அரட்டையில் சொல்லுங்கள் |
@@ -546,6 +577,28 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayPage.pickOne` | Pick at least one thing to log. | பதிவு செய்ய குறைந்தது ஒன்றைத் தேர்ந்தெடுக்கவும். |
 | [ ] | `todayPage.kcalTotal` | About {{count}} kcal so far | இதுவரை சுமார் {{count}} கலோரி |
 | [ ] | `todayPage.moodNow` | Feeling {{value}} of 5 | மனநிலை 5-இல் {{value}} |
+| [ ] | `todayPage.greetMorning` | Good morning | காலை வணக்கம் |
+| [ ] | `todayPage.greetAfternoon` | Good afternoon | மதிய வணக்கம் |
+| [ ] | `todayPage.greetEvening` | Good evening | மாலை வணக்கம் |
+| [ ] | `todayPage.tagline` | Small steps. Big progress. | சிறிய அடிகள். பெரிய முன்னேற்றம். |
+| [ ] | `todayPage.cheer` | You're doing great! | நீங்கள் நன்றாகச் செய்கிறீர்கள்! |
+| [ ] | `todayPage.balanceLabel` | Balance | சமநிலை |
+| [ ] | `todayPage.meals` | Meals | உணவுகள் |
+| [ ] | `todayPage.glassesOf` | of {{total}} glasses | / {{total}} குவளைகள் |
+| [ ] | `todayPage.feeling` | How are you feeling? | எப்படி உணர்கிறீர்கள்? |
+| [ ] | `todayPage.logMood` | Log mood {{value}} of 5 | மனநிலை 5-இல் {{value}} எனப் பதிவு செய் |
+| [ ] | `todayPage.markTaken` | Mark taken | எடுத்ததாகக் குறி |
+| [ ] | `todayPage.periodTracker` | Period tracker | மாதவிடாய் கண்காணிப்பு |
+| [ ] | `todayPage.cycleSummary` | Cycle day {{day}} of about {{length}} days | சுமார் {{length}} நாள் சுழற்சியில் நாள் {{day}} |
+| [ ] | `todayPage.insightsTitle` | Quick insights | விரைவுப் பார்வைகள் |
+| [ ] | `todayPage.steps` | Steps | அடிகள் |
+| [ ] | `todayPage.stress` | Stress | மன அழுத்தம் |
+| [ ] | `todayPage.stressLevel.low` | Low | குறைவு |
+| [ ] | `todayPage.stressLevel.medium` | Medium | நடுத்தரம் |
+| [ ] | `todayPage.stressLevel.high` | High | அதிகம் |
+| [ ] | `todayPage.askTitle` | Ask {{name}} anything | {{name}}-இடம் எதையும் கேளுங்கள் |
+| [ ] | `todayPage.askBody` | Get personalised advice, reminders and support. | தனிப்பட்ட ஆலோசனை, நினைவூட்டல்கள் மற்றும் ஆதரவைப் பெறுங்கள். |
+| [ ] | `todayPage.greetWithName` | {{greeting}}, {{name}} | {{greeting}}, {{name}} |
 
 ## Server messages (fallbacks, pushes, delay check-in)
 

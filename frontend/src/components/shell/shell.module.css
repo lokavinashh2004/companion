@@ -1,0 +1,225 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) 0;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .topbar {
+    padding: var(--space-4) var(--space-6) 0;
+    margin-bottom: calc(-1 * var(--space-3));
+  }
+}
+
+.pop {
+  position: relative;
+}
+.topButton {
+  position: relative;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  border: 1px solid var(--card-edge);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.topButton:hover {
+  background: var(--surface-alt);
+}
+.topButton[aria-expanded='true'] {
+  background: var(--chip);
+  color: var(--primary);
+}
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ec4899, #db2777);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 19px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.avatarButton {
+  padding: 0 var(--space-2) 0 3px;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grad);
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+.avatarBig {
+  width: 44px;
+  height: 44px;
+  font-size: 1.15rem;
+}
+.caret {
+  color: var(--text-muted);
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 20;
+  width: min(340px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(70dvh, 520px);
+  overflow-y: auto;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px -20px rgb(21 17 46 / 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: pop-in 0.14s ease-out;
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+.panelTitle {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.reminders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.reminder {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+}
+.reminderHot {
+  background: var(--chip);
+}
+.reminderIcon {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+.reminderText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.reminderTitle {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.reminderBody {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.panelLink {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+.whoText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.whoName {
+  font-weight: 700;
+}
+.whoEmail {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+.menu a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.menu a:hover {
+  background: var(--surface-alt);
+}
+.themeRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.themeLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.signOut {
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+}
+.signOut:hover {
+  background: var(--surface-alt);
+}

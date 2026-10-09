@@ -1,4 +1,5 @@
 // Only the Latin + Tamil subsets we need (keeps the offline cache small).
+import '@fontsource-variable/anek-tamil/standard.css';
 import '@fontsource/noto-sans/latin-400.css';
 import '@fontsource/noto-sans/latin-600.css';
 import '@fontsource/noto-sans/latin-700.css';

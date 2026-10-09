@@ -1,0 +1,36 @@
+{
+  "profileName": {
+    "title": "Your name",
+    "label": "What should I call you? (optional)",
+    "hint": "Only used to greet you in the app. It is never sent to the AI."
+  },
+  "reminders": {
+    "bell": "Reminders",
+    "bellCount_one": "Reminders: {{count}} needs attention",
+    "bellCount_other": "Reminders: {{count}} need attention",
+    "title": "Today's reminders",
+    "empty": "Nothing needs you right now.",
+    "openToday": "Open Today",
+    "doseMissed": "{{name}} not taken yet",
+    "doseMissedBody": "It was due at {{time}}.",
+    "doseDue": "{{name}} later today",
+    "doseDueBody": "Due at {{time}}.",
+    "waterBehind": "Time for some water",
+    "waterBehindBody": "{{litres}} L so far of your {{goal}} L goal.",
+    "waterGoal": "{{litres}} L of water today!",
+    "waterGoalBody": "Goal reached. Keep sipping through the day.",
+    "periodLate_one": "Period {{count}} day past the predicted range",
+    "periodLate_other": "Period {{count}} days past the predicted range",
+    "periodLateBody": "PCOS cycles often vary. Log it when it starts.",
+    "periodToday": "Your period may start from today",
+    "periodSoon_one": "Your period may start in {{count}} day",
+    "periodSoon_other": "Your period may start in {{count}} days",
+    "allClear": "You're all caught up",
+    "allClearBody": "Small steps add up. Tell me anything in chat whenever you like.",
+    "addGlass": "+ Add a glass"
+  },
+  "shell": {
+    "account": "Your account",
+    "you": "You"
+  }
+}

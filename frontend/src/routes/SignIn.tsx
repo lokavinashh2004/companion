@@ -2,10 +2,12 @@ import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useLocation } from 'react-router';
 
+import { Icon } from '@/components/Icon';
 import { Button, Card, Field, Muted, Page, Row } from '@/components/ui';
 import { setUiLanguage } from '@/i18n';
 import { useAuth } from '@/lib/auth';
 import { firebaseConfigured, resetPassword, signInEmail, signInGoogle, signUpEmail } from '@/lib/firebase';
+import s from './SignIn.module.css';
 
 export function SignIn() {
   const { t, i18n } = useTranslation();
@@ -63,9 +65,9 @@ export function SignIn() {
           {i18n.language === 'ta' ? t('settings.english') : t('settings.tamil')}
         </Button>
       </Row>
-      <p style={{ fontSize: '2.5rem', margin: 0 }} aria-hidden="true">
-        🌸
-      </p>
+      <span className={s.mark} aria-hidden="true">
+        <Icon name="sparkle" size={30} />
+      </span>
       <h1>{t('auth.title')}</h1>
       <Muted>{t('auth.subtitle')}</Muted>
       <Card>

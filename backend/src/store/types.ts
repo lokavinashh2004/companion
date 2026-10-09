@@ -18,6 +18,8 @@ export interface UserDoc extends Base {
 
 export interface ProfileDoc extends Owned {
   companion_name: string;
+  /** UI greetings only; kept out of every LLM prompt. */
+  display_name?: string | null;
   display_language: 'auto' | 'en' | 'ta' | 'tanglish';
   ui_language: 'en' | 'ta';
   persona_tone: 'bestie' | 'calm' | 'coach';

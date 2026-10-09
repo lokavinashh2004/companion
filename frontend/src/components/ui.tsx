@@ -6,12 +6,22 @@ import s from './ui.module.css';
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
 
-export function Page({ children, title, actions, wide }: { children: ReactNode; title?: string; actions?: ReactNode; wide?: boolean }) {
+export function Page({ children, title, actions, wide, hero, eyebrow, subtitle }: { children: ReactNode; title?: string; actions?: ReactNode; wide?: boolean; hero?: boolean; eyebrow?: ReactNode; subtitle?: ReactNode }) {
   return (
     <main id="main" className={cx(s.page, wide && s.pageWide)}>
       {title || actions ? (
-        <div className={s.pageHeader}>
-          {title ? <h1>{title}</h1> : <span />}
+        <div className={cx(s.pageHeader, hero && s.hero)}>
+          {eyebrow || subtitle ? (
+            <div className={s.titleBlock}>
+              {eyebrow ? <p className={s.eyebrow}>{eyebrow}</p> : null}
+              {title ? <h1>{title}</h1> : null}
+              {subtitle ? <p className={s.subtitle}>{subtitle}</p> : null}
+            </div>
+          ) : title ? (
+            <h1>{title}</h1>
+          ) : (
+            <span />
+          )}
           {actions}
         </div>
       ) : null}
@@ -20,10 +30,24 @@ export function Page({ children, title, actions, wide }: { children: ReactNode; 
   );
 }
 
-export function Card({ children, tone = 'surface', title, className }: { children: ReactNode; tone?: 'surface' | 'alt' | 'calm' | 'warn'; title?: ReactNode; className?: string }) {
+/** A card. `icon` (an emoji) sits in a soft tinted bubble beside the title; `aside` goes at the right of the title row. */
+export function Card({ children, tone = 'surface', title, icon, tint, aside, className }: { children: ReactNode; tone?: 'surface' | 'alt' | 'calm' | 'warn'; title?: ReactNode; icon?: string; tint?: 'violet' | 'blue' | 'pink' | 'peach' | 'green' | 'amber'; aside?: ReactNode; className?: string }) {
+  const heading = title ? <h2 className={s.cardTitle}>{title}</h2> : null;
   return (
     <section className={cx(s.card, tone === 'alt' && s.cardAlt, tone === 'calm' && s.cardCalm, tone === 'warn' && s.cardWarn, className)}>
-      {title ? <h2 className={s.cardTitle}>{title}</h2> : null}
+      {icon || aside ? (
+        <div className={s.cardHead}>
+          {icon ? (
+            <span className={cx(s.cardIcon, tint && s[`tint_${tint}`])} aria-hidden="true">
+              {icon}
+            </span>
+          ) : null}
+          {heading}
+          {aside ? <span className={s.cardAside}>{aside}</span> : null}
+        </div>
+      ) : (
+        heading
+      )}
       {children}
     </section>
   );

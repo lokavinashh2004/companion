@@ -31,16 +31,19 @@ export function createApp(deps: AppDeps) {
     },
   });
 
-  app.use('*', secureHeaders());
+  // CORS first, so every response (preflights, 401s, 404s, errors) carries the headers for allowed origins.
+  // Auth is a Bearer token, not cookies; credentials stay on so the exact origin is always echoed, never '*'.
   app.use(
     '*',
     cors({
       origin: (origin) => (deps.allowedOrigins.includes(origin) ? origin : null),
       allowHeaders: ['Authorization', 'Content-Type'],
       allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+      credentials: true,
       maxAge: 600,
     }),
   );
+  app.use('*', secureHeaders());
   // Photos are downscaled to 1024 px in the browser; 4 MB is plenty.
   app.use('*', bodyLimit({ maxSize: 4 * 1024 * 1024, onError: (c) => c.json({ error: 'too_large' }, 413) }));
   // Request log without bodies or query strings (no health data in logs).

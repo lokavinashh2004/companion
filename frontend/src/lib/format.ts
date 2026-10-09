@@ -9,6 +9,11 @@ export function longDate(d: string): string {
   return new Date(`${d}T00:00:00Z`).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 
+/** 'Thursday, 8 October' style label for a YYYY-MM-DD date, in the UI language. */
+export function weekdayDate(d: string): string {
+  return new Date(`${d}T00:00:00Z`).toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+}
+
 export function monthTitle(month: string): string {
   return new Date(`${month}-01T00:00:00Z`).toLocaleDateString(dateLocale(), { month: 'long', year: 'numeric', timeZone: 'UTC' });
 }

@@ -22,6 +22,8 @@ export const DayQuery = z.object({ day: date.optional() });
 export const ProfileSchema = z
   .object({
     companion_name: z.string(),
+    /** What she likes to be called, for greetings in the app only. Never sent to the language model. */
+    display_name: z.string().nullable(),
     display_language: z.enum(['auto', 'en', 'ta', 'tanglish']),
     ui_language: z.enum(['en', 'ta']),
     persona_tone: z.enum(['bestie', 'calm', 'coach']),
@@ -46,6 +48,7 @@ export const MeSchema = z.object({ uid: z.string(), email: z.string().nullable()
 
 const profileFields = {
   companion_name: z.string().trim().min(1).max(30),
+  display_name: z.string().trim().max(30).nullable(),
   display_language: z.enum(['auto', 'en', 'ta', 'tanglish']),
   ui_language: z.enum(['en', 'ta']),
   persona_tone: z.enum(['bestie', 'calm', 'coach']),

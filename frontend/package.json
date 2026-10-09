@@ -14,6 +14,7 @@
     "api:types": "npx --yes -p typescript@5 -p openapi-typescript@7 openapi-typescript ../backend/openapi.json -o src/lib/api-schema.d.ts"
   },
   "dependencies": {
+    "@fontsource-variable/anek-tamil": "^5.3.0",
     "@fontsource/noto-sans": "^5.3.0",
     "@fontsource/noto-sans-tamil": "^5.3.0",
     "@tanstack/react-query": "^5.104.1",

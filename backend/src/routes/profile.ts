@@ -21,7 +21,7 @@ export function registerProfile(app: App, { services: s }: AppDeps) {
   app.openapi(
     createRoute({ method: 'patch', path: '/me', tags: ['profile'], security: sec, request: { body: jsonBody(ProfilePatchSchema) }, responses: { 200: jsonRes(ProfileSchema, 'Updated profile') } }),
     async (c) => {
-      const p = await s.store.user(c.get('uid')).profiles.updateOne({}, c.req.valid('json'));
+      const p = await s.store.user(c.get('uid')).profiles.updateOne({}, blankToNull(c.req.valid('json')));
       return c.json(toProfile(p!), 200);
     },
   );
@@ -38,7 +38,7 @@ export function registerProfile(app: App, { services: s }: AppDeps) {
     async (c) => {
       const body = c.req.valid('json');
       const u = s.store.user(c.get('uid'));
-      const p = (await u.profiles.updateOne({}, { ...body.profile, onboarding_done: true }))!;
+      const p = (await u.profiles.updateOne({}, { ...blankToNull(body.profile), onboarding_done: true }))!;
       const today = todayFor(s, p);
       if (body.medications.length) {
         await u.medications.insertMany(body.medications.map((m) => ({ ...m, active: true, start_date: today, end_date: null })));
@@ -53,4 +53,9 @@ export function registerProfile(app: App, { services: s }: AppDeps) {
       return c.json(toProfile(p), 200);
     },
   );
+}
+
+/** An emptied display name means "don't use a name". */
+function blankToNull<T extends { display_name?: string | null }>(patch: T): T {
+  return patch.display_name === '' ? { ...patch, display_name: null } : patch;
 }

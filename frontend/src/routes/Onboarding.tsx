@@ -30,6 +30,7 @@ export function Onboarding() {
   const [step, setStep] = useState(1);
   const [replyLanguage, setReplyLanguage] = useState<ReplyLanguage>('auto');
   const [companionName, setCompanionName] = useState('');
+  const [yourName, setYourName] = useState('');
   const [persona, setPersona] = useState<Persona>('bestie');
   const [addressForm, setAddressForm] = useState<AddressForm>('casual');
   const [calories, setCalories] = useState<Calories>('hide');
@@ -64,6 +65,7 @@ export function Onboarding() {
           display_language: replyLanguage,
           ui_language: uiLanguage,
           companion_name: companionName.trim() || t('onboarding.companionNamePlaceholder'),
+          display_name: yourName.trim() || null,
           persona_tone: persona,
           tamil_address_form: addressForm,
           calorie_display: calories,
@@ -115,6 +117,14 @@ export function Onboarding() {
     case 2:
       content = (
         <Card title={t('onboarding.companionTitle')}>
+          <Field
+            label={t('profileName.label')}
+            hint={t('profileName.hint')}
+            value={yourName}
+            maxLength={30}
+            autoComplete="given-name"
+            onChange={(e) => setYourName(e.target.value)}
+          />
           <Field
             label={t('onboarding.companionName')}
             placeholder={t('onboarding.companionNamePlaceholder')}

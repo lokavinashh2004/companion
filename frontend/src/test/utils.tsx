@@ -55,6 +55,7 @@ export function renderPage(ui: ReactElement, { route = '/', path = '*' }: { rout
 /** A complete profile for tests (onboarded, English, calories hidden). */
 export const PROFILE = {
   companion_name: 'Companion',
+  display_name: null,
   display_language: 'auto',
   ui_language: 'en',
   persona_tone: 'bestie',

@@ -7,8 +7,9 @@
   padding-top: env(safe-area-inset-top);
 }
 .brand {
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.4rem;
 }
 .stepText {
   color: var(--text-muted);
@@ -16,15 +17,15 @@
   font-weight: 600;
 }
 .progress {
-  height: 6px;
+  height: 8px;
   border-radius: 999px;
-  background: var(--surface-alt);
+  background: var(--chip);
   overflow: hidden;
 }
 .progress > span {
   display: block;
   height: 100%;
-  background: var(--primary);
+  background: var(--grad);
   border-radius: 999px;
   transition: width 0.25s ease;
 }
@@ -47,9 +48,10 @@
   gap: 2px;
   min-height: var(--tap);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
+  border-radius: 18px;
   border: 1.5px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--shadow);
   color: var(--text);
   font: inherit;
   text-align: left;
@@ -61,7 +63,8 @@
 }
 .optionSelected {
   border-color: var(--primary);
-  background: var(--surface-alt);
+  background: var(--chip);
+  box-shadow: 0 0 0 4px rgb(124 58 237 / 0.14), var(--shadow);
 }
 .optionTitle {
   font-weight: 700;
@@ -130,5 +133,6 @@
   position: sticky;
   bottom: 0;
   padding: var(--space-3) 0 calc(var(--space-3) + env(safe-area-inset-bottom));
-  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(14px);
 }

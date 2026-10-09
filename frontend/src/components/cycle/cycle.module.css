@@ -1,15 +1,17 @@
 .headline {
   margin: 0;
-  font-size: 1.35rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 .prediction {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--surface-alt);
+  background: linear-gradient(110deg, var(--predicted), var(--chip));
 }
 .predLabel {
   font-size: 0.85rem;
@@ -76,9 +78,11 @@
 .period:hover:not(:disabled) {
   background: var(--period);
   color: #fff;
+  box-shadow: 0 6px 14px -6px var(--period);
 }
 .today {
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgb(124 58 237 / 0.15);
 }
 .legend {
   display: flex;

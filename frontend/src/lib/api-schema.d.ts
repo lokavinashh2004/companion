@@ -1357,6 +1357,7 @@ export interface components {
         };
         Profile: {
             companion_name: string;
+            display_name: string | null;
             /** @enum {string} */
             display_language: "auto" | "en" | "ta" | "tanglish";
             /** @enum {string} */
@@ -1382,6 +1383,7 @@ export interface components {
         };
         ProfilePatch: {
             companion_name?: string;
+            display_name?: string | null;
             /** @enum {string} */
             display_language?: "auto" | "en" | "ta" | "tanglish";
             /** @enum {string} */
@@ -1407,6 +1409,7 @@ export interface components {
         Onboarding: {
             profile: {
                 companion_name?: string;
+                display_name?: string | null;
                 /** @enum {string} */
                 display_language?: "auto" | "en" | "ta" | "tanglish";
                 /** @enum {string} */

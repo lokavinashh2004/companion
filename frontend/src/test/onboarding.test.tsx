@@ -134,6 +134,7 @@ it('not sure: skipping the date and cycle length sends nulls', async () => {
   const body = calls.find((c) => c.path === '/me/onboarding')?.body as { profile: { typical_cycle_length: unknown; companion_name: string }; last_period_start: unknown; medications: unknown[] };
   expect(body.profile.typical_cycle_length).toBeNull();
   expect(body.profile.companion_name).toBe('Companion');
+  expect((body.profile as { display_name?: unknown }).display_name).toBeNull();
   expect(body.last_period_start).toBeNull();
   expect(body.medications).toEqual([]);
 });

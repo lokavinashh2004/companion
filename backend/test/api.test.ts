@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { allowedOrigins, PRODUCTION_ORIGIN } from '../src/env.ts';
 import { harness, onboard, ORIGIN } from './helpers.ts';
 
 describe('system', () => {
@@ -25,6 +26,31 @@ describe('system', () => {
     expect(ok.headers.get('access-control-allow-origin')).toBe(ORIGIN);
     const evil = await h.app.request('/me', { method: 'OPTIONS', headers: { Origin: 'https://evil.example', 'Access-Control-Request-Method': 'GET' } });
     expect(evil.headers.get('access-control-allow-origin')).toBeNull();
+  });
+
+  it('CORS preflight allows the auth header, methods and credentials, and errors carry CORS headers too', async () => {
+    const h = await harness();
+    const pre = await h.app.request('/chat/messages?limit=60', {
+      method: 'OPTIONS',
+      headers: { Origin: ORIGIN, 'Access-Control-Request-Method': 'GET', 'Access-Control-Request-Headers': 'authorization,content-type' },
+    });
+    expect(pre.status).toBe(204);
+    expect(pre.headers.get('access-control-allow-origin')).toBe(ORIGIN);
+    expect(pre.headers.get('access-control-allow-credentials')).toBe('true');
+    expect(pre.headers.get('access-control-allow-headers')).toMatch(/Authorization/);
+    expect(pre.headers.get('access-control-allow-methods')).toMatch(/PATCH/);
+    const unauth = await h.app.request('/me', { headers: { Origin: ORIGIN } });
+    expect(unauth.status).toBe(401);
+    expect(unauth.headers.get('access-control-allow-origin')).toBe(ORIGIN);
+  });
+
+  it('ALLOWED_ORIGINS tolerates quotes, slashes, paths and spaces, and production always allows the deployed frontend', () => {
+    expect(allowedOrigins({ NODE_ENV: 'development', ALLOWED_ORIGINS: ' "https://A.vercel.app/", http://localhost:5173/chat ;nope' })).toEqual([
+      'https://a.vercel.app',
+      'http://localhost:5173',
+    ]);
+    expect(allowedOrigins({ NODE_ENV: 'production', ALLOWED_ORIGINS: '' })).toEqual([PRODUCTION_ORIGIN]);
+    expect(allowedOrigins({ NODE_ENV: 'production', ALLOWED_ORIGINS: `${PRODUCTION_ORIGIN}/` })).toEqual([PRODUCTION_ORIGIN]);
   });
 
   it('unknown routes: 401 without a token, 404 with one', async () => {
@@ -57,6 +83,16 @@ describe('auth and profile', () => {
     expect((await h.json<{ profile: { display_language: string } }>('/me', { token: 'token-b' })).body.profile.display_language).toBe('auto');
     expect((await h.req('/me', { method: 'PATCH', token: 'token-a', body: { onboarding_done: true } })).status).toBe(400);
     expect((await h.req('/me', { method: 'PATCH', token: 'token-a', body: { morning_checkin: '25:00' } })).status).toBe(400);
+  });
+
+  it('display name is optional, trimmed, and blank clears it', async () => {
+    const h = await harness();
+    expect((await h.json<{ profile: { display_name: string | null } }>('/me', { token: 'token-a' })).body.profile.display_name).toBeNull();
+    const set = await h.json<{ display_name: string | null }>('/me', { method: 'PATCH', token: 'token-a', body: { display_name: '  Priya ' } });
+    expect(set.body.display_name).toBe('Priya');
+    const cleared = await h.json<{ display_name: string | null }>('/me', { method: 'PATCH', token: 'token-a', body: { display_name: '   ' } });
+    expect(cleared.body.display_name).toBeNull();
+    expect((await h.req('/me', { method: 'PATCH', token: 'token-a', body: { display_name: 'x'.repeat(31) } })).status).toBe(400);
   });
 
   it('onboarding saves profile, medicines and the last period (old start gets a 5-day end)', async () => {
