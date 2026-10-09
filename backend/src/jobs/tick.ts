@@ -10,7 +10,7 @@ import { runModelHealth } from './modelHealth.ts';
 import { runReminders } from './reminders.ts';
 import { runRetryQueue } from './retryQueue.ts';
 
-async function claim(s: Services, job: string, period: string): Promise<boolean> {
+export async function claim(s: Services, job: string, period: string): Promise<boolean> {
   try {
     await s.store.shared.job_runs.insertOne({ job, period });
     return true;
@@ -20,7 +20,7 @@ async function claim(s: Services, job: string, period: string): Promise<boolean>
   }
 }
 
-export type JobName = 'reminders' | 'retry-queue' | 'cycle-check' | 'daily-summary' | 'model-health';
+export type JobName = 'reminders' | 'retry-queue' | 'cycle-check' | 'daily-summary' | 'model-health' | 'llm-check';
 
 export async function runJob(s: Services, name: JobName, apiUrl: string): Promise<unknown> {
   switch (name) {
@@ -34,6 +34,9 @@ export async function runJob(s: Services, name: JobName, apiUrl: string): Promis
       return runDailySummary(s);
     case 'model-health':
       return runModelHealth(s.store, s.fetch);
+    case 'llm-check':
+      // Manual: checks the key and sends one tiny request to every enabled model (uses ~1 request per model).
+      return s.llm.check ? s.llm.check({ probe: true }) : { error: 'llm check not available' };
   }
 }
 

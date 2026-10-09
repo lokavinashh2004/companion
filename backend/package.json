@@ -15,6 +15,7 @@
     
     "models:seed": "tsx scripts/seed-models.ts",
     "models:eval": "tsx --env-file=.env scripts/language-eval.ts",
+    "models:check": "tsx scripts/check-models.ts",
     "openapi": "tsx scripts/openapi.ts",
     "prefetch-model": "tsx scripts/prefetch-model.ts"
   },

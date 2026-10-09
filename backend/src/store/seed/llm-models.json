@@ -1,122 +1,143 @@
 {
  "_about": [
-  "Starter list of OpenRouter :free models (unverified: openrouter.ai was unreachable from the build machine).",
-  "Regenerate with npm run models:seed; run npm run models:eval to add tamil_script / tanglish caps."
+  "OpenRouter :free models in fallback order (priority 1 is tried first). The backend resolves each display",
+  "name to its exact id from https://openrouter.ai/api/v1/models at startup; vision and response_format",
+  "support come from the catalog too. Rows that disappear from this list are disabled in the database.",
+  "Left out on purpose: NVIDIA Nemotron 3.5 Content Safety (a moderation classifier, not a chat model).",
+  "Check the key and every model with: npm run models:check (or POST /jobs/llm-check on the server)."
  ],
  "models": [
   {
-   "model_id": "google/gemini-2.0-flash-exp:free",
+   "name": "NVIDIA: Nemotron 3 Ultra (free)",
+   "model_id": null,
    "priority": 1,
-   "caps": [
-    "chat",
-    "json",
-    "vision"
-   ],
-   "enabled": true,
-   "supports_response_format": true,
-   "notes": "unverified starter"
-  },
-  {
-   "model_id": "deepseek/deepseek-chat-v3-0324:free",
-   "priority": 2,
    "caps": [
     "chat",
     "json"
    ],
    "enabled": true,
-   "supports_response_format": true,
-   "notes": "unverified starter"
+   "notes": "primary: 55B-active reasoning MoE, 1M context"
   },
   {
-   "model_id": "meta-llama/llama-4-maverick:free",
+   "name": "Poolside: Laguna S 2.1 (free)",
+   "model_id": null,
+   "priority": 2,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": false,
+   "notes": "coding model; going away 2026-10-31; free use: provider may train on prompts (health data) - enable only if you accept that"
+  },
+  {
+   "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+   "model_id": null,
    "priority": 3,
    "caps": [
     "chat",
-    "json",
-    "vision"
+    "json"
    ],
    "enabled": true,
-   "supports_response_format": true,
-   "notes": "unverified starter"
+   "notes": "fast 3B-active MoE"
   },
   {
-   "model_id": "google/gemma-3-27b-it:free",
+   "name": "Dots Studio: Dots3-Note Preview (free)",
+   "model_id": null,
    "priority": 4,
    "caps": [
     "chat",
-    "json",
-    "vision"
+    "json"
    ],
    "enabled": true,
-   "supports_response_format": false,
-   "notes": "unverified starter"
+   "notes": "multimodal; going away 2026-12-31"
   },
   {
-   "model_id": "meta-llama/llama-3.3-70b-instruct:free",
+   "name": "NVIDIA: Nemotron 3 Super (free)",
+   "model_id": null,
    "priority": 5,
    "caps": [
     "chat",
     "json"
    ],
    "enabled": true,
-   "supports_response_format": true,
-   "notes": "unverified starter"
+   "notes": "120B hybrid MoE"
   },
   {
-   "model_id": "qwen/qwen3-235b-a22b:free",
+   "name": "Thinking Machines: Inkling (free)",
+   "model_id": null,
    "priority": 6,
    "caps": [
     "chat",
     "json"
    ],
    "enabled": true,
-   "supports_response_format": false,
-   "notes": "unverified starter"
+   "notes": "multimodal (image + audio), multilingual"
   },
   {
-   "model_id": "mistralai/mistral-small-3.2-24b-instruct:free",
+   "name": "Apodex: Apodex 1.1 Mini (free)",
+   "model_id": null,
    "priority": 7,
    "caps": [
     "chat",
-    "json",
-    "vision"
+    "json"
    ],
    "enabled": true,
-   "supports_response_format": true,
-   "notes": "unverified starter"
+   "notes": "research-style reasoning"
   },
   {
-   "model_id": "z-ai/glm-4.5-air:free",
+   "name": "Cohere: North Mini Code (free)",
+   "model_id": null,
    "priority": 8,
    "caps": [
     "chat",
     "json"
    ],
    "enabled": true,
-   "supports_response_format": false,
-   "notes": "unverified starter"
+   "notes": "coding-focused, kept as a late fallback"
   },
   {
-   "model_id": "moonshotai/kimi-k2:free",
+   "name": "Thinking Machines: Inkling Small (free)",
+   "model_id": null,
    "priority": 9,
    "caps": [
     "chat",
     "json"
    ],
    "enabled": true,
-   "supports_response_format": false,
-   "notes": "unverified starter"
+   "notes": "multimodal, multilingual"
   },
   {
-   "model_id": "openai/gpt-oss-20b:free",
+   "name": "Poolside: Laguna XS 2.1 (free)",
+   "model_id": null,
    "priority": 10,
    "caps": [
     "chat",
     "json"
    ],
+   "enabled": false,
+   "notes": "coding model; going away 2026-10-31; free use: provider may train on prompts (health data) - enable only if you accept that"
+  },
+  {
+   "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+   "model_id": null,
+   "priority": 11,
+   "caps": [
+    "chat",
+    "json"
+   ],
    "enabled": true,
-   "supports_response_format": false,
-   "notes": "unverified starter"
+   "notes": "multimodal (image/video/audio) perception model"
+  },
+  {
+   "name": "LiquidAI: LFM2.5-2.6B (free)",
+   "model_id": null,
+   "priority": 12,
+   "caps": [
+    "chat",
+    "json"
+   ],
+   "enabled": false,
+   "notes": "small; weak at knowledge-heavy tasks; free use: provider may train on prompts (health data) - enable only if you accept that"
   }
  ]
 }

@@ -32,8 +32,8 @@ export function SignIn() {
     try {
       if (mode === 'in') await signInEmail(email.trim(), password);
       else await signUpEmail(email.trim(), password);
-    } catch {
-      setMessage(t('common.error'));
+    } catch (e) {
+      setMessage(t(authErrorKey(e)));
     } finally {
       setBusy(false);
     }
@@ -44,7 +44,8 @@ export function SignIn() {
     try {
       await signInGoogle();
     } catch (e) {
-      setMessage((e as { code?: string }).code === 'auth/popup-blocked' ? t('auth.popupBlocked') : t('common.error'));
+      if ((e as { code?: string }).code === 'auth/popup-closed-by-user' || (e as { code?: string }).code === 'auth/cancelled-popup-request') return;
+      setMessage(t(authErrorKey(e)));
     }
   };
 
@@ -108,4 +109,28 @@ export function SignIn() {
       <Muted small>{t('common.disclaimer')}</Muted>
     </Page>
   );
+}
+
+// Firebase error codes → a message she can act on (anything else stays the generic error).
+const AUTH_ERRORS: Record<string, string> = {
+  'auth/popup-blocked': 'auth.popupBlocked',
+  'auth/unauthorized-domain': 'authErrors.unauthorizedDomain',
+  'auth/invalid-credential': 'authErrors.wrongLogin',
+  'auth/invalid-login-credentials': 'authErrors.wrongLogin',
+  'auth/wrong-password': 'authErrors.wrongLogin',
+  'auth/user-not-found': 'authErrors.wrongLogin',
+  'auth/email-already-in-use': 'authErrors.emailInUse',
+  'auth/weak-password': 'auth.invalid',
+  'auth/invalid-email': 'auth.invalid',
+  'auth/too-many-requests': 'authErrors.tooMany',
+  'auth/network-request-failed': 'authErrors.network',
+  'auth/operation-not-allowed': 'authErrors.notEnabled',
+  'auth/invalid-api-key': 'auth.notConfigured',
+  'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'auth.notConfigured',
+};
+
+function authErrorKey(e: unknown): string {
+  const code = (e as { code?: string } | null)?.code;
+  if (code && !AUTH_ERRORS[code]) console.warn('sign-in failed:', code);
+  return (code && AUTH_ERRORS[code]) || 'common.error';
 }

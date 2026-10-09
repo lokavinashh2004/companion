@@ -32,5 +32,13 @@
   "shell": {
     "account": "Your account",
     "you": "You"
+  },
+  "authErrors": {
+    "unauthorizedDomain": "Sign-in isn't allowed on this web address yet. The app owner needs to add it in Firebase (Authentication → Settings → Authorized domains).",
+    "wrongLogin": "That email and password don't match. Please try again or reset your password.",
+    "emailInUse": "That email may already have an account. Try signing in instead.",
+    "tooMany": "Too many attempts. Please wait a few minutes and try again.",
+    "network": "Couldn't reach the sign-in service. Check your connection and try again.",
+    "notEnabled": "This sign-in method isn't turned on yet. The app owner needs to enable it in Firebase."
   }
 }

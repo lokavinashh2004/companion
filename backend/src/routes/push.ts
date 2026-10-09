@@ -114,7 +114,7 @@ export function registerPush(app: App, deps: AppDeps) {
       method: 'post',
       path: '/jobs/{name}',
       tags: ['jobs'],
-      request: { params: z.object({ name: z.enum(['reminders', 'retry-queue', 'cycle-check', 'daily-summary', 'model-health']) }), headers: z.object({ 'x-cron-secret': z.string().optional() }) },
+      request: { params: z.object({ name: z.enum(['reminders', 'retry-queue', 'cycle-check', 'daily-summary', 'model-health', 'llm-check']) }), headers: z.object({ 'x-cron-secret': z.string().optional() }) },
       responses: { 200: jsonRes(z.object({ result: z.unknown() }), 'Runs one job now (manual trigger)') },
     }),
     async (c) => {

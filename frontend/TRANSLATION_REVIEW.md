@@ -561,6 +561,12 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `reminders.addGlass` | + Add a glass | + ஒரு குவளை சேர் |
 | [ ] | `shell.account` | Your account | உங்கள் கணக்கு |
 | [ ] | `shell.you` | You | நீங்கள் |
+| [ ] | `authErrors.unauthorizedDomain` | Sign-in isn't allowed on this web address yet. The app owner needs to add it in Firebase (Authentication → Settings → Authorized domains). | இந்த இணைய முகவரியில் உள்நுழைவு இன்னும் அனுமதிக்கப்படவில்லை. செயலி உரிமையாளர் இதை Firebase-இல் சேர்க்க வேண்டும் (Authentication → Settings → Authorized domains). |
+| [ ] | `authErrors.wrongLogin` | That email and password don't match. Please try again or reset your password. | மின்னஞ்சலும் கடவுச்சொல்லும் பொருந்தவில்லை. மீண்டும் முயலுங்கள் அல்லது கடவுச்சொல்லை மீட்டமையுங்கள். |
+| [ ] | `authErrors.emailInUse` | That email may already have an account. Try signing in instead. | இந்த மின்னஞ்சலுக்கு ஏற்கனவே கணக்கு இருக்கலாம். உள்நுழைய முயலுங்கள். |
+| [ ] | `authErrors.tooMany` | Too many attempts. Please wait a few minutes and try again. | அதிக முயற்சிகள். சில நிமிடங்கள் கழித்து மீண்டும் முயலுங்கள். |
+| [ ] | `authErrors.network` | Couldn't reach the sign-in service. Check your connection and try again. | உள்நுழைவு சேவையை அடைய முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயலுங்கள். |
+| [ ] | `authErrors.notEnabled` | This sign-in method isn't turned on yet. The app owner needs to enable it in Firebase. | இந்த உள்நுழைவு முறை இன்னும் இயக்கப்படவில்லை. செயலி உரிமையாளர் Firebase-இல் இயக்க வேண்டும். |
 | [ ] | `todayPage.waterUndo` | −250 ml | −250 மி.லி |
 | [ ] | `todayPage.waterUndoLabel` | Remove 250 ml | 250 மி.லி நீக்கவும் |
 | [ ] | `todayPage.tellChat` | Tell me in chat | அரட்டையில் சொல்லுங்கள் |

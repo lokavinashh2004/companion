@@ -11,6 +11,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { companionSystemPrompt } from '../src/core/prompts/companion.ts';
 import { checkReply, type ReplyLanguage } from '../src/core/language.ts';
 import { CompanionResponse, extractJson } from '../src/core/schemas.ts';
+import { fetchCatalog, resolveSeedModel, type SeedModel } from '../src/services/models.ts';
 
 const CASES: { lang: ReplyLanguage; text: string; expect: string }[] = [
   { lang: 'en', text: 'Had two idlis and sambar for breakfast', expect: 'foods idli x2, sambar; meal breakfast' },
@@ -36,7 +37,11 @@ async function main() {
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) throw new Error('Set OPENROUTER_API_KEY (backend/.env)');
   const SEED = 'src/store/seed/llm-models.json';
-  const seed = JSON.parse(readFileSync(SEED, 'utf8')) as { _about: string[]; models: { model_id: string; caps: string[]; enabled: boolean; supports_response_format: boolean }[] };
+  const seed = JSON.parse(readFileSync(SEED, 'utf8')) as { _about: string[]; models: (SeedModel & { model_id: string })[] };
+  // Seed rows may only name the model; resolve those to exact ids (and keep them, so --apply writes them back).
+  const catalog = await fetchCatalog();
+  for (const m of seed.models) if (!m.model_id) m.model_id = resolveSeedModel(m, catalog)?.id ?? (null as unknown as string);
+  seed.models = seed.models.filter((m) => m.model_id || (console.warn(`not in the OpenRouter catalog: ${m.name}`), false));
   const only = process.env.MODELS?.split(',').map((s: string) => s.trim());
   const list = seed.models.filter((m) => m.enabled && (!only || only.includes(m.model_id)));
 
