@@ -105,7 +105,13 @@ export async function probeModel(fetchFn: typeof fetch, apiKey: string, modelId:
       method: 'POST',
       signal: AbortSignal.timeout(timeoutMs),
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'X-Title': 'Companion' },
-      body: JSON.stringify({ model: modelId, temperature: 0, max_tokens: 40, messages: [{ role: 'user', content: 'Reply with exactly {"ok":true} and nothing else.' }] }),
+      body: JSON.stringify({
+        model: modelId,
+        temperature: 0,
+        max_tokens: 400, // reasoning models spend tokens thinking before they answer
+        reasoning: { effort: 'low', exclude: true },
+        messages: [{ role: 'user', content: 'Reply with exactly {"ok":true} and nothing else.' }],
+      }),
     });
   } catch (e) {
     return done(false, e instanceof Error && e.name === 'TimeoutError' ? 'timeout' : `network: ${e instanceof Error ? e.message : e}`);
@@ -114,11 +120,13 @@ export async function probeModel(fetchFn: typeof fetch, apiKey: string, modelId:
   if (looksLikeHtml(body)) return done(false, PROXY);
   if (!res.ok) return done(false, `http_${res.status}: ${body.slice(0, 160)}`);
   try {
-    const parsed = JSON.parse(body) as { error?: unknown; choices?: { message?: { content?: unknown; reasoning?: unknown } }[] };
+    const parsed = JSON.parse(body) as { error?: unknown; choices?: { finish_reason?: string; message?: { content?: unknown; reasoning?: unknown } }[] };
     if (parsed.error) return done(false, `provider_error: ${JSON.stringify(parsed.error).slice(0, 160)}`);
-    const msg = parsed.choices?.[0]?.message;
-    const text = typeof msg?.content === 'string' ? msg.content.trim() : '';
-    return text ? done(true) : done(false, 'empty_content');
+    const choice = parsed.choices?.[0];
+    const text = typeof choice?.message?.content === 'string' ? choice.message.content.trim() : '';
+    if (text) return done(true);
+    if (choice?.finish_reason === 'length' || choice?.message?.reasoning) return done(false, 'empty_content: still reasoning when the token limit hit');
+    return done(false, `empty_content (finish_reason ${choice?.finish_reason ?? 'none'})`);
   } catch {
     return done(false, 'bad_envelope');
   }

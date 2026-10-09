@@ -50,7 +50,9 @@ export function createApp(deps: AppDeps) {
   app.use('*', async (c, next) => {
     const t0 = Date.now();
     await next();
-    if (c.req.path !== '/health') console.log(`${c.req.method} ${c.req.routePath} ${c.res.status} ${Date.now() - t0}ms`);
+    // Route pattern (e.g. /food/logs/:id) when one matched; else the bare path, still without the query string.
+    const route = c.req.routePath === '/*' ? c.req.path : c.req.routePath;
+    if (c.req.path !== '/health') console.log(`${c.req.method} ${route} ${c.res.status} ${Date.now() - t0}ms`);
   });
 
   const requireUser = createMiddleware<AppEnv>(async (c, next) => {

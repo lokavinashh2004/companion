@@ -131,6 +131,8 @@ async function attempt<T>(deps: RouterDeps, model: ModelRow, opts: RouteOptions<
         messages: opts.messages,
         temperature: opts.temperature,
         max_tokens: opts.maxTokens ?? 900,
+        // Reasoning models: think briefly and keep the thinking out of the reply (ignored by other models).
+        reasoning: { effort: 'low', exclude: true },
         ...(model.supports_response_format ? { response_format: { type: 'json_object' } } : {}),
       }),
     });

@@ -86,10 +86,11 @@ describe('reminders', () => {
   it('forged or expired medicine tokens are rejected', async () => {
     const h = await harness();
     const secret = 'test-med-secret-123456';
-    const good = signMedToken({ uid: 'uidA', medication_id: 'm', day: '2026-10-08', time: '08:00', exp: Date.now() + 1000 }, secret);
+    const good = signMedToken({ uid: 'uidA', medication_id: 'm', day: '2026-10-08', time: '08:00', exp: Date.now() + 60_000 }, secret);
     expect(verifyMedToken(good, secret)).toBeTruthy();
     expect(verifyMedToken(good, 'other-secret')).toBeNull();
-    expect(verifyMedToken(good.replace(/.$/, 'x'), secret)).toBeNull();
+    // change the last signature character (to a different one: replacing an 'x' with 'x' would forge nothing)
+    expect(verifyMedToken(good.slice(0, -1) + (good.endsWith('x') ? 'y' : 'x'), secret)).toBeNull();
     expect(verifyMedToken(signMedToken({ uid: 'uidA', medication_id: 'm', day: 'd', time: 't', exp: Date.now() - 1 }, secret), secret)).toBeNull();
     expect((await h.req('/med-action', { body: { token: 'forged.token.value', action: 'taken' } })).status).toBe(401);
   });

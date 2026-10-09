@@ -72,11 +72,13 @@ it('renders history, sends a message optimistically and shows the reply', async 
   expect(await screen.findByText('Had a walk today')).toBeTruthy();
   expect(screen.getByText(en.chat.sending)).toBeTruthy();
   expect(screen.getByText(en.chat.typing)).toBeTruthy();
+  expect(screen.getByTestId('typing')).toBeTruthy(); // the three-dot bubble on the companion's side
   expect((box as HTMLTextAreaElement).value).toBe('');
 
   release();
   expect(await screen.findByText('So glad you told me 💛')).toBeTruthy();
   expect(screen.queryByText(en.chat.sending)).toBeNull();
+  expect(screen.queryByTestId('typing')).toBeNull();
 
   const post = calls.find((c) => c.method === 'POST' && c.path === '/chat/messages');
   const body = post?.body as { text: string; client_id: string };

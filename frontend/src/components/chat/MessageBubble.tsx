@@ -88,3 +88,16 @@ export function MessageBubble({ message, actions, statusOverride }: { message: C
     </li>
   );
 }
+
+/** Three bouncing dots on the companion's side while a reply is on its way (the header announces "typing…"). */
+export function TypingBubble() {
+  return (
+    <li className={cx(s.item, s.itemBot)} aria-hidden="true" data-testid="typing">
+      <div className={cx(s.bubble, s.bubbleBot, s.typing)}>
+        <span className={s.dot} />
+        <span className={s.dot} />
+        <span className={s.dot} />
+      </div>
+    </li>
+  );
+}

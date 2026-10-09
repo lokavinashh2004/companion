@@ -14,7 +14,7 @@ import { loadOlderMessages, useConfirmPeriod, useMe, useMessages, useSendMessage
 import { useOnline } from '@/lib/useOnline';
 import { Composer } from './Composer';
 import { CrisisCard } from './CrisisCard';
-import { MessageBubble, type BubbleActions } from './MessageBubble';
+import { MessageBubble, TypingBubble, type BubbleActions } from './MessageBubble';
 import { PhotoLogSheet } from './PhotoLogSheet';
 import s from './panel.module.css';
 
@@ -191,6 +191,7 @@ export function ChatPanel({ variant = 'page', onClose }: { variant?: ChatVariant
               statusOverride={t('chat.sending')}
             />
           ) : null}
+          {pending ? <TypingBubble /> : null}
         </ol>
 
         {showCrisis ? <CrisisCard onDismiss={() => setDismissedCrisis(crisisKey)} /> : null}

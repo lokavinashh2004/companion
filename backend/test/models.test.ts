@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createLlmClient } from '../src/services/llm.ts';
-import { checkKey, resolveSeedModel, type OrModel } from '../src/services/models.ts';
+import { checkKey, probeModel, resolveSeedModel, type OrModel } from '../src/services/models.ts';
 import { syncModels } from '../src/store/seed.ts';
 import { createMemoryStore } from '../src/store/index.ts';
 import seed from '../src/store/seed/llm-models.json' with { type: 'json' };
@@ -24,8 +24,14 @@ describe('seed list', () => {
     expect(names).toHaveLength(12);
     expect(names.some((n) => /content safety/i.test(n))).toBe(false);
     expect(seed.models.map((m) => m.priority)).toEqual(names.map((_, i) => i + 1));
-    // models whose free tier may train on prompts start disabled (health data)
-    expect(seed.models.filter((m) => !m.enabled).map((m) => m.name)).toEqual(['Poolside: Laguna S 2.1 (free)', 'Poolside: Laguna XS 2.1 (free)', 'LiquidAI: LFM2.5-2.6B (free)']);
+    // off: free tiers that may train on prompts (health data), and Inkling (agentic harnesses only)
+    expect(seed.models.filter((m) => !m.enabled).map((m) => m.name)).toEqual([
+      'Poolside: Laguna S 2.1 (free)',
+      'Thinking Machines: Inkling (free)',
+      'Thinking Machines: Inkling Small (free)',
+      'Poolside: Laguna XS 2.1 (free)',
+      'LiquidAI: LFM2.5-2.6B (free)',
+    ]);
   });
 
   it('resolves display names to the free variant, with or without the vendor prefix', () => {
@@ -85,12 +91,22 @@ describe('llm check', () => {
     expect(r.models.map((m) => [m.model_id, m.ok])).toEqual([
       ['nvidia/nemotron-3-ultra:free', false],
       ['nvidia/nemotron-3.5-lightning:free', true],
-      ['thinkingmachines/inkling:free', true],
-    ]);
+    ]); // Inkling is synced but disabled, so it is not probed
     expect(r.first_working).toBe('nvidia/nemotron-3.5-lightning:free');
     expect((await store.shared.llm_models.findOne({ model_id: 'nvidia/nemotron-3-ultra:free' }))?.unhealthy_until).not.toBeNull();
-    expect(await llm.remaining()).toBe(47); // probes use the daily budget
+    expect(await llm.remaining()).toBe(48); // probes use the daily budget
     // the key never appears in logs
     expect(JSON.stringify((console.log as unknown as { mock: { calls: unknown[] } }).mock.calls)).not.toContain('sk-good');
+  });
+
+  it('asks reasoning models for brief hidden reasoning, and explains a reasoning-only reply', async () => {
+    let sent: Record<string, unknown> = {};
+    const f = vi.fn(async (_u: unknown, init?: RequestInit) => {
+      sent = JSON.parse(String(init?.body)) as Record<string, unknown>;
+      return json({ choices: [{ finish_reason: 'length', message: { content: '', reasoning: 'thinking…' } }] });
+    }) as unknown as typeof fetch;
+    const r = await probeModel(f, 'sk', 'x/reasoner:free');
+    expect(sent).toMatchObject({ max_tokens: 400, reasoning: { effort: 'low', exclude: true } });
+    expect(r).toMatchObject({ ok: false, error: 'empty_content: still reasoning when the token limit hit' });
   });
 });
