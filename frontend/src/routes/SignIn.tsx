@@ -5,6 +5,7 @@ import { Navigate, useLocation } from 'react-router';
 import { Icon } from '@/components/Icon';
 import { Button, Card, Field, Muted, Page, Row } from '@/components/ui';
 import { setUiLanguage } from '@/i18n';
+import { isAdminEmail, loginEmail } from '@/lib/admin';
 import { useAuth } from '@/lib/auth';
 import { firebaseConfigured, resetPassword, signInEmail, signInGoogle, signUpEmail } from '@/lib/firebase';
 import s from './SignIn.module.css';
@@ -19,19 +20,26 @@ export function SignIn() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  if (user) return <Navigate to={(location.state as { from?: string } | null)?.from ?? '/'} replace />;
+  if (user) return <Navigate to={isAdminEmail(user.email) ? '/admin' : ((location.state as { from?: string } | null)?.from ?? '/')} replace />;
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setMessage(null);
-    if (!/^\S+@\S+\.\S+$/.test(email.trim()) || password.length < 8) {
+    const address = loginEmail(email);
+    const admin = isAdminEmail(address);
+    if (admin && mode === 'up') {
+      setMessage(t('admin.reserved'));
+      return;
+    }
+    // The built-in admin may use a 6-character password (Firebase's minimum); everyone else needs 8.
+    if (!/^\S+@\S+\.\S+$/.test(address) || password.length < (admin ? 6 : 8)) {
       setMessage(t('auth.invalid'));
       return;
     }
     setBusy(true);
     try {
-      if (mode === 'in') await signInEmail(email.trim(), password);
-      else await signUpEmail(email.trim(), password);
+      if (mode === 'in') await signInEmail(address, password);
+      else await signUpEmail(address, password);
     } catch (e) {
       setMessage(t(authErrorKey(e)));
     } finally {
@@ -78,7 +86,7 @@ export function SignIn() {
         </Button>
         <Muted small>{t('auth.or')}</Muted>
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Field label={t('auth.email')} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Field label={t('auth.email')} type="text" inputMode="email" autoCapitalize="none" spellCheck={false} autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
           <Field
             label={t('auth.password')}
             type="password"

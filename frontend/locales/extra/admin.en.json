@@ -1,0 +1,45 @@
+{
+  "admin": {
+    "menu": "Admin · AI usage",
+    "title": "AI usage",
+    "backToApp": "Back to the app",
+    "refresh": "Refresh",
+    "reserved": "That username is reserved for the app owner.",
+    "forbiddenTitle": "Only for the app owner",
+    "forbiddenBody": "This account isn't an admin. Sign in with the admin account to see AI usage.",
+    "requestsTitle": "Requests today",
+    "requestsLeft": "{{left}} left · resets at {{time}}",
+    "tokensTitle": "Tokens today",
+    "promptTokens": "Prompt",
+    "replyTokens": "Reply",
+    "tokensNote": "Counted from OpenRouter's replies. Free models have no token cap; the daily request limit is what runs out.",
+    "keyTitle": "OpenRouter key",
+    "keyStatus": {
+      "ok": "Working",
+      "invalid": "Rejected: create a new key",
+      "missing": "Not set on the server",
+      "unreachable": "Couldn't check right now"
+    },
+    "credits": "Credits used",
+    "creditLimit": "Credit limit",
+    "noLimit": "None",
+    "tier": "Tier",
+    "freeTier": "Free",
+    "paidTier": "Paid",
+    "historyRequests": "Requests, last 14 days",
+    "historyTokens": "Tokens, last 14 days",
+    "modelsTitle": "Models, in fallback order",
+    "model": "Model",
+    "state": "State",
+    "answered": "Answered",
+    "failed": "Failed",
+    "avgTime": "Avg time",
+    "lastError": "Last error",
+    "states": {
+      "on": "On",
+      "cooling": "Resting",
+      "off": "Off",
+      "gone": "Gone"
+    }
+  }
+}

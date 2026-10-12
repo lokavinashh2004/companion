@@ -145,6 +145,11 @@ function AvatarMenu() {
             <Link to="/me/settings" onClick={close}>
               ⚙️ {t('settings.title')}
             </Link>
+            {me.data?.is_admin ? (
+              <Link to="/admin" onClick={close}>
+                📊 {t('admin.menu')}
+              </Link>
+            ) : null}
           </nav>
           <div className={s.themeRow}>
             <span className={s.themeLabel}>{t('settings.theme')}</span>

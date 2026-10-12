@@ -44,7 +44,7 @@ export const ProfileSchema = z
   })
   .openapi('Profile');
 
-export const MeSchema = z.object({ uid: z.string(), email: z.string().nullable(), profile: ProfileSchema }).openapi('Me');
+export const MeSchema = z.object({ uid: z.string(), email: z.string().nullable(), is_admin: z.boolean(), profile: ProfileSchema }).openapi('Me');
 
 const profileFields = {
   companion_name: z.string().trim().min(1).max(30),
@@ -373,3 +373,40 @@ export const MedActionSchema = z.object({ token: z.string().min(10).max(1000), a
 
 export type Profile = z.infer<typeof ProfileSchema>;
 export type ProfilePatch = z.infer<typeof ProfilePatchSchema>;
+
+// ---------------------------------------------------------------- admin
+
+const int = z.number().int();
+export const AdminUsageSchema = z
+  .object({
+    day: date,
+    budget: int,
+    used: int,
+    remaining: int,
+    resets_at: z.string(),
+    tokens: z.object({ prompt: int, completion: int, total: int }),
+    history: z.array(z.object({ day: date, requests: int, prompt_tokens: int, completion_tokens: int })),
+    key: z.object({
+      status: z.enum(['ok', 'invalid', 'missing', 'unreachable']),
+      label: z.string().nullable(),
+      free_tier: z.boolean().nullable(),
+      usage: z.number().nullable(),
+      limit: z.number().nullable(),
+      limit_remaining: z.number().nullable(),
+      error: z.string().nullable(),
+    }),
+    models: z.array(
+      z.object({
+        model_id: z.string(),
+        priority: int,
+        enabled: z.boolean(),
+        health_disabled: z.boolean(),
+        cooling_until: z.string().nullable(),
+        success_count: int,
+        fail_count: int,
+        avg_latency_ms: z.number().nullable(),
+        last_error: z.string().nullable(),
+      }),
+    ),
+  })
+  .openapi('AdminUsage');

@@ -272,6 +272,9 @@ export interface LlmModelDoc extends Base {
 export interface LlmUsageDoc extends Base {
   day: string;
   requests: number;
+  /** Token counts OpenRouter reports for each answered request (absent before tracking started). */
+  prompt_tokens?: number;
+  completion_tokens?: number;
 }
 
 export interface JobRunDoc extends Base {

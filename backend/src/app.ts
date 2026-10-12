@@ -7,6 +7,8 @@ import { HTTPException } from 'hono/http-exception';
 import { secureHeaders } from 'hono/secure-headers';
 
 import { HealthSchema } from './contract.ts';
+import { BUILT_IN_ADMIN_EMAIL } from './env.ts';
+import { registerAdmin } from './routes/admin.ts';
 import { registerChat } from './routes/chat.ts';
 import { registerCycle } from './routes/cycle.ts';
 import { registerFood } from './routes/food.ts';
@@ -67,6 +69,9 @@ export function createApp(deps: AppDeps) {
     await ensureUser(deps.services, user.uid, user.email);
     c.set('uid', user.uid);
     c.set('email', user.email);
+    const email = user.email?.toLowerCase() ?? null;
+    const admins = deps.admins ?? { uids: [], emails: [] };
+    c.set('admin', email === BUILT_IN_ADMIN_EMAIL || admins.uids.includes(user.uid) || (!!email && user.email_verified === true && admins.emails.includes(email)));
     await next();
   });
   app.use('*', async (c, next) => {
@@ -87,6 +92,7 @@ export function createApp(deps: AppDeps) {
   registerRecords(app, deps);
   registerInsights(app, deps);
   registerPush(app, deps);
+  registerAdmin(app, deps);
 
   app.openAPIRegistry.registerComponent('securitySchemes', 'firebase', { type: 'http', scheme: 'bearer', bearerFormat: 'Firebase ID token' });
   app.doc31('/openapi.json', { openapi: '3.1.0', info: { title: 'Companion API', version: VERSION } });

@@ -7,6 +7,8 @@ import type { Env } from '../env.ts';
 export interface VerifiedUser {
   uid: string;
   email: string | null;
+  /** Google sign-in emails are verified; email/password ones only after the verification link. */
+  email_verified?: boolean;
 }
 
 export interface FirebaseAuth {
@@ -33,7 +35,7 @@ export function createFirebaseAuth(env: Pick<Env, 'FIREBASE_PROJECT_ID' | 'FIREB
     async verifyToken(idToken) {
       // Checks signature (Google's public keys), expiry, issuer and audience = our project.
       const decoded = await auth.verifyIdToken(idToken, false);
-      return { uid: decoded.uid, email: decoded.email ?? null };
+      return { uid: decoded.uid, email: decoded.email ?? null, email_verified: decoded.email_verified === true };
     },
     async deleteUser(uid) {
       if (!env.FIREBASE_SERVICE_ACCOUNT) throw new Error('FIREBASE_SERVICE_ACCOUNT is required to delete users');

@@ -66,6 +66,11 @@ export function storeRouterDeps(store: Store, apiKey: string, fetchFn: typeof fe
     },
     getUsage: async () => (await store.shared.llm_usage.findOne({ day: usageDay(new Date(now())) }))?.requests ?? 0,
     bumpUsage: () => store.shared.llm_usage.inc({ day: usageDay(new Date(now())) }, 'requests', 1, { upsert: true }),
+    recordTokens: async (prompt, completion) => {
+      const day = { day: usageDay(new Date(now())) };
+      if (prompt) await store.shared.llm_usage.inc(day, 'prompt_tokens', prompt, { upsert: true });
+      if (completion) await store.shared.llm_usage.inc(day, 'completion_tokens', completion, { upsert: true });
+    },
     fetch: fetchFn,
     apiKey,
     now,

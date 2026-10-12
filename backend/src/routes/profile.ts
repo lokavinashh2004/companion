@@ -14,7 +14,7 @@ export function registerProfile(app: App, { services: s }: AppDeps) {
       const u = s.store.user(c.get('uid'));
       // Opening the app counts as "seen" (used for the one-time soft nudge after 3 quiet days).
       const p = (await u.profiles.updateOne({}, { last_opened_at: s.now().toISOString() })) ?? (await profileOf(u));
-      return c.json({ uid: c.get('uid'), email: c.get('email'), profile: toProfile(p) }, 200);
+      return c.json({ uid: c.get('uid'), email: c.get('email'), is_admin: c.get('admin'), profile: toProfile(p) }, 200);
     },
   );
 

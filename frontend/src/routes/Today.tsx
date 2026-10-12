@@ -1,4 +1,4 @@
-// Today: a greeting, food balance, meals, water, medicines, mood, the cycle strip, quick insights, weekly weight and a quick log.
+// Today: a greeting, food balance, meals, water, medicines, mood, the cycle strip, a walk session, quick insights, weekly weight and a quick log.
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -9,6 +9,7 @@ import { BalanceCard, MealsCard } from '@/components/today/BalanceCard';
 import { CycleStrip, InsightsCard, MedsCard, MoodCard, WaterCard, WeightCard } from '@/components/today/DayCards';
 import { NudgeCard } from '@/components/today/NudgeCard';
 import { QuickLogSheet } from '@/components/today/QuickLogSheet';
+import { WalkCard } from '@/components/today/WalkCard';
 import { Button, ErrorState, Loading, Notice, Page } from '@/components/ui';
 import { weekdayDate } from '@/lib/format';
 import { useMe, useToday } from '@/lib/queries';
@@ -89,6 +90,7 @@ export function Today() {
                   {t('todayPage.openCycle')} ›
                 </Link>
               </CycleCard>
+              <WalkCard today={today.data} />
               <InsightsCard today={today.data} />
               <WeightCard today={today.data} />
             </div>

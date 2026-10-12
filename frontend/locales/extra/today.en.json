@@ -40,5 +40,24 @@
     "askTitle": "Ask {{name}} anything",
     "askBody": "Get personalised advice, reminders and support.",
     "greetWithName": "{{greeting}}, {{name}}"
+  },
+  "walk": {
+    "title": "Walk",
+    "intro": "Tap Start and keep this page open while you walk. Steps are counted from your phone's motion sensor.",
+    "start": "Start walking",
+    "stop": "Stop walking",
+    "again": "Walk again",
+    "stepsUnit": "steps",
+    "keepOpen": "Keep this page open. Counting pauses if you lock the screen or switch apps.",
+    "totalSteps": "Steps",
+    "duration": "Duration",
+    "calories": "Calories",
+    "kcal": "{{value}} kcal",
+    "kcalNote": "Estimated for {{kg}} kg.",
+    "cheerStart": "Nice start! Every step counts 👟",
+    "cheerGreat": "Great walk! Keep it up 💪",
+    "cheerAmazing": "Amazing effort! You crushed it 🔥",
+    "denied": "Companion needs motion access to count steps. You can allow it in your browser settings and try again.",
+    "unsupported": "This device doesn't share motion data, so steps can't be counted here. Try on your phone."
   }
 }

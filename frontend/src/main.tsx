@@ -27,6 +27,7 @@ import { Medications } from './routes/Medications';
 import { NotFound } from './routes/NotFound';
 import { Onboarding } from './routes/Onboarding';
 import { Remembers } from './routes/Remembers';
+import { Admin } from './routes/Admin';
 import { RequireAuth } from './routes/RequireAuth';
 import { Settings } from './routes/Settings';
 import { SignIn } from './routes/SignIn';
@@ -37,6 +38,14 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30
 
 const router = createBrowserRouter([
   { path: '/sign-in', element: <SignIn /> },
+  {
+    path: '/admin',
+    element: (
+      <RequireAuth allowUnboarded>
+        <Admin />
+      </RequireAuth>
+    ),
+  },
   {
     path: '/onboarding',
     element: (

@@ -5,7 +5,7 @@ import { serve } from '@hono/node-server';
 import { createApp, VERSION } from './app.ts';
 import { claim, tick } from './jobs/tick.ts';
 import { createFirebaseAuth } from './auth/firebase.ts';
-import { allowedOrigins, loadEnv } from './env.ts';
+import { adminAllowlist, allowedOrigins, BUILT_IN_ADMIN_EMAIL, loadEnv } from './env.ts';
 import type { Services } from './services/context.ts';
 import { configureModelDir, embed } from './services/embed.ts';
 import { createLlmClient, usageDay } from './services/llm.ts';
@@ -65,7 +65,8 @@ const services: Services = {
 const apiUrl = (env.PUBLIC_API_URL ?? env.RENDER_EXTERNAL_URL ?? `http://localhost:${env.PORT}`).replace(/\/$/, '');
 const origins = allowedOrigins(env);
 console.log(`CORS allowed origins: ${origins.join(', ') || '(none)'}`);
-const app = createApp({ auth, services, allowedOrigins: origins, apiUrl });
+const admins = adminAllowlist(env);
+const app = createApp({ auth, services, allowedOrigins: origins, apiUrl, admins });
 
 const yesNo = (v: unknown) => (v ? 'set' : 'MISSING');
 serve({ fetch: app.fetch, port: env.PORT, hostname: '0.0.0.0' }, (info) => {
@@ -79,6 +80,7 @@ serve({ fetch: app.fetch, port: env.PORT, hostname: '0.0.0.0' }, (info) => {
       `  firebase     project ${env.FIREBASE_PROJECT_ID}, service account ${yesNo(env.FIREBASE_SERVICE_ACCOUNT)}`,
       `  cors         ${origins.join(', ') || '(none)'}`,
       `  llm          OpenRouter key ${yesNo(env.OPENROUTER_API_KEY)}, ${enabled} models enabled, ${env.LLM_DAILY_BUDGET} requests/day budget`,
+      `  admin        ${[BUILT_IN_ADMIN_EMAIL, ...admins.emails, ...admins.uids.map((u) => `uid ${u.slice(0, 6)}…`)].join(', ')}`,
       `  push         ${env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY ? 'on' : 'off (VAPID keys missing)'}, cron secret ${yesNo(env.CRON_SECRET)}, USDA key ${yesNo(env.USDA_API_KEY)}`,
       '==================================================',
     ].join('\n'),

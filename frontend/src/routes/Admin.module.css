@@ -1,0 +1,119 @@
+.back {
+  align-self: flex-start;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+.big {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.of {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+}
+.meter {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  overflow: hidden;
+}
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+.fillHot {
+  background: var(--danger);
+}
+.pairs {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--space-3);
+}
+.pairs dt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.pairs dd {
+  margin: 0;
+  font-weight: 700;
+}
+.status {
+  margin: 0;
+  font-weight: 700;
+}
+.ok {
+  color: var(--success);
+}
+.bad {
+  color: var(--danger);
+}
+.tableBox {
+  overflow-x: auto;
+  margin: 0 calc(-1 * var(--space-2));
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  white-space: nowrap;
+}
+.table th {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.82rem;
+}
+.error {
+  white-space: normal !important;
+  min-width: 220px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.pill {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.pill_on {
+  background: var(--calm);
+  color: var(--on-calm);
+}
+.pill_cooling {
+  background: var(--chip);
+  color: var(--on-chip);
+}
+.pill_off,
+.pill_gone {
+  background: var(--surface-alt);
+  color: var(--text-muted);
+}

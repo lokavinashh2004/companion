@@ -11,6 +11,7 @@ type S = components['schemas'];
 export type Profile = S['Profile'];
 export type ProfilePatch = S['ProfilePatch'];
 export type Me = S['Me'];
+export type AdminUsage = S['AdminUsage'];
 export type ChatMessage = S['ChatMessage'];
 export type MessageMeta = S['MessageMeta'];
 export type SendResult = S['SendResult'];

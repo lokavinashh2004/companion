@@ -433,6 +433,43 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `a11y.periodDay` | {{date}}, period | {{date}}, பீரியட் |
 | [ ] | `a11y.predictedDay` | {{date}}, predicted window | {{date}}, கணித்த காலம் |
 | [ ] | `a11y.callHelpline` | Call Tele-MANAS helpline 14416 | Tele-MANAS உதவி எண் 14416-ஐ அழை |
+| [ ] | `admin.menu` | Admin · AI usage | நிர்வாகம் · AI பயன்பாடு |
+| [ ] | `admin.title` | AI usage | AI பயன்பாடு |
+| [ ] | `admin.backToApp` | Back to the app | செயலிக்குத் திரும்பு |
+| [ ] | `admin.refresh` | Refresh | புதுப்பி |
+| [ ] | `admin.reserved` | That username is reserved for the app owner. | இந்தப் பயனர்பெயர் செயலி உரிமையாளருக்கு ஒதுக்கப்பட்டது. |
+| [ ] | `admin.forbiddenTitle` | Only for the app owner | செயலி உரிமையாளருக்கு மட்டும் |
+| [ ] | `admin.forbiddenBody` | This account isn't an admin. Sign in with the admin account to see AI usage. | இந்தக் கணக்கு நிர்வாகி அல்ல. AI பயன்பாட்டைப் பார்க்க நிர்வாகி கணக்கில் உள்நுழையுங்கள். |
+| [ ] | `admin.requestsTitle` | Requests today | இன்றைய கோரிக்கைகள் |
+| [ ] | `admin.requestsLeft` | {{left}} left · resets at {{time}} | {{left}} மீதம் · {{time}}-க்கு மீட்டமைப்பு |
+| [ ] | `admin.tokensTitle` | Tokens today | இன்றைய டோக்கன்கள் |
+| [ ] | `admin.promptTokens` | Prompt | கேள்வி |
+| [ ] | `admin.replyTokens` | Reply | பதில் |
+| [ ] | `admin.tokensNote` | Counted from OpenRouter's replies. Free models have no token cap; the daily request limit is what runs out. | OpenRouter பதில்களிலிருந்து கணக்கிடப்பட்டது. இலவச மாடல்களுக்கு டோக்கன் வரம்பு இல்லை; தினசரி கோரிக்கை வரம்பே தீர்ந்துபோகும். |
+| [ ] | `admin.keyTitle` | OpenRouter key | OpenRouter சாவி |
+| [ ] | `admin.keyStatus.ok` | Working | செயல்படுகிறது |
+| [ ] | `admin.keyStatus.invalid` | Rejected: create a new key | நிராகரிக்கப்பட்டது: புதிய சாவி உருவாக்கவும் |
+| [ ] | `admin.keyStatus.missing` | Not set on the server | சர்வரில் அமைக்கப்படவில்லை |
+| [ ] | `admin.keyStatus.unreachable` | Couldn't check right now | இப்போது சரிபார்க்க முடியவில்லை |
+| [ ] | `admin.credits` | Credits used | பயன்படுத்திய கிரெடிட் |
+| [ ] | `admin.creditLimit` | Credit limit | கிரெடிட் வரம்பு |
+| [ ] | `admin.noLimit` | None | இல்லை |
+| [ ] | `admin.tier` | Tier | வகை |
+| [ ] | `admin.freeTier` | Free | இலவசம் |
+| [ ] | `admin.paidTier` | Paid | கட்டணம் |
+| [ ] | `admin.historyRequests` | Requests, last 14 days | கோரிக்கைகள், கடந்த 14 நாட்கள் |
+| [ ] | `admin.historyTokens` | Tokens, last 14 days | டோக்கன்கள், கடந்த 14 நாட்கள் |
+| [ ] | `admin.modelsTitle` | Models, in fallback order | மாடல்கள், மாற்று வரிசையில் |
+| [ ] | `admin.model` | Model | மாடல் |
+| [ ] | `admin.state` | State | நிலை |
+| [ ] | `admin.answered` | Answered | பதிலளித்தது |
+| [ ] | `admin.failed` | Failed | தோல்வி |
+| [ ] | `admin.avgTime` | Avg time | சராசரி நேரம் |
+| [ ] | `admin.lastError` | Last error | கடைசிப் பிழை |
+| [ ] | `admin.states.on` | On | இயக்கத்தில் |
+| [ ] | `admin.states.cooling` | Resting | ஓய்வில் |
+| [ ] | `admin.states.off` | Off | அணைப்பு |
+| [ ] | `admin.states.gone` | Gone | நீக்கப்பட்டது |
 | [ ] | `chatPage.loadEarlier` | Load earlier messages | முந்தைய மெசேஜ்களை காட்டு |
 | [ ] | `chatPage.removed` | Removed: {{label}} | நீக்கப்பட்டது: {{label}} |
 | [ ] | `chatPage.undoAria` | Undo: {{label}} | திரும்பப் பெறு: {{label}} |
@@ -605,6 +642,23 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayPage.askTitle` | Ask {{name}} anything | {{name}}-இடம் எதையும் கேளுங்கள் |
 | [ ] | `todayPage.askBody` | Get personalised advice, reminders and support. | தனிப்பட்ட ஆலோசனை, நினைவூட்டல்கள் மற்றும் ஆதரவைப் பெறுங்கள். |
 | [ ] | `todayPage.greetWithName` | {{greeting}}, {{name}} | {{greeting}}, {{name}} |
+| [ ] | `walk.title` | Walk | நடை |
+| [ ] | `walk.intro` | Tap Start and keep this page open while you walk. Steps are counted from your phone's motion sensor. | Start-ஐத் தட்டி, நடக்கும்போது இந்தப் பக்கத்தைத் திறந்தே வையுங்கள். உங்கள் போனின் அசைவு சென்சார் மூலம் அடிகள் எண்ணப்படும். |
+| [ ] | `walk.start` | Start walking | நடக்கத் தொடங்கு |
+| [ ] | `walk.stop` | Stop walking | நடையை நிறுத்து |
+| [ ] | `walk.again` | Walk again | மீண்டும் நட |
+| [ ] | `walk.stepsUnit` | steps | அடிகள் |
+| [ ] | `walk.keepOpen` | Keep this page open. Counting pauses if you lock the screen or switch apps. | இந்தப் பக்கத்தைத் திறந்தே வையுங்கள். திரையைப் பூட்டினாலோ வேறு ஆப்புக்கு மாறினாலோ எண்ணுவது நிற்கும். |
+| [ ] | `walk.totalSteps` | Steps | அடிகள் |
+| [ ] | `walk.duration` | Duration | நேரம் |
+| [ ] | `walk.calories` | Calories | கலோரிகள் |
+| [ ] | `walk.kcal` | {{value}} kcal | {{value}} kcal |
+| [ ] | `walk.kcalNote` | Estimated for {{kg}} kg. | {{kg}} கி.கி எடைக்குக் கணக்கிடப்பட்டது. |
+| [ ] | `walk.cheerStart` | Nice start! Every step counts 👟 | நல்ல தொடக்கம்! ஒவ்வொரு அடியும் முக்கியம் 👟 |
+| [ ] | `walk.cheerGreat` | Great walk! Keep it up 💪 | அருமையான நடை! இப்படியே தொடருங்கள் 💪 |
+| [ ] | `walk.cheerAmazing` | Amazing effort! You crushed it 🔥 | அசத்திட்டீங்க! சூப்பர் முயற்சி 🔥 |
+| [ ] | `walk.denied` | Companion needs motion access to count steps. You can allow it in your browser settings and try again. | அடிகளை எண்ண Companion-க்கு அசைவு அனுமதி வேண்டும். உங்கள் பிரவுசர் அமைப்புகளில் அனுமதித்து மீண்டும் முயற்சி செய்யுங்கள். |
+| [ ] | `walk.unsupported` | This device doesn't share motion data, so steps can't be counted here. Try on your phone. | இந்தச் சாதனம் அசைவுத் தரவைத் தருவதில்லை, அதனால் இங்கே அடிகளை எண்ண முடியாது. உங்கள் போனில் முயற்சி செய்யுங்கள். |
 
 ## Server messages (fallbacks, pushes, delay check-in)
 

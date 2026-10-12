@@ -75,4 +75,4 @@ export const PROFILE = {
   weight_tracking: false,
 } as const;
 
-export const ME = { uid: 'u1', email: 'tester@companion.test', profile: PROFILE };
+export const ME = { uid: 'u1', email: 'tester@companion.test', is_admin: false, profile: PROFILE };

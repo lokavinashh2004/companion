@@ -280,3 +280,11 @@ export function useDismissInsight() {
     onSuccess: () => inv(keys.insights, keys.cycle),
   });
 }
+
+// ---------------------------------------------------------------- admin
+
+/** Owner-only LLM usage (403 for everyone else). Refreshes every minute while open. */
+export function useAdminUsage() {
+  const { user } = useAuth();
+  return useQuery({ queryKey: ['admin-usage'], enabled: !!user, retry: false, refetchInterval: 60_000, queryFn: async () => unwrap(await api.GET('/admin/usage')) });
+}

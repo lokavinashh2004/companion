@@ -38,6 +38,10 @@ const EnvSchema = z.object({
   /** Signs the short-lived tokens inside medicine notifications (Taken / Snooze). */
   MED_ACTION_SECRET: optional,
 
+  /** Who may open /admin: comma-separated Firebase UIDs, and/or emails (only counted once Firebase has verified them). */
+  ADMIN_UIDS: optional,
+  ADMIN_EMAILS: optional,
+
   /** Where the gte-small embedding model is cached (filled at build time). */
   MODEL_DIR: z.string().default('./models'),
 });
@@ -79,4 +83,21 @@ export function allowedOrigins(env: Pick<Env, 'ALLOWED_ORIGINS' | 'NODE_ENV'>): 
   }
   if (env.NODE_ENV === 'production') out.add(PRODUCTION_ORIGIN);
   return [...out];
+}
+
+/**
+ * The built-in admin: sign in to the app with username "admin" (the frontend maps it to this email).
+ * Create it once in Firebase → Authentication → Users → Add user; after that nobody else can register it.
+ * Console-created users are unverified, so this one address is trusted without email verification.
+ */
+export const BUILT_IN_ADMIN_EMAIL = 'admin@companion.app';
+
+export interface AdminAllowlist {
+  uids: string[];
+  emails: string[];
+}
+
+export function adminAllowlist(env: Pick<Env, 'ADMIN_UIDS' | 'ADMIN_EMAILS'>): AdminAllowlist {
+  const list = (v: string | undefined) => (v ?? '').split(/[,\s]+/).map((x) => x.trim().replace(/^['"]+|['"]+$/g, '')).filter(Boolean);
+  return { uids: list(env.ADMIN_UIDS), emails: list(env.ADMIN_EMAILS).map((e) => e.toLowerCase()) };
 }

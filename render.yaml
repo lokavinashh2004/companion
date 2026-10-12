@@ -45,3 +45,7 @@ services:
         sync: false
       - key: MED_ACTION_SECRET
         sync: false
+      - key: ADMIN_UIDS             # optional extra admins (built-in: admin@companion.app)
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false

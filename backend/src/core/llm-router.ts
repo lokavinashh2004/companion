@@ -26,6 +26,8 @@ export interface RouterDeps {
   recordAttempt(modelId: string, ok: boolean, latencyMs: number, error?: string): Promise<void>;
   getUsage(): Promise<number>;
   bumpUsage(): Promise<number>;
+  /** Tokens OpenRouter reports for a response (optional; used for the admin page). */
+  recordTokens?(prompt: number, completion: number): Promise<void>;
   fetch: typeof fetch;
   apiKey: string;
   now(): number;
@@ -148,6 +150,8 @@ async function attempt<T>(deps: RouterDeps, model: ModelRow, opts: RouteOptions<
   let content: unknown;
   try {
     const parsed = JSON.parse(body);
+    const usage = parsed?.usage as { prompt_tokens?: unknown; completion_tokens?: unknown } | undefined;
+    if (usage) await deps.recordTokens?.(Number(usage.prompt_tokens) || 0, Number(usage.completion_tokens) || 0).catch(() => undefined);
     // OpenRouter sometimes returns 200 with an error object inside.
     if (parsed?.error) {
       const msg = JSON.stringify(parsed.error).slice(0, 160);

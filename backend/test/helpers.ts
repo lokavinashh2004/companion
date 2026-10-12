@@ -11,6 +11,7 @@ export const ORIGIN = 'https://companion.vercel.app';
 export const TOKENS: Record<string, { uid: string; email: string | null }> = {
   'token-a': { uid: 'uidA', email: 'a@example.test' },
   'token-b': { uid: 'uidB', email: null },
+  'token-admin': { uid: 'uidAdmin', email: 'Admin@Companion.app' },
 };
 
 /** Each call pops the next scripted LLM result ({reply,...} object → ok; string → failure reason). */

@@ -51,6 +51,9 @@
               "null"
             ]
           },
+          "is_admin": {
+            "type": "boolean"
+          },
           "profile": {
             "$ref": "#/components/schemas/Profile"
           }
@@ -58,6 +61,7 @@
         "required": [
           "uid",
           "email",
+          "is_admin",
           "profile"
         ]
       },
@@ -2184,6 +2188,198 @@
           "token",
           "action"
         ]
+      },
+      "AdminUsage": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "budget": {
+            "type": "integer"
+          },
+          "used": {
+            "type": "integer"
+          },
+          "remaining": {
+            "type": "integer"
+          },
+          "resets_at": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "object",
+            "properties": {
+              "prompt": {
+                "type": "integer"
+              },
+              "completion": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "prompt",
+              "completion",
+              "total"
+            ]
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "requests": {
+                  "type": "integer"
+                },
+                "prompt_tokens": {
+                  "type": "integer"
+                },
+                "completion_tokens": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "day",
+                "requests",
+                "prompt_tokens",
+                "completion_tokens"
+              ]
+            }
+          },
+          "key": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ok",
+                  "invalid",
+                  "missing",
+                  "unreachable"
+                ]
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "free_tier": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "usage": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "limit": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "limit_remaining": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "error": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "label",
+              "free_tier",
+              "usage",
+              "limit",
+              "limit_remaining",
+              "error"
+            ]
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "model_id": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "integer"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "health_disabled": {
+                  "type": "boolean"
+                },
+                "cooling_until": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "success_count": {
+                  "type": "integer"
+                },
+                "fail_count": {
+                  "type": "integer"
+                },
+                "avg_latency_ms": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "last_error": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "model_id",
+                "priority",
+                "enabled",
+                "health_disabled",
+                "cooling_until",
+                "success_count",
+                "fail_count",
+                "avg_latency_ms",
+                "last_error"
+              ]
+            }
+          }
+        },
+        "required": [
+          "day",
+          "budget",
+          "used",
+          "remaining",
+          "resets_at",
+          "tokens",
+          "history",
+          "key",
+          "models"
+        ]
       }
     },
     "parameters": {}
@@ -3422,7 +3618,8 @@
                 "retry-queue",
                 "cycle-check",
                 "daily-summary",
-                "model-health"
+                "model-health",
+                "llm-check"
               ]
             },
             "required": true,
@@ -3448,6 +3645,30 @@
                   "properties": {
                     "result": {}
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/usage": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "LLM usage for the owner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUsage"
                 }
               }
             }

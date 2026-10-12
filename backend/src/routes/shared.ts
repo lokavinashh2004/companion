@@ -11,13 +11,15 @@ import type { Services } from '../services/context.ts';
 import type { UserScope } from '../store/index.ts';
 import type { FoodLogDoc, InsightDoc, MedicationDoc, MessageDoc, ProfileDoc } from '../store/types.ts';
 
-export type AppEnv = { Variables: { uid: string; email: string | null } };
+export type AppEnv = { Variables: { uid: string; email: string | null; admin: boolean } };
 export type App = OpenAPIHono<AppEnv>;
 
 export interface AppDeps {
   auth: Pick<FirebaseAuth, 'verifyToken' | 'deleteUser'>;
   services: Services;
   allowedOrigins: string[];
+  /** Firebase accounts allowed to open /admin (none when omitted). */
+  admins?: { uids: string[]; emails: string[] };
   /** Public URL of this API (put into push notifications so the service worker can call /med-action). */
   apiUrl: string;
 }
