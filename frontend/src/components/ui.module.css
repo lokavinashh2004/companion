@@ -1,6 +1,7 @@
 .page {
   padding: var(--space-4);
-  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  /* clears the bottom tab bar and the floating chat button above it */
+  padding-bottom: calc(160px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -83,6 +84,19 @@
 }
 .hero > :not(h1) {
   position: relative;
+}
+/* Phones: a shorter hero so the content below shows without scrolling. */
+@media (max-width: 599px) {
+  .hero {
+    min-height: 0;
+    padding: var(--space-4);
+  }
+  .hero h1 {
+    font-size: 1.55rem;
+  }
+  .hero .subtitle {
+    font-size: 0.9rem;
+  }
 }
 @media (min-width: 900px) {
   .hero {

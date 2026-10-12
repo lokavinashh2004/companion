@@ -1,13 +1,11 @@
-// Walk session card: Start → live steps and time → Stop → saved summary with steps, duration, calories and a cheer.
-// Before a walk it shows today's steps towards the goal and links to the walking dashboard.
+// Walk session card (top of the Walking page): Start → live steps and time → Stop → saved summary with steps,
+// duration, calories and a cheer. Before a walk it shows today's steps towards the goal and the goal streak.
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 
 import { Button, Card, Muted, Notice } from '@/components/ui';
 import { StepProgress } from '@/components/walks/StepProgress';
 import w from '@/components/walks/walks.module.css';
-import type { Today } from '@/lib/api';
 import { useSaveWalk, useWalks } from '@/lib/queries';
 import { clock, DEFAULT_WEIGHT_KG, useWalk, walkCheerKey, walkKcal, type WalkSummary } from '@/lib/walk';
 import s from './today.module.css';
@@ -22,14 +20,13 @@ function useNow(active: boolean) {
   return now;
 }
 
-export function WalkCard({ today }: { today: Today }) {
+export function WalkCard({ showKcal }: { showKcal: boolean }) {
   const { t } = useTranslation();
   const { status, startedAt, steps, summary, start, stop, reset } = useWalk();
   const walks = useWalks(7);
   const save = useSaveWalk();
   const walking = status === 'walking';
   const now = useNow(walking);
-  const showKcal = today.calorie_display === 'show';
   const weightKg = walks.data?.weight_kg ?? DEFAULT_WEIGHT_KG;
   const todaySteps = walks.data?.days.find((d) => d.day === walks.data?.today)?.steps;
 
@@ -43,11 +40,7 @@ export function WalkCard({ today }: { today: Today }) {
     save.reset();
     void start();
   };
-  const historyLink = (
-    <Link className={w.link} to="/walks">
-      {t('walk.history')} ›
-    </Link>
-  );
+  const streak = walks.data?.streak ?? 0;
 
   return (
     <Card title={t('walk.title')} icon="🚶‍♀️" tint="peach">
@@ -102,17 +95,19 @@ export function WalkCard({ today }: { today: Today }) {
           <Button kind="ghost" small onClick={reset} disabled={save.isPending}>
             {t('common.close')}
           </Button>
-          {historyLink}
         </>
       ) : (
         <>
           {status === 'denied' ? <Notice tone="warn">{t('walk.denied')}</Notice> : null}
           {status === 'unsupported' ? <Notice tone="warn">{t('walk.unsupported')}</Notice> : null}
-          {walks.data && todaySteps != null ? <StepProgress steps={todaySteps} goal={walks.data.goal} /> : <Muted small>{t('walk.intro')}</Muted>}
+          {walks.data && todaySteps != null ? (
+            <StepProgress steps={todaySteps} goal={walks.data.goal} aside={streak > 0 ? <span className={w.streak}>🔥 {t('walks.streak', { count: streak })}</span> : null} />
+          ) : (
+            <Muted small>{t('walk.intro')}</Muted>
+          )}
           <Button busy={status === 'starting'} onClick={onStart}>
             ▶ {t('walk.start')}
           </Button>
-          {historyLink}
         </>
       )}
     </Card>

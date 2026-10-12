@@ -614,7 +614,6 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayPage.weightHint` | Only for your own trend. Skip it any week. | உங்கள் போக்கைப் பார்க்க மட்டும். எந்த வாரமும் தவிர்க்கலாம். |
 | [ ] | `todayPage.weightInvalid` | Please enter a weight between 20 and 300 kg. | 20 முதல் 300 கி.கி வரையிலான எடையை உள்ளிடவும். |
 | [ ] | `todayPage.weightSaved` | Weight saved ✓ | எடை சேமிக்கப்பட்டது ✓ |
-| [ ] | `todayPage.seeInsights` | See your insights | உங்கள் பார்வைகளைக் காணுங்கள் |
 | [ ] | `todayPage.openCycle` | Open cycle | சுழற்சியைத் திறக்கவும் |
 | [ ] | `todayPage.addSleep` | Add sleep | தூக்கத்தைச் சேர்க்கவும் |
 | [ ] | `todayPage.skipSleep` | Skip sleep | தூக்கத்தைத் தவிர்க்கவும் |
@@ -633,9 +632,6 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayPage.logMood` | Log mood {{value}} of 5 | மனநிலை 5-இல் {{value}} எனப் பதிவு செய் |
 | [ ] | `todayPage.markTaken` | Mark taken | எடுத்ததாகக் குறி |
 | [ ] | `todayPage.periodTracker` | Period tracker | மாதவிடாய் கண்காணிப்பு |
-| [ ] | `todayPage.cycleSummary` | Cycle day {{day}} of about {{length}} days | சுமார் {{length}} நாள் சுழற்சியில் நாள் {{day}} |
-| [ ] | `todayPage.insightsTitle` | Quick insights | விரைவுப் பார்வைகள் |
-| [ ] | `todayPage.steps` | Steps | அடிகள் |
 | [ ] | `todayPage.stress` | Stress | மன அழுத்தம் |
 | [ ] | `todayPage.stressLevel.low` | Low | குறைவு |
 | [ ] | `todayPage.stressLevel.medium` | Medium | நடுத்தரம் |
@@ -660,14 +656,46 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `walk.cheerAmazing` | Amazing effort! You crushed it 🔥 | அசத்திட்டீங்க! சூப்பர் முயற்சி 🔥 |
 | [ ] | `walk.denied` | Companion needs motion access to count steps. You can allow it in your browser settings and try again. | அடிகளை எண்ண Companion-க்கு அசைவு அனுமதி வேண்டும். உங்கள் பிரவுசர் அமைப்புகளில் அனுமதித்து மீண்டும் முயற்சி செய்யுங்கள். |
 | [ ] | `walk.unsupported` | This device doesn't share motion data, so steps can't be counted here. Try on your phone. | இந்தச் சாதனம் அசைவுத் தரவைத் தருவதில்லை, அதனால் இங்கே அடிகளை எண்ண முடியாது. உங்கள் போனில் முயற்சி செய்யுங்கள். |
-| [ ] | `walk.history` | See walking history | நடை வரலாற்றைப் பாருங்கள் |
 | [ ] | `walk.saving` | Saving your walk… | உங்கள் நடை சேமிக்கப்படுகிறது… |
 | [ ] | `walk.saved` | Saved to your walking history ✓ | உங்கள் நடை வரலாற்றில் சேமிக்கப்பட்டது ✓ |
 | [ ] | `walk.saveFailed` | Couldn't save this walk. | இந்த நடையைச் சேமிக்க முடியவில்லை. |
+| [ ] | `todayHub.label` | Your day | உங்கள் நாள் |
+| [ ] | `todayHub.back` | Today | இன்று |
+| [ ] | `todayHub.food` | Food | உணவு |
+| [ ] | `todayHub.mood` | Mood & symptoms | மனநிலை & அறிகுறிகள் |
+| [ ] | `todayHub.rest` | Sleep & stress | தூக்கம் & மன அழுத்தம் |
+| [ ] | `todayHub.weight` | Weight | எடை |
+| [ ] | `todayHub.balance` | {{score}}/10 balance | சமநிலை {{score}}/10 |
+| [ ] | `todayHub.meals_one` | {{count}} meal | {{count}} உணவு |
+| [ ] | `todayHub.meals_other` | {{count}} meals | {{count}} உணவுகள் |
+| [ ] | `todayHub.foodEmpty` | Nothing logged yet | இன்னும் எதுவும் பதிவு செய்யவில்லை |
+| [ ] | `todayHub.glasses` | {{count}} of {{total}} glasses | {{total}}-இல் {{count}} டம்ளர் |
+| [ ] | `todayHub.dosesTaken` | {{taken}} of {{total}} taken | {{total}}-இல் {{taken}} எடுத்தாச்சு |
+| [ ] | `todayHub.medsEmpty` | Add your medicines | உங்கள் மருந்துகளைச் சேர்க்கவும் |
+| [ ] | `todayHub.missed` | Missed | தவறியது |
+| [ ] | `todayHub.symptoms_one` | {{count}} symptom | {{count}} அறிகுறி |
+| [ ] | `todayHub.symptoms_other` | {{count}} symptoms | {{count}} அறிகுறிகள் |
+| [ ] | `todayHub.moodEmpty` | How are you feeling? | எப்படி உணர்கிறீர்கள்? |
+| [ ] | `todayHub.walkingNow` | Walking now · {{n}} steps | இப்போது நடக்கிறீர்கள் · {{n}} அடிகள் |
+| [ ] | `todayHub.steps` | {{n}} steps today | இன்று {{n}} அடிகள் |
+| [ ] | `todayHub.walkEmpty` | Start a walk | நடையைத் தொடங்குங்கள் |
+| [ ] | `todayHub.live` | Live | நேரலை |
+| [ ] | `todayHub.periodDay` | Period day {{day}} | மாதவிடாய் நாள் {{day}} |
+| [ ] | `todayHub.cycleDay` | Cycle day {{day}} | சுழற்சி நாள் {{day}} |
+| [ ] | `todayHub.late_one` | {{count}} day late | {{count}} நாள் தாமதம் |
+| [ ] | `todayHub.late_other` | {{count}} days late | {{count}} நாட்கள் தாமதம் |
+| [ ] | `todayHub.lateBadge` | Late | தாமதம் |
+| [ ] | `todayHub.cycleEmpty` | Log your period | மாதவிடாயைப் பதிவு செய்யுங்கள் |
+| [ ] | `todayHub.stress` | {{level}} stress | {{level}} மன அழுத்தம் |
+| [ ] | `todayHub.restEmpty` | Log sleep and stress | தூக்கம், மன அழுத்தம் பதிவு செய்யுங்கள் |
+| [ ] | `todayHub.weightDue` | Weekly check-in due | வாராந்திர எடை பதிவு நேரம் |
+| [ ] | `todayHub.weightNotDue` | No weigh-in due this week. We’ll ask again next week. | இந்த வாரம் எடை பதிவு தேவையில்லை. அடுத்த வாரம் மீண்டும் கேட்போம். |
+| [ ] | `todayHub.logFood` | Log more food in chat | அரட்டையில் மேலும் உணவைப் பதிவு செய்யுங்கள் |
+| [ ] | `todayHub.waterHint` | Each tap adds one glass (250 ml). Aim for about 8 a day. | ஒவ்வொரு தட்டலும் ஒரு டம்ளர் (250 மி.லி) சேர்க்கும். நாளொன்றுக்கு சுமார் 8 டம்ளர் இலக்கு. |
+| [ ] | `todayHub.manageMeds` | Manage medicines | மருந்துகளை நிர்வகிக்கவும் |
+| [ ] | `todayHub.moreCheckIn` | Log energy, stress, symptoms or sleep | ஆற்றல், மன அழுத்தம், அறிகுறிகள் அல்லது தூக்கத்தைப் பதிவு செய்யுங்கள் |
 | [ ] | `walks.title` | Walking | நடை |
 | [ ] | `walks.subtitle` | Your steps, day by day. | நாள்தோறும் உங்கள் அடிகள். |
-| [ ] | `walks.backToday` | Today | இன்று |
-| [ ] | `walks.today` | Today | இன்று |
 | [ ] | `walks.ofGoal` | of {{goal}} steps | / {{goal}} அடிகள் |
 | [ ] | `walks.todayProgress` | Today's steps towards your goal | உங்கள் இலக்கை நோக்கி இன்றைய அடிகள் |
 | [ ] | `walks.goalReached` | Goal reached today 🎉 | இன்றைய இலக்கை அடைந்துவிட்டீர்கள் 🎉 |

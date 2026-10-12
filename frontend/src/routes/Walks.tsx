@@ -1,18 +1,18 @@
-// Walking dashboard: today's steps towards the goal, the goal streak, daily steps for 7 or 30 days,
-// totals for the period, and recent walks (each can be removed). Two columns on desktop.
+// Walking: start/stop a walk (with today's steps towards the goal and the streak), daily steps for 7 or 30 days,
+// totals for the period, and recent walks (each can be removed). Opened from the Walk tile on Today.
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 
 import { BarChart } from '@/components/Charts';
 import { ConfirmSheet } from '@/components/me/common';
 import m from '@/components/me/me.module.css';
-import { StepProgress } from '@/components/walks/StepProgress';
+import { WalkCard } from '@/components/today/WalkCard';
 import s from '@/components/walks/walks.module.css';
 import { Button, Card, ErrorState, Loading, Muted, Page, Segmented } from '@/components/ui';
 import type { Walk } from '@/lib/api';
 import { shortDate } from '@/lib/format';
 import { useDeleteWalk, useMe, useWalks } from '@/lib/queries';
+import { BackToToday } from './TodaySection';
 import { clock, DEFAULT_WEIGHT_KG, walkKcal } from '@/lib/walk';
 
 type Range = '7' | '30';
@@ -27,28 +27,16 @@ export function Walks() {
   const d = q.data;
   const showKcal = me.data?.profile.calorie_display === 'show';
 
-  const todaySteps = d?.days.find((x) => x.day === d.today)?.steps ?? 0;
   const avg = d ? Math.round(d.totals.steps / d.days.length) : 0;
   const timeOf = (iso: string) => new Date(iso).toLocaleTimeString(i18n.language, { hour: 'numeric', minute: '2-digit' });
-  const back = (
-    <Link className={s.link} to="/today">
-      ‹ {t('walks.backToday')}
-    </Link>
-  );
 
   return (
-    <Page title={t('walks.title')} subtitle={t('walks.subtitle')} eyebrow={back} wide>
+    <Page title={t('walks.title')} subtitle={t('walks.subtitle')} eyebrow={<BackToToday />} wide>
       {q.isLoading ? <Loading /> : null}
       {q.isError ? <ErrorState onRetry={() => void q.refetch()} /> : null}
       {d ? (
         <div className={m.insightGrid}>
-          <Card title={t('walks.today')} icon="👟" tint="peach">
-            <StepProgress
-              steps={todaySteps}
-              goal={d.goal}
-              aside={d.streak > 0 ? <span className={s.streak}>🔥 {t('walks.streak', { count: d.streak })}</span> : null}
-            />
-          </Card>
+          <WalkCard showKcal={showKcal} />
 
           <Card title={t('walks.period')} icon="📊" tint="violet">
             <Segmented<Range>

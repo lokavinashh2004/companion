@@ -1,59 +1,13 @@
-/* Dashboard: one column on phones, two cards side by side once there's room, and a side column on wide screens.
-   Sized by the page's own width (container queries), so it adapts whether or not the chat panel is open. */
-.dash {
-  container-type: inline-size;
-}
-.grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
-  align-items: start;
-}
-.col {
+/* Hub: nudge, tiles, then the chat banner, in one column at every width. */
+.hub {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  min-width: 0;
-}
-.pair {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
-}
-@container (min-width: 560px) {
-  .pair,
-  .side {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
-  }
-}
-@container (min-width: 900px) {
-  .grid {
-    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
-  }
-  .side {
-    display: flex;
-    align-items: stretch;
-  }
 }
 
 .cheer {
   font-weight: 500;
   margin-left: var(--space-3);
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
-  align-self: flex-start;
-}
-.link:hover {
-  text-decoration: underline;
 }
 
 /* "Ask Companion anything": a dark ink banner into the chat */

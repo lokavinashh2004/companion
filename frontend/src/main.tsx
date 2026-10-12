@@ -13,7 +13,7 @@ import './lib/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import { registerSW } from 'virtual:pwa-register';
 
 import { AuthProvider } from './lib/auth';
@@ -32,6 +32,7 @@ import { RequireAuth } from './routes/RequireAuth';
 import { Settings } from './routes/Settings';
 import { SignIn } from './routes/SignIn';
 import { Today } from './routes/Today';
+import { TodaySection } from './routes/TodaySection';
 import { Walks } from './routes/Walks';
 
 // Cache lives in memory only (no health data persisted in the browser).
@@ -60,7 +61,9 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
-      { path: '/walks', element: <Walks /> },
+      { path: '/today/walk', element: <Walks /> },
+      { path: '/today/:section', element: <TodaySection /> },
+      { path: '/walks', element: <Navigate to="/today/walk" replace /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },
       { path: '/me', element: <Me /> },

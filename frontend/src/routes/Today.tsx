@@ -1,15 +1,13 @@
-// Today: a greeting, food balance, meals, water, medicines, mood, the cycle strip, a walk session, quick insights, weekly weight and a quick log.
+// Today hub: a greeting, the one most useful nudge, then a tile per area (food, water, medicines, mood, walk,
+// cycle, sleep & stress, weight when due). Each tile opens its own screen; built phone-first.
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
-import { CycleCard } from '@/components/cycle/CycleCard';
 import { Icon } from '@/components/Icon';
-import { BalanceCard, MealsCard } from '@/components/today/BalanceCard';
-import { CycleStrip, InsightsCard, MedsCard, MoodCard, WaterCard, WeightCard } from '@/components/today/DayCards';
 import { NudgeCard } from '@/components/today/NudgeCard';
 import { QuickLogSheet } from '@/components/today/QuickLogSheet';
-import { WalkCard } from '@/components/today/WalkCard';
+import { TodayTiles } from '@/components/today/TodayTiles';
 import { Button, ErrorState, Loading, Notice, Page } from '@/components/ui';
 import { weekdayDate } from '@/lib/format';
 import { useMe, useToday } from '@/lib/queries';
@@ -59,42 +57,21 @@ export function Today() {
       {today.isLoading ? <Loading /> : null}
       {today.isError ? <ErrorState onRetry={() => void today.refetch()} /> : null}
       {today.data ? (
-        <div className={s.dash}>
-          <div className={s.grid}>
-            <div className={s.col}>
-              <BalanceCard today={today.data} />
-              <div className={s.pair}>
-                <MealsCard today={today.data} />
-                <WaterCard today={today.data} />
-                <MedsCard today={today.data} />
-                <MoodCard today={today.data} />
-              </div>
-              <Link className={s.ask} to="/">
-                <span className={s.askMark} aria-hidden="true">
-                  <Icon name="sparkle" size={22} />
-                </span>
-                <span className={s.askText}>
-                  <span className={s.askTitle}>{t('todayPage.askTitle', { name: companion })}</span>
-                  <span className={s.askBody}>{t('todayPage.askBody')}</span>
-                </span>
-                <span className={s.askArrow} aria-hidden="true">
-                  <Icon name="send" size={18} />
-                </span>
-              </Link>
-            </div>
-            <div className={`${s.col} ${s.side}`}>
-              <NudgeCard today={today.data} />
-              <CycleCard status={today.data.status} prediction={today.data.prediction} title={t('todayPage.periodTracker')}>
-                <CycleStrip day={today.data.day} status={today.data.status} prediction={today.data.prediction} />
-                <Link className={s.link} to="/cycle">
-                  {t('todayPage.openCycle')} ›
-                </Link>
-              </CycleCard>
-              <WalkCard today={today.data} />
-              <InsightsCard today={today.data} />
-              <WeightCard today={today.data} />
-            </div>
-          </div>
+        <div className={s.hub}>
+          <NudgeCard today={today.data} />
+          <TodayTiles today={today.data} />
+          <Link className={s.ask} to="/">
+            <span className={s.askMark} aria-hidden="true">
+              <Icon name="sparkle" size={22} />
+            </span>
+            <span className={s.askText}>
+              <span className={s.askTitle}>{t('todayPage.askTitle', { name: companion })}</span>
+              <span className={s.askBody}>{t('todayPage.askBody')}</span>
+            </span>
+            <span className={s.askArrow} aria-hidden="true">
+              <Icon name="send" size={18} />
+            </span>
+          </Link>
           <QuickLogSheet
             open={quickOpen}
             day={today.data.day}

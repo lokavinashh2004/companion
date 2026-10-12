@@ -1,11 +1,11 @@
-// Small Today cards: water glasses, mood & symptoms, medicines checklist, cycle strip, quick insights, weekly weight.
+// Today section cards: water glasses, mood & symptoms, medicines checklist, weekly weight.
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { Button, Card, Chip, cx, Field, Muted, Notice, Row } from '@/components/ui';
-import type { CycleStatus, Prediction, Today } from '@/lib/api';
-import { addDays, diffDays, hhmm } from '@/lib/format';
+import type { Today } from '@/lib/api';
+import { hhmm } from '@/lib/format';
 import { useAddWater, useQuickLog, useSaveWeight, useSetDose } from '@/lib/queries';
 import { MOOD_EMOJI } from './constants';
 import s from './today.module.css';
@@ -134,58 +134,6 @@ export function MedsCard({ today }: { today: Today }) {
           }),
         )}
       </ul>
-    </Card>
-  );
-}
-
-/** One dot per day of the current cycle: days gone, today, and the predicted period window. */
-export function CycleStrip({ day, status, prediction }: { day: string; status: CycleStatus; prediction: Prediction }) {
-  const { t } = useTranslation();
-  const cycleDay = status.cycle_day;
-  if (status.kind !== 'cycle' || !cycleDay || !prediction) return null;
-  const start = addDays(day, -(cycleDay - 1));
-  const length = Math.min(45, Math.max(cycleDay, diffDays(start, prediction.latest) + 1));
-  const from = diffDays(start, prediction.earliest);
-  const to = diffDays(start, prediction.latest);
-  const likely = Math.max(21, diffDays(start, prediction.likely));
-  return (
-    <div className={s.strip} role="img" aria-label={t('todayPage.cycleSummary', { day: cycleDay, length: likely })}>
-      {Array.from({ length }, (_, i) => (
-        <span key={i} className={cx(s.dot, i < cycleDay - 1 && s.dotPast, i === cycleDay - 1 && s.dotToday, i >= from && i <= to && s.dotPredicted)} />
-      ))}
-    </div>
-  );
-}
-
-export function InsightsCard({ today }: { today: Today }) {
-  const { t } = useTranslation();
-  const sleep = today.lifestyle?.sleep_hours ?? null;
-  const steps = today.lifestyle?.steps ?? null;
-  const stress = [...today.moods].reverse().find((m) => m.stress != null)?.stress ?? null;
-  const stressKey = stress == null ? null : stress <= 2 ? 'low' : stress === 3 ? 'medium' : 'high';
-  const stats = [
-    { icon: '🌙', label: t('today.sleep'), value: sleep != null ? t('today.sleepHours', { count: sleep }) : '–' },
-    { icon: '👟', label: t('todayPage.steps'), value: steps != null ? steps.toLocaleString() : '–' },
-    { icon: '🍃', label: t('todayPage.stress'), value: stressKey ? t(`todayPage.stressLevel.${stressKey}`) : '–' },
-  ];
-  return (
-    <Card title={t('todayPage.insightsTitle')} icon="💡" tint="amber">
-      <dl className={s.stats}>
-        {stats.map((x) => (
-          <div key={x.label} className={s.stat}>
-            <span className={s.statIcon} aria-hidden="true">
-              {x.icon}
-            </span>
-            <span className={s.statText}>
-              <dt>{x.label}</dt>
-              <dd>{x.value}</dd>
-            </span>
-          </div>
-        ))}
-      </dl>
-      <Link className={s.cardLink} to="/insights">
-        📈 {t('todayPage.seeInsights')} ›
-      </Link>
     </Card>
   );
 }

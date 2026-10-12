@@ -3,6 +3,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
 import i18n from '@/i18n';
 import { Today } from '@/routes/Today';
+import { TodaySection } from '@/routes/TodaySection';
 import { mockApi, renderPage } from './utils';
 
 vi.mock('@/lib/auth', () => ({ useAuth: () => ({ user: { uid: 'u1' }, ready: true }) }));
@@ -58,67 +59,69 @@ afterEach(async () => {
   await act(() => i18n.changeLanguage('en'));
 });
 
-it('shows score, highlights, meals and an estimate tag, with kcal hidden by default', async () => {
-  mockApi({ 'GET /today': TODAY });
+const section = (name: string) => renderPage(<TodaySection />, { route: `/today/${name}`, path: '/today/:section' });
+const tile = (name: RegExp) => screen.getByRole('link', { name });
+
+// ---------------------------------------------------------------- hub
+
+it('shows one tile per area with a summary of today, each opening its own screen', async () => {
+  mockApi({ 'GET /today': { ...TODAY, lifestyle: { water_ml: 500, sleep_hours: 7.5, exercise_minutes: null, steps: 2400 } } });
   renderPage(<Today />);
-  expect(await screen.findByText('7/10')).toBeTruthy();
-  expect(screen.getByText('✓ good protein today')).toBeTruthy();
-  expect(screen.getByText('Idea: a small bowl of kootu or poriyal')).toBeTruthy();
-  expect(screen.getByText('Breakfast')).toBeTruthy();
-  expect(screen.getByText('Lunch')).toBeTruthy();
-  expect(screen.getByText('Idli')).toBeTruthy();
-  expect(screen.getByText('× 3 pieces')).toBeTruthy();
-  expect(screen.getAllByText('estimate')).toHaveLength(1);
-  expect(screen.queryByText(/kcal/)).toBeNull();
-  // cycle card shows a range, not a single date
-  expect(screen.getByText('Cycle day 12')).toBeTruthy();
-  expect(screen.getByText('Low confidence')).toBeTruthy();
-  expect(screen.getByText('PCOS cycles often vary, so this is a range.')).toBeTruthy();
-  expect(screen.getByRole('link', { name: /See your insights/ }).getAttribute('href')).toBe('/insights');
+  expect(await screen.findByRole('list', { name: 'Your day' })).toBeTruthy();
+  expect(tile(/^Food: 7\/10 balance · 2 meals$/).getAttribute('href')).toBe('/today/food');
+  expect(tile(/^Water: 2 of 8 glasses$/).getAttribute('href')).toBe('/today/water');
+  expect(tile(/^Medicines: 0 of 1 taken$/).getAttribute('href')).toBe('/today/meds');
+  expect(tile(/^Mood & symptoms: .+ Feeling 4 of 5 · 1 symptom$/).getAttribute('href')).toBe('/today/mood');
+  expect(tile(/^Walk: 2,400 steps today$/).getAttribute('href')).toBe('/today/walk');
+  expect(tile(/^Period tracker: Cycle day 12$/).getAttribute('href')).toBe('/cycle');
+  expect(tile(/^Sleep & stress: .*7\.5.* · Low stress$/).getAttribute('href')).toBe('/insights');
+  // the details live on the section screens, not the hub
+  expect(screen.queryByText('Idli')).toBeNull();
+  expect(screen.queryByRole('button', { name: '+250 ml' })).toBeNull();
+  // weight only when due
+  expect(screen.queryByRole('link', { name: /^Weight/ })).toBeNull();
 });
 
-it('shows kcal only when the profile opts in', async () => {
-  mockApi({ 'GET /today': { ...TODAY, calorie_display: 'show' } });
+it('tiles show friendly prompts when nothing is logged, a weight tile when due, and a late badge', async () => {
+  mockApi({
+    'GET /today': {
+      ...TODAY,
+      foods: [],
+      score: null,
+      moods: [],
+      symptoms: [],
+      lifestyle: null,
+      meds: [],
+      weight_due: true,
+      status: { kind: 'late', cycle_day: 38, period_day: null, days_late: 3, phase: 'late' },
+    },
+  });
   renderPage(<Today />);
-  expect(await screen.findByText('120 kcal')).toBeTruthy();
-  expect(screen.getByText('400 kcal')).toBeTruthy();
+  expect(await screen.findByRole('link', { name: 'Food: Nothing logged yet' })).toBeTruthy();
+  expect(tile(/^Medicines: Add your medicines$/)).toBeTruthy();
+  expect(tile(/^Mood & symptoms: How are you feeling\?$/)).toBeTruthy();
+  expect(tile(/^Walk: Start a walk$/)).toBeTruthy();
+  expect(tile(/^Period tracker: 3 days late$/)).toBeTruthy();
+  expect(screen.getByText('Late')).toBeTruthy();
+  expect(tile(/^Weight: Weekly check-in due$/).getAttribute('href')).toBe('/today/weight');
 });
 
-it('shows a friendly empty state with a way to chat when nothing is logged', async () => {
-  mockApi({ 'GET /today': { ...TODAY, foods: [], score: null } });
-  renderPage(<Today />, { route: '/today', path: '/today' });
-  expect(await screen.findByText(/Nothing logged yet/)).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Tell me in chat' }));
-  expect(await screen.findByText('other page')).toBeTruthy();
+it('flags a missed medicine dose on its tile', async () => {
+  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.setSystemTime(new Date(2026, 9, 8, 11, 0));
+  try {
+    mockApi({ 'GET /today': TODAY });
+    renderPage(<Today />);
+    expect(await screen.findByText('Missed')).toBeTruthy();
+  } finally {
+    vi.useRealTimers();
+  }
 });
 
-it('adds 250 ml of water', async () => {
-  const calls = mockApi({ 'GET /today': TODAY, 'POST /today/water': { day: DAY, ml: 750 } });
-  renderPage(<Today />);
-  fireEvent.click(await screen.findByRole('button', { name: '+250 ml' }));
-  await waitFor(() => expect(calls.find((c) => c.method === 'POST' && c.path === '/today/water')?.body).toEqual({ day: DAY, ml: 250 }));
-});
-
-it('marks a medicine dose as taken', async () => {
-  const calls = mockApi({ 'GET /today': TODAY, 'POST /meds/{id}/dose': { ok: true } });
-  renderPage(<Today />);
-  fireEvent.click(await screen.findByRole('switch', { name: /Metformin 500 mg · 08:00/ }));
-  await waitFor(() => expect(calls.find((c) => c.method === 'POST' && c.path === '/meds/med1/dose')?.body).toEqual({ day: DAY, time: '08:00', taken: true }));
-});
-
-it('removes a food item after confirming', async () => {
-  const calls = mockApi({ 'GET /today': TODAY, 'DELETE /food/logs/{id}': { ok: true } });
-  renderPage(<Today />);
-  fireEvent.click(await screen.findByRole('button', { name: 'Remove Idli' }));
-  expect(screen.getByText('Remove Idli?')).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
-  await waitFor(() => expect(calls.some((c) => c.method === 'DELETE' && c.path === '/food/logs/f1')).toBe(true));
-});
-
-it('quick log sends the chosen values and confirms', async () => {
+it('quick log from the hub sends the chosen values and confirms', async () => {
   const calls = mockApi({ 'GET /today': TODAY, 'POST /today/quick-log': { ok: true } });
   renderPage(<Today />);
-  await screen.findByText('7/10');
+  await screen.findByRole('list', { name: 'Your day' });
   fireEvent.click(screen.getByRole('button', { name: /Quick log/ }));
   fireEvent.click(screen.getByRole('button', { name: 'Mood 4 of 5' }));
   fireEvent.click(screen.getByRole('button', { name: 'Energy 2 of 5' }));
@@ -140,20 +143,97 @@ it('quick log sends the chosen values and confirms', async () => {
   expect(await screen.findByText('Logged ✓')).toBeTruthy();
 });
 
-it('asks for weekly weight only when due', async () => {
-  const calls = mockApi({ 'GET /today': { ...TODAY, weight_due: true }, 'POST /today/weight': { ok: true } });
+it('renders the hub in Tamil', async () => {
+  mockApi({ 'GET /today': TODAY });
+  await act(() => i18n.changeLanguage('ta'));
   renderPage(<Today />);
+  expect(await screen.findByRole('list', { name: 'உங்கள் நாள்' })).toBeTruthy();
+  expect(screen.getByRole('heading', { name: 'உணவு' })).toBeTruthy();
+  expect(screen.queryByText('Food')).toBeNull();
+});
+
+// ---------------------------------------------------------------- section screens
+
+it('food: score, highlights, meals and an estimate tag, with kcal hidden by default', async () => {
+  mockApi({ 'GET /today': TODAY });
+  section('food');
+  expect(await screen.findByText('7/10')).toBeTruthy();
+  expect(screen.getByRole('heading', { level: 1, name: 'Food' })).toBeTruthy();
+  expect(screen.getByRole('link', { name: '‹ Today' }).getAttribute('href')).toBe('/today');
+  expect(screen.getByText('✓ good protein today')).toBeTruthy();
+  expect(screen.getByText('Idea: a small bowl of kootu or poriyal')).toBeTruthy();
+  expect(screen.getByText('Breakfast')).toBeTruthy();
+  expect(screen.getByText('Lunch')).toBeTruthy();
+  expect(screen.getByText('Idli')).toBeTruthy();
+  expect(screen.getByText('× 3 pieces')).toBeTruthy();
+  expect(screen.getAllByText('estimate')).toHaveLength(1);
+  expect(screen.queryByText(/kcal/)).toBeNull();
+});
+
+it('food: kcal only when the profile opts in', async () => {
+  mockApi({ 'GET /today': { ...TODAY, calorie_display: 'show' } });
+  section('food');
+  expect(await screen.findByText('120 kcal')).toBeTruthy();
+  expect(screen.getByText('400 kcal')).toBeTruthy();
+});
+
+it('food: a friendly empty state with a way to chat when nothing is logged', async () => {
+  mockApi({ 'GET /today': { ...TODAY, foods: [], score: null } });
+  section('food');
+  expect(await screen.findByText(/Nothing logged yet/)).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Tell me in chat' }));
+  expect(await screen.findByText('other page')).toBeTruthy();
+});
+
+it('food: removes an item after confirming', async () => {
+  const calls = mockApi({ 'GET /today': TODAY, 'DELETE /food/logs/{id}': { ok: true } });
+  section('food');
+  fireEvent.click(await screen.findByRole('button', { name: 'Remove Idli' }));
+  expect(screen.getByText('Remove Idli?')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
+  await waitFor(() => expect(calls.some((c) => c.method === 'DELETE' && c.path === '/food/logs/f1')).toBe(true));
+});
+
+it('water: adds 250 ml', async () => {
+  const calls = mockApi({ 'GET /today': TODAY, 'POST /today/water': { day: DAY, ml: 750 } });
+  section('water');
+  fireEvent.click(await screen.findByRole('button', { name: '+250 ml' }));
+  await waitFor(() => expect(calls.find((c) => c.method === 'POST' && c.path === '/today/water')?.body).toEqual({ day: DAY, ml: 250 }));
+});
+
+it('medicines: marks a dose as taken', async () => {
+  const calls = mockApi({ 'GET /today': TODAY, 'POST /meds/{id}/dose': { ok: true } });
+  section('meds');
+  fireEvent.click(await screen.findByRole('switch', { name: /Metformin 500 mg · 08:00/ }));
+  await waitFor(() => expect(calls.find((c) => c.method === 'POST' && c.path === '/meds/med1/dose')?.body).toEqual({ day: DAY, time: '08:00', taken: true }));
+  expect(screen.getByRole('link', { name: /Manage medicines/ }).getAttribute('href')).toBe('/me/medications');
+});
+
+it('mood: logs a mood with one tap and opens the full check-in', async () => {
+  const calls = mockApi({ 'GET /today': TODAY, 'POST /today/quick-log': { ok: true } });
+  section('mood');
+  fireEvent.click(await screen.findByRole('button', { name: 'Log mood 2 of 5' }));
+  await waitFor(() => expect(calls.find((c) => c.path === '/today/quick-log')?.body).toEqual({ day: DAY, mood: 2 }));
+  fireEvent.click(screen.getByRole('button', { name: /Log energy, stress/ }));
+  expect(await screen.findByRole('button', { name: 'Energy 2 of 5' })).toBeTruthy();
+});
+
+it('weight: asks only when due', async () => {
+  const calls = mockApi({ 'GET /today': { ...TODAY, weight_due: true }, 'POST /today/weight': { ok: true } });
+  section('weight');
   fireEvent.change(await screen.findByLabelText('Weight (kg)'), { target: { value: '64.5' } });
   fireEvent.click(screen.getByRole('button', { name: 'Save weight' }));
   await waitFor(() => expect(calls.find((c) => c.path === '/today/weight')?.body).toEqual({ day: DAY, weight_kg: 64.5 }));
 });
 
-it('renders in Tamil', async () => {
+it('weight: says so when no weigh-in is due', async () => {
   mockApi({ 'GET /today': TODAY });
-  await act(() => i18n.changeLanguage('ta'));
-  renderPage(<Today />);
-  expect(await screen.findByText('7/10')).toBeTruthy();
-  expect(screen.getByRole('link', { name: /உங்கள் பார்வைகளைக் காணுங்கள்/ })).toBeTruthy();
-  expect(screen.getByRole('heading', { name: 'உணவு சமநிலை' })).toBeTruthy();
-  expect(screen.queryByText('Food balance')).toBeNull();
+  section('weight');
+  expect(await screen.findByText(/No weigh-in due this week/)).toBeTruthy();
+});
+
+it('an unknown section shows not found', async () => {
+  mockApi({ 'GET /today': TODAY });
+  section('nope');
+  expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeTruthy();
 });

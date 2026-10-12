@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WalkCard } from '@/components/today/WalkCard';
 import i18n from '@/i18n';
-import type { Today } from '@/lib/api';
 import { createStepDetector } from '@/lib/steps';
 import { clock, useWalk, walkCheerKey, walkKcal } from '@/lib/walk';
 import { Walks } from '@/routes/Walks';
@@ -13,7 +12,6 @@ vi.mock('@/lib/auth', () => ({ useAuth: () => ({ user: { uid: 'u1' }, ready: tru
 vi.mock('@/lib/firebase', () => ({ idToken: async () => 'token' }));
 
 const DAY = '2026-10-08';
-const TODAY = { day: DAY, calorie_display: 'show' } as Today;
 
 const walkDays = (steps: number[]) => steps.map((n, i) => ({ day: `2026-10-0${i + 2}`, steps: n, duration_s: n ? 1200 : 0, sessions: n ? 1 : 0 }));
 const WALKS = {
@@ -21,7 +19,7 @@ const WALKS = {
   goal: 5000,
   weight_kg: 60,
   days: walkDays([0, 6200, 5400, 0, 3000, 5100, 2400]),
-  streak: 0,
+  streak: 2,
   totals: { steps: 22100, duration_s: 6000, sessions: 5, active_days: 5, goal_days: 3 },
   best: { day: '2026-10-03', steps: 6200, duration_s: 1200, sessions: 1 },
   recent: [
@@ -110,11 +108,11 @@ describe('WalkCard', () => {
     vi.stubGlobal('DeviceMotionEvent', class {});
     const calls = mockApi({ 'GET /walks': WALKS, 'POST /walks': (b: unknown) => ({ id: 'w9', day: DAY, ...(b as object) }) });
     const remove = vi.spyOn(window, 'removeEventListener');
-    renderPage(<WalkCard today={TODAY} />);
+    renderPage(<WalkCard showKcal />);
     await settle();
     expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('2400');
     expect(screen.getByText('2,600 steps to go')).toBeTruthy();
-    expect(screen.getByRole('link', { name: /walking history/i }).getAttribute('href')).toBe('/walks');
+    expect(screen.getByText(/2-day streak/)).toBeTruthy();
 
     await startWalk();
     expect(screen.getByText('0')).toBeTruthy();
@@ -150,7 +148,7 @@ describe('WalkCard', () => {
       'GET /walks': WALKS,
       'POST /walks': (b: unknown) => (fail ? { __status: 500, body: { error: 'internal' } } : { id: 'w9', day: DAY, ...(b as object) }),
     });
-    renderPage(<WalkCard today={TODAY} />);
+    renderPage(<WalkCard showKcal />);
     await settle();
     await startWalk();
     await stopWalk();
@@ -167,7 +165,7 @@ describe('WalkCard', () => {
   it('hides calories when the profile hides them', async () => {
     vi.stubGlobal('DeviceMotionEvent', class {});
     mockApi({ 'GET /walks': WALKS, 'POST /walks': { id: 'w9', day: DAY, started_at: '2026-10-08T07:00:00Z', duration_s: 0, steps: 0 } });
-    renderPage(<WalkCard today={{ ...TODAY, calorie_display: 'hide' }} />);
+    renderPage(<WalkCard showKcal={false} />);
     await startWalk();
     act(() => motion(9.81, 0));
     await stopWalk();
@@ -177,7 +175,7 @@ describe('WalkCard', () => {
   it('shows a friendly message when motion access is denied', async () => {
     vi.stubGlobal('DeviceMotionEvent', Object.assign(class {}, { requestPermission: async () => 'denied' }));
     mockApi({ 'GET /walks': WALKS });
-    renderPage(<WalkCard today={TODAY} />);
+    renderPage(<WalkCard showKcal />);
     await startWalk();
     expect(screen.getByText(/needs motion access/i)).toBeTruthy();
     expect(screen.getByRole('button', { name: /start walking/i })).toBeTruthy();
@@ -186,7 +184,7 @@ describe('WalkCard', () => {
   it('explains when the device sends no motion data', async () => {
     vi.stubGlobal('DeviceMotionEvent', class {});
     mockApi({ 'GET /walks': WALKS });
-    renderPage(<WalkCard today={TODAY} />);
+    renderPage(<WalkCard showKcal />);
     await startWalk();
     await act(() => vi.advanceTimersByTimeAsync(3500));
     expect(screen.getByText(/doesn't share motion data/i)).toBeTruthy();

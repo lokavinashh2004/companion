@@ -13,6 +13,7 @@ import { Cycle } from '@/routes/Cycle';
 import { Layout } from '@/routes/Layout';
 import { Me } from '@/routes/Me';
 import { Today } from '@/routes/Today';
+import { TodaySection } from '@/routes/TodaySection';
 import { Walks } from '@/routes/Walks';
 import { Insights } from '@/routes/Insights';
 import { Admin } from '@/routes/Admin';
@@ -95,7 +96,8 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
-      { path: '/walks', element: <Walks /> },
+      { path: '/today/walk', element: <Walks /> },
+      { path: '/today/:section', element: <TodaySection /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },
       { path: '/me', element: <Me /> },

@@ -5,8 +5,6 @@
   "walks": {
     "title": "Walking",
     "subtitle": "Your steps, day by day.",
-    "backToday": "Today",
-    "today": "Today",
     "ofGoal": "of {{goal}} steps",
     "todayProgress": "Today's steps towards your goal",
     "goalReached": "Goal reached today 🎉",
