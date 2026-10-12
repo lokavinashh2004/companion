@@ -666,8 +666,6 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayHub.rest` | Sleep & stress | தூக்கம் & மன அழுத்தம் |
 | [ ] | `todayHub.weight` | Weight | எடை |
 | [ ] | `todayHub.balance` | {{score}}/10 balance | சமநிலை {{score}}/10 |
-| [ ] | `todayHub.meals_one` | {{count}} meal | {{count}} உணவு |
-| [ ] | `todayHub.meals_other` | {{count}} meals | {{count}} உணவுகள் |
 | [ ] | `todayHub.foodEmpty` | Nothing logged yet | இன்னும் எதுவும் பதிவு செய்யவில்லை |
 | [ ] | `todayHub.glasses` | {{count}} of {{total}} glasses | {{total}}-இல் {{count}} டம்ளர் |
 | [ ] | `todayHub.dosesTaken` | {{taken}} of {{total}} taken | {{total}}-இல் {{taken}} எடுத்தாச்சு |
@@ -694,6 +692,35 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `todayHub.waterHint` | Each tap adds one glass (250 ml). Aim for about 8 a day. | ஒவ்வொரு தட்டலும் ஒரு டம்ளர் (250 மி.லி) சேர்க்கும். நாளொன்றுக்கு சுமார் 8 டம்ளர் இலக்கு. |
 | [ ] | `todayHub.manageMeds` | Manage medicines | மருந்துகளை நிர்வகிக்கவும் |
 | [ ] | `todayHub.moreCheckIn` | Log energy, stress, symptoms or sleep | ஆற்றல், மன அழுத்தம், அறிகுறிகள் அல்லது தூக்கத்தைப் பதிவு செய்யுங்கள் |
+| [ ] | `todayHub.mealsOf` | {{done}}/{{goal}} meals | {{done}}/{{goal}} உணவுகள் |
+| [ ] | `goals.title` | Today's goals | இன்றைய இலக்குகள் |
+| [ ] | `goals.met` | {{met}} of {{total}} goals done | {{total}}-இல் {{met}} இலக்குகள் முடிந்தன |
+| [ ] | `goals.allDone` | All goals done today 🎉 | இன்றைய எல்லா இலக்குகளும் முடிந்தன 🎉 |
+| [ ] | `goals.done` | done | முடிந்தது |
+| [ ] | `goals.meals` | meals | உணவுகள் |
+| [ ] | `goals.glasses` | glasses | டம்ளர் |
+| [ ] | `goals.ofSteps` | of {{goal}} steps | / {{goal}} அடிகள் |
+| [ ] | `goals.name.food` | Meals | உணவுகள் |
+| [ ] | `goals.name.water` | Water | தண்ணீர் |
+| [ ] | `goals.name.steps` | Steps | அடிகள் |
+| [ ] | `goals.calendarLink` | Goal calendar | இலக்கு நாட்காட்டி |
+| [ ] | `goals.calendarTitle` | Goal calendar | இலக்கு நாட்காட்டி |
+| [ ] | `goals.calendarSubtitle` | Days you met all three goals. | மூன்று இலக்குகளையும் முடித்த நாட்கள். |
+| [ ] | `goals.legend` | Legend | விளக்கம் |
+| [ ] | `goals.legendDone` | All 3 goals done | 3 இலக்குகளும் முடிந்தன |
+| [ ] | `goals.legendPart` | Partly done | பாதி முடிந்தது |
+| [ ] | `goals.dayComplete` | {{date}}: all goals done | {{date}}: எல்லா இலக்குகளும் முடிந்தன |
+| [ ] | `goals.dayPercent` | {{date}}: {{percent}}% | {{date}}: {{percent}}% |
+| [ ] | `goals.completeDays` | Complete days | முழுமையான நாட்கள் |
+| [ ] | `goals.daysOf` | {{n}} of {{total}} | {{total}}-இல் {{n}} |
+| [ ] | `goals.streak` | Streak | தொடர்ச்சி |
+| [ ] | `goals.streakDays_one` | {{count}} day | {{count}} நாள் |
+| [ ] | `goals.streakDays_other` | {{count}} days | {{count}} நாட்கள் |
+| [ ] | `goals.rules` | Daily goals: {{meals}} meals logged, {{glasses}} glasses of water and {{steps}} steps. They start again each day. | தினசரி இலக்குகள்: {{meals}} உணவுகள் பதிவு, {{glasses}} டம்ளர் தண்ணீர், {{steps}} அடிகள். ஒவ்வொரு நாளும் மீண்டும் தொடங்கும். |
+| [ ] | `goals.mealsOf` | {{done}} of {{goal}} meals | {{goal}}-இல் {{done}} உணவுகள் |
+| [ ] | `goals.glassesOf` | {{done}} of {{goal}} glasses | {{goal}}-இல் {{done}} டம்ளர் |
+| [ ] | `goals.stepsOf` | {{done}} of {{goal}} | {{goal}}-இல் {{done}} |
+| [ ] | `goals.allDonePast` | All three goals done this day ✓ | இந்த நாளில் மூன்று இலக்குகளும் முடிந்தன ✓ |
 | [ ] | `walks.title` | Walking | நடை |
 | [ ] | `walks.subtitle` | Your steps, day by day. | நாள்தோறும் உங்கள் அடிகள். |
 | [ ] | `walks.ofGoal` | of {{goal}} steps | / {{goal}} அடிகள் |

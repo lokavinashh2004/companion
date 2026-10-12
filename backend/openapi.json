@@ -1201,6 +1201,9 @@
           },
           "weight_due": {
             "type": "boolean"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/DayProgress"
           }
         },
         "required": [
@@ -1214,7 +1217,8 @@
           "symptoms",
           "lifestyle",
           "meds",
-          "weight_due"
+          "weight_due",
+          "progress"
         ]
       },
       "CycleStatus": {
@@ -1420,6 +1424,154 @@
         "required": [
           "time",
           "taken"
+        ]
+      },
+      "DayProgress": {
+        "type": "object",
+        "properties": {
+          "percent": {
+            "type": "integer"
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "food": {
+            "type": "object",
+            "properties": {
+              "done": {
+                "type": "number"
+              },
+              "goal": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "done",
+              "goal"
+            ],
+            "description": "meal slots logged"
+          },
+          "water": {
+            "type": "object",
+            "properties": {
+              "done": {
+                "type": "number"
+              },
+              "goal": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "done",
+              "goal"
+            ],
+            "description": "ml"
+          },
+          "steps": {
+            "type": "object",
+            "properties": {
+              "done": {
+                "type": "number"
+              },
+              "goal": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "done",
+              "goal"
+            ]
+          }
+        },
+        "required": [
+          "percent",
+          "complete",
+          "food",
+          "water",
+          "steps"
+        ]
+      },
+      "ProgressMonth": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string"
+          },
+          "today": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "goals": {
+            "type": "object",
+            "properties": {
+              "meals": {
+                "type": "integer"
+              },
+              "water_ml": {
+                "type": "integer"
+              },
+              "steps": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "meals",
+              "water_ml",
+              "steps"
+            ]
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProgressDay"
+            }
+          },
+          "complete_days": {
+            "type": "integer"
+          },
+          "streak": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "month",
+          "today",
+          "goals",
+          "days",
+          "complete_days",
+          "streak"
+        ]
+      },
+      "ProgressDay": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "percent": {
+            "type": "integer"
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "meals": {
+            "type": "integer"
+          },
+          "water_ml": {
+            "type": "number"
+          },
+          "steps": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day",
+          "percent",
+          "complete",
+          "meals",
+          "water_ml",
+          "steps"
         ]
       },
       "Water": {
@@ -2965,6 +3117,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Today"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/progress": {
+      "get": {
+        "tags": [
+          "today"
+        ],
+        "security": [
+          {
+            "firebase": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+            },
+            "required": false,
+            "name": "month",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Daily goal progress for each day of a month (default: this month) and the complete-day streak",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressMonth"
                 }
               }
             }

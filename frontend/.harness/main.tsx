@@ -12,6 +12,7 @@ import { Chat } from '@/routes/Chat';
 import { Cycle } from '@/routes/Cycle';
 import { Layout } from '@/routes/Layout';
 import { Me } from '@/routes/Me';
+import { Goals } from '@/routes/Goals';
 import { Today } from '@/routes/Today';
 import { TodaySection } from '@/routes/TodaySection';
 import { Walks } from '@/routes/Walks';
@@ -47,6 +48,7 @@ const ROUTES: Record<string, unknown> = {
     lifestyle: { water_ml: 750, sleep_hours: 7.5, exercise_minutes: null, steps: null },
     meds: [{ medication: { id: 'med1', name: 'Metformin', dose: '500 mg', schedule_times: ['20:00'], active: true, start_date: null, end_date: null }, doses: [{ time: '20:00', taken: false }] }],
     weight_due: false,
+    progress: { percent: 46, complete: false, food: { done: 2, goal: 3 }, water: { done: 750, goal: 2000 }, steps: { done: 2400, goal: 5000 } },
   },
   'GET /chat/messages': {
     has_more: false,
@@ -70,6 +72,16 @@ const ROUTES: Record<string, unknown> = {
         { id: 'w1', day: '2026-10-06', started_at: '2026-10-06T01:00:00Z', duration_s: 1925, steps: 3500 },
       ],
     };
+  },
+  'GET /progress': (url: URL) => {
+    const month = url.searchParams.get('month') ?? '2026-10';
+    const pct = [100, 67, 100, 100, 33, 0, 100, 83, 100, 100, 100, 50, 67, 100, 17, 100, 100, 83, 100, 100, 67, 100, 100, 100, 0, 33, 100, 100, 100, 100];
+    const days = month === '2026-10'
+      ? [100, 100, 67, 100, 100, 100, 100, 46].map((p, i) => ({ day: `2026-10-0${i + 1}`, percent: p, complete: p === 100, meals: p === 100 ? 3 : 2, water_ml: p === 100 ? 2000 : 750, steps: p === 100 ? 5300 : 2400 }))
+      : month === '2026-09'
+        ? pct.map((p, i) => ({ day: `2026-09-${String(i + 1).padStart(2, '0')}`, percent: p, complete: p === 100, meals: p === 100 ? 3 : 1, water_ml: p === 100 ? 2000 : 500, steps: p === 100 ? 5100 : 1500 }))
+        : [];
+    return { month, today: DAY, goals: { meals: 3, water_ml: 2000, steps: 5000 }, days, complete_days: days.filter((d) => d.complete).length, streak: 4 };
   },
   'GET /cycle': {
     today: DAY,
@@ -97,6 +109,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
       { path: '/today/walk', element: <Walks /> },
+      { path: '/today/goals', element: <Goals /> },
       { path: '/today/:section', element: <TodaySection /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },

@@ -31,6 +31,7 @@ import { Admin } from './routes/Admin';
 import { RequireAuth } from './routes/RequireAuth';
 import { Settings } from './routes/Settings';
 import { SignIn } from './routes/SignIn';
+import { Goals } from './routes/Goals';
 import { Today } from './routes/Today';
 import { TodaySection } from './routes/TodaySection';
 import { Walks } from './routes/Walks';
@@ -62,6 +63,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
       { path: '/today/walk', element: <Walks /> },
+      { path: '/today/goals', element: <Goals /> },
       { path: '/today/:section', element: <TodaySection /> },
       { path: '/walks', element: <Navigate to="/today/walk" replace /> },
       { path: '/cycle', element: <Cycle /> },

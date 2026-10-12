@@ -28,6 +28,7 @@ export const keys = {
   facts: ['facts'] as const,
   insights: ['insights'] as const,
   walks: (days: number) => ['walks', days] as const,
+  progress: (month: string) => ['progress', month] as const,
 };
 
 /** After logging anything, these views may change. */
@@ -35,7 +36,11 @@ const LOG_VIEWS = [['today'], keys.cycle, keys.insights, keys.messages] as const
 
 function useInvalidate() {
   const qc = useQueryClient();
-  return (...ks: readonly (readonly unknown[])[]) => Promise.all(ks.map((k) => qc.invalidateQueries({ queryKey: k })));
+  return (...ks: readonly (readonly unknown[])[]) => {
+    // Anything that changes Today (food, water, steps) also changes the daily-goals calendar.
+    const all = ks.some((k) => k[0] === 'today') ? [...ks, ['progress']] : ks;
+    return Promise.all(all.map((k) => qc.invalidateQueries({ queryKey: k })));
+  };
 }
 
 // ---------------------------------------------------------------- profile
@@ -172,6 +177,14 @@ export function useSaveWeight() {
     mutationFn: async (body: { day: string; weight_kg: number }) => unwrap(await api.POST('/today/weight', { body })),
     onSuccess: () => inv(['today'], keys.insights),
   });
+}
+
+// ---------------------------------------------------------------- daily goals
+
+/** Daily goal progress for each day of `month` (YYYY-MM), up to today. */
+export function useProgress(month: string) {
+  const { user } = useAuth();
+  return useQuery({ queryKey: keys.progress(month), enabled: !!user, queryFn: async () => unwrap(await api.GET('/progress', { params: { query: { month } } })) });
 }
 
 // ---------------------------------------------------------------- walks

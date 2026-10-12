@@ -466,6 +466,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    month?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Daily goal progress for each day of a month (default: this month) and the complete-day streak */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProgressMonth"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/today/water": {
         parameters: {
             query?: never;
@@ -1731,6 +1768,7 @@ export interface components {
                 doses: components["schemas"]["Dose"][];
             }[];
             weight_due: boolean;
+            progress: components["schemas"]["DayProgress"];
         };
         CycleStatus: {
             /** @enum {string} */
@@ -1768,6 +1806,44 @@ export interface components {
         Dose: {
             time: string;
             taken: boolean;
+        };
+        DayProgress: {
+            percent: number;
+            complete: boolean;
+            /** @description meal slots logged */
+            food: {
+                done: number;
+                goal: number;
+            };
+            /** @description ml */
+            water: {
+                done: number;
+                goal: number;
+            };
+            steps: {
+                done: number;
+                goal: number;
+            };
+        };
+        ProgressMonth: {
+            month: string;
+            today: string;
+            goals: {
+                meals: number;
+                water_ml: number;
+                steps: number;
+            };
+            days: components["schemas"]["ProgressDay"][];
+            complete_days: number;
+            streak: number;
+        };
+        ProgressDay: {
+            day: string;
+            percent: number;
+            complete: boolean;
+            meals: number;
+            water_ml: number;
+            steps: number;
         };
         Water: {
             day: string;

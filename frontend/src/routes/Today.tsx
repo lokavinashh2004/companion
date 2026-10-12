@@ -1,10 +1,11 @@
-// Today hub: a greeting, the one most useful nudge, then a tile per area (food, water, medicines, mood, walk,
+// Today hub: a greeting, today's goals (meals, water, steps), the one most useful nudge, then a tile per area (food, water, medicines, mood, walk,
 // cycle, sleep & stress, weight when due). Each tile opens its own screen; built phone-first.
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
 import { Icon } from '@/components/Icon';
+import { DailyGoalsCard } from '@/components/today/DailyGoalsCard';
 import { NudgeCard } from '@/components/today/NudgeCard';
 import { QuickLogSheet } from '@/components/today/QuickLogSheet';
 import { TodayTiles } from '@/components/today/TodayTiles';
@@ -58,6 +59,8 @@ export function Today() {
       {today.isError ? <ErrorState onRetry={() => void today.refetch()} /> : null}
       {today.data ? (
         <div className={s.hub}>
+          {/* absent when talking to a backend deployed before daily goals */}
+          {today.data.progress ? <DailyGoalsCard progress={today.data.progress} /> : null}
           <NudgeCard today={today.data} />
           <TodayTiles today={today.data} />
           <Link className={s.ask} to="/">

@@ -1,12 +1,14 @@
 import { createRoute } from '@hono/zod-openapi';
 
-import { DayQuery, OkSchema, QuickLogSchema, TodaySchema, WaterSchema, WeightSchema } from '../contract.ts';
+import { DayQuery, OkSchema, ProgressMonthSchema, ProgressQuery, QuickLogSchema, TodaySchema, WaterSchema, WeightSchema } from '../contract.ts';
 import { addDays, localDateTime, localMidnight } from '../core/dates.ts';
+import { completeStreak, DAILY_GOALS, dailyProgress, dayProgress } from '../core/progress.ts';
 import { balanceScore, type ScoreItem } from '../core/score.ts';
 import { loadCycle } from '../services/cycle.ts';
 import { jsonBody, jsonRes, profileOf, todayFor, toFoodLog, toMedication, toPrediction, toStatus, type App, type AppDeps } from './shared.ts';
 
 const sec = [{ firebase: [] }];
+const STREAK_LOOKBACK_DAYS = 120;
 
 export function registerToday(app: App, { services: s }: AppDeps) {
   app.openapi(
@@ -35,6 +37,7 @@ export function registerToday(app: App, { services: s }: AppDeps) {
         u.weight_logs.findOne({}, { sort: { day: -1 } }),
       ]);
       const score = balanceScore(foods as ScoreItem[]);
+      const goals = dayProgress({ day, meals: new Set(foods.map((f) => f.meal)).size, water_ml: lifestyle?.water_ml ?? 0, steps: lifestyle?.steps ?? 0 });
       return c.json(
         {
           day,
@@ -54,6 +57,51 @@ export function registerToday(app: App, { services: s }: AppDeps) {
             })),
           })),
           weight_due: p.weight_tracking && (!lastWeight || lastWeight.day <= addDays(today, -7)),
+          progress: {
+            percent: goals.percent,
+            complete: goals.complete,
+            food: { done: goals.meals, goal: DAILY_GOALS.meals },
+            water: { done: goals.water_ml, goal: DAILY_GOALS.water_ml },
+            steps: { done: goals.steps, goal: DAILY_GOALS.steps },
+          },
+        },
+        200,
+      );
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: 'get',
+      path: '/progress',
+      tags: ['today'],
+      security: sec,
+      request: { query: ProgressQuery },
+      responses: { 200: jsonRes(ProgressMonthSchema, 'Daily goal progress for each day of a month (default: this month) and the complete-day streak') },
+    }),
+    async (c) => {
+      const u = s.store.user(c.get('uid'));
+      const today = todayFor(s, await profileOf(u));
+      const month = c.req.valid('query').month ?? today.slice(0, 7);
+      const first = `${month}-01`;
+      const last = addDays(`${addDays(first, 31).slice(0, 7)}-01`, -1);
+      const to = last < today ? last : today;
+      // The streak can reach back before this month.
+      const from = first < addDays(today, -STREAK_LOOKBACK_DAYS) ? first : addDays(today, -STREAK_LOOKBACK_DAYS);
+      const [foods, lifestyle] = await Promise.all([
+        u.food_logs.find({ day: { $gte: from, $lte: today } }),
+        u.lifestyle_logs.find({ day: { $gte: from, $lte: today } }),
+      ]);
+      const all = dailyProgress(foods, lifestyle, from, today);
+      const days = first > today ? [] : all.filter((d) => d.day >= first && d.day <= to);
+      return c.json(
+        {
+          month,
+          today,
+          goals: { ...DAILY_GOALS },
+          days: days.map(({ day, percent, complete, meals, water_ml, steps }) => ({ day, percent, complete, meals, water_ml, steps })),
+          complete_days: days.filter((d) => d.complete).length,
+          streak: completeStreak(all, today),
         },
         200,
       );

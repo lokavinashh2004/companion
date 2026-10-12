@@ -48,6 +48,7 @@ const TODAY = {
     },
   ],
   weight_due: false,
+  progress: { percent: 46, complete: false, food: { done: 2, goal: 3 }, water: { done: 500, goal: 2000 }, steps: { done: 2400, goal: 5000 } },
 };
 
 beforeEach(async () => {
@@ -65,10 +66,10 @@ const tile = (name: RegExp) => screen.getByRole('link', { name });
 // ---------------------------------------------------------------- hub
 
 it('shows one tile per area with a summary of today, each opening its own screen', async () => {
-  mockApi({ 'GET /today': { ...TODAY, lifestyle: { water_ml: 500, sleep_hours: 7.5, exercise_minutes: null, steps: 2400 } } });
+  mockApi({ 'GET /today': TODAY });
   renderPage(<Today />);
   expect(await screen.findByRole('list', { name: 'Your day' })).toBeTruthy();
-  expect(tile(/^Food: 7\/10 balance · 2 meals$/).getAttribute('href')).toBe('/today/food');
+  expect(tile(/^Food: 2\/3 meals · 7\/10 balance$/).getAttribute('href')).toBe('/today/food');
   expect(tile(/^Water: 2 of 8 glasses$/).getAttribute('href')).toBe('/today/water');
   expect(tile(/^Medicines: 0 of 1 taken$/).getAttribute('href')).toBe('/today/meds');
   expect(tile(/^Mood & symptoms: .+ Feeling 4 of 5 · 1 symptom$/).getAttribute('href')).toBe('/today/mood');
@@ -82,6 +83,28 @@ it('shows one tile per area with a summary of today, each opening its own screen
   expect(screen.queryByRole('link', { name: /^Weight/ })).toBeNull();
 });
 
+it("shows today's goals: one bar for the day and a pill per goal", async () => {
+  mockApi({ 'GET /today': TODAY });
+  renderPage(<Today />);
+  const bar = await screen.findByRole('progressbar', { name: "Today's goals" });
+  expect(bar.getAttribute('aria-valuenow')).toBe('46');
+  expect(screen.getByText('46%')).toBeTruthy();
+  expect(screen.getByText('0 of 3 goals done')).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Meals: 2/3 meals' }).getAttribute('href')).toBe('/today/food');
+  expect(screen.getByRole('link', { name: 'Water: 2/8 glasses' }).getAttribute('href')).toBe('/today/water');
+  expect(screen.getByRole('link', { name: 'Steps: 2.4k of 5k steps' }).getAttribute('href')).toBe('/today/walk');
+  expect(screen.getByRole('link', { name: /Goal calendar/ }).getAttribute('href')).toBe('/today/goals');
+});
+
+it('celebrates when every goal is met', async () => {
+  const progress = { percent: 100, complete: true, food: { done: 4, goal: 3 }, water: { done: 2250, goal: 2000 }, steps: { done: 5100, goal: 5000 } };
+  mockApi({ 'GET /today': { ...TODAY, progress } });
+  renderPage(<Today />);
+  expect(await screen.findByText('All goals done today 🎉')).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Meals: 3/3 meals, done' })).toBeTruthy();
+  expect(screen.getByRole('link', { name: 'Steps: 5.1k of 5k steps, done' })).toBeTruthy();
+});
+
 it('tiles show friendly prompts when nothing is logged, a weight tile when due, and a late badge', async () => {
   mockApi({
     'GET /today': {
@@ -93,6 +116,7 @@ it('tiles show friendly prompts when nothing is logged, a weight tile when due, 
       lifestyle: null,
       meds: [],
       weight_due: true,
+      progress: { percent: 0, complete: false, food: { done: 0, goal: 3 }, water: { done: 0, goal: 2000 }, steps: { done: 0, goal: 5000 } },
       status: { kind: 'late', cycle_day: 38, period_day: null, days_late: 3, phase: 'late' },
     },
   });

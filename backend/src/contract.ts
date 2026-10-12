@@ -274,6 +274,17 @@ export const MedicationSchema = z
   })
   .openapi('Medication');
 
+const goalPart = z.object({ done: z.number(), goal: z.number() });
+export const DayProgressSchema = z
+  .object({
+    percent: z.number().int(),
+    complete: z.boolean(),
+    food: goalPart.describe('meal slots logged'),
+    water: goalPart.describe('ml'),
+    steps: goalPart,
+  })
+  .openapi('DayProgress');
+
 export const TodaySchema = z
   .object({
     day: date,
@@ -289,6 +300,7 @@ export const TodaySchema = z
       .nullable(),
     meds: z.array(z.object({ medication: MedicationSchema, doses: z.array(DoseSchema) })),
     weight_due: z.boolean(),
+    progress: DayProgressSchema,
   })
   .openapi('Today');
 
@@ -304,6 +316,24 @@ export const QuickLogSchema = z
   })
   .openapi('QuickLog');
 export const WeightSchema = z.object({ day: date, weight_kg: z.number().min(20).max(300) }).openapi('Weight');
+
+// ---------------------------------------------------------------- daily goals calendar
+
+export const ProgressQuery = z.object({ month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'YYYY-MM').optional() });
+export const ProgressDaySchema = z
+  .object({ day: date, percent: z.number().int(), complete: z.boolean(), meals: z.number().int(), water_ml: z.number(), steps: z.number().int() })
+  .openapi('ProgressDay');
+export const ProgressMonthSchema = z
+  .object({
+    month: z.string(),
+    today: date,
+    goals: z.object({ meals: z.number().int(), water_ml: z.number().int(), steps: z.number().int() }),
+    /** Days of the month up to today (none for future months). */
+    days: z.array(ProgressDaySchema),
+    complete_days: z.number().int(),
+    streak: z.number().int(),
+  })
+  .openapi('ProgressMonth');
 
 // ---------------------------------------------------------------- walks
 

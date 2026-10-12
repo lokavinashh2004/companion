@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { cx } from '@/components/ui';
 import ui from '@/components/ui.module.css';
 import type { Today } from '@/lib/api';
-import { todayReminders, WATER_GOAL_ML } from '@/lib/reminders';
+import { todayReminders } from '@/lib/reminders';
 import { useWalk } from '@/lib/walk';
 import { MOOD_EMOJI } from './constants';
 import s from './tiles.module.css';
@@ -55,15 +55,16 @@ export function TodayTiles({ today }: { today: Today }) {
   const { t } = useTranslation();
   const walk = useWalk();
 
-  // Food
-  const meals = new Set(today.foods.map((f) => f.meal)).size;
+  // Food, water and steps bars follow the daily goals (3 meals, 8 glasses, the step goal). The fallback covers a
+  // backend deployed before daily goals existed (frontend and backend deploy separately).
+  const { food: meals, water, steps: stepGoal } = (today.progress as Today['progress'] | undefined) ?? {
+    food: { done: new Set(today.foods.map((f) => f.meal)).size, goal: 3 },
+    water: { done: today.lifestyle?.water_ml ?? 0, goal: 2000 },
+    steps: { done: today.lifestyle?.steps ?? 0, goal: 5000 },
+  };
   const food = today.foods.length
-    ? [today.score ? t('todayHub.balance', { score: today.score.score }) : null, t('todayHub.meals', { count: meals })].filter(Boolean).join(' · ')
+    ? [t('todayHub.mealsOf', { done: Math.min(meals.done, meals.goal), goal: meals.goal }), today.score ? t('todayHub.balance', { score: today.score.score }) : null].filter(Boolean).join(' · ')
     : t('todayHub.foodEmpty');
-
-  // Water
-  const ml = today.lifestyle?.water_ml ?? 0;
-  const glassGoal = WATER_GOAL_ML / 250;
 
   // Medicines
   const doses = today.meds.flatMap((m) => m.doses);
@@ -79,7 +80,7 @@ export function TodayTiles({ today }: { today: Today }) {
   ].filter(Boolean);
 
   // Walk (live while a walk is running)
-  const steps = today.lifestyle?.steps ?? 0;
+  const steps = stepGoal.done;
   const walking = walk.status === 'walking';
 
   // Cycle
@@ -102,8 +103,8 @@ export function TodayTiles({ today }: { today: Today }) {
   return (
     <div className={s.wrap}>
       <ul className={s.grid} aria-label={t('todayHub.label')}>
-        <Tile to="/today/food" icon="🍽️" tint="peach" title={t('todayHub.food')} summary={food} progress={today.score ? today.score.score / 10 : undefined} />
-        <Tile to="/today/water" icon="💧" tint="blue" title={t('today.water')} summary={t('todayHub.glasses', { count: Math.floor(ml / 250), total: glassGoal })} progress={ml / WATER_GOAL_ML} />
+        <Tile to="/today/food" icon="🍽️" tint="peach" title={t('todayHub.food')} summary={food} progress={meals.done / meals.goal} />
+        <Tile to="/today/water" icon="💧" tint="blue" title={t('today.water')} summary={t('todayHub.glasses', { count: Math.floor(water.done / 250), total: water.goal / 250 })} progress={water.done / water.goal} />
         <Tile
           to="/today/meds"
           icon="💊"
@@ -120,6 +121,7 @@ export function TodayTiles({ today }: { today: Today }) {
           tint="green"
           title={t('walk.title')}
           summary={walking ? t('todayHub.walkingNow', { n: walk.steps.toLocaleString() }) : steps ? t('todayHub.steps', { n: steps.toLocaleString() }) : t('todayHub.walkEmpty')}
+          progress={stepGoal.done / stepGoal.goal}
           badge={walking ? { label: t('todayHub.live'), live: true } : undefined}
         />
         <Tile to="/cycle" icon="🌸" tint="pink" title={t('todayPage.periodTracker')} summary={cycle} badge={st.kind === 'late' ? { label: t('todayHub.lateBadge') } : undefined} />

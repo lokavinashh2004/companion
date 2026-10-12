@@ -109,6 +109,7 @@
   background: var(--danger);
 }
 .live {
+  color: var(--on-success);
   background: var(--success);
 }
 

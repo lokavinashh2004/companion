@@ -20,6 +20,7 @@
   --period: #d9367a;
   --predicted: #fbdbe9;
   --success: #1e7a52;
+  --on-success: #ffffff;
   --warning: #8a5a00;
   --danger: #b4233a;
   --calm: #def5e8;
@@ -72,6 +73,7 @@
     --period: #f06ba4;
     --predicted: #4a1d35;
     --success: #7fd6aa;
+    --on-success: #0e2a1d;
     --warning: #f2c46d;
     --danger: #ff9b9b;
     --calm: #133528;
@@ -110,6 +112,7 @@
   --period: #f06ba4;
   --predicted: #4a1d35;
   --success: #7fd6aa;
+  --on-success: #0e2a1d;
   --warning: #f2c46d;
   --danger: #ff9b9b;
   --calm: #133528;

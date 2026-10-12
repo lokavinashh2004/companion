@@ -67,8 +67,6 @@
     "rest": "Sleep & stress",
     "weight": "Weight",
     "balance": "{{score}}/10 balance",
-    "meals_one": "{{count}} meal",
-    "meals_other": "{{count}} meals",
     "foodEmpty": "Nothing logged yet",
     "glasses": "{{count}} of {{total}} glasses",
     "dosesTaken": "{{taken}} of {{total}} taken",
@@ -94,6 +92,39 @@
     "logFood": "Log more food in chat",
     "waterHint": "Each tap adds one glass (250 ml). Aim for about 8 a day.",
     "manageMeds": "Manage medicines",
-    "moreCheckIn": "Log energy, stress, symptoms or sleep"
+    "moreCheckIn": "Log energy, stress, symptoms or sleep",
+    "mealsOf": "{{done}}/{{goal}} meals"
+  },
+  "goals": {
+    "title": "Today's goals",
+    "met": "{{met}} of {{total}} goals done",
+    "allDone": "All goals done today 🎉",
+    "done": "done",
+    "meals": "meals",
+    "glasses": "glasses",
+    "ofSteps": "of {{goal}} steps",
+    "name": {
+      "food": "Meals",
+      "water": "Water",
+      "steps": "Steps"
+    },
+    "calendarLink": "Goal calendar",
+    "calendarTitle": "Goal calendar",
+    "calendarSubtitle": "Days you met all three goals.",
+    "legend": "Legend",
+    "legendDone": "All 3 goals done",
+    "legendPart": "Partly done",
+    "dayComplete": "{{date}}: all goals done",
+    "dayPercent": "{{date}}: {{percent}}%",
+    "completeDays": "Complete days",
+    "daysOf": "{{n}} of {{total}}",
+    "streak": "Streak",
+    "streakDays_one": "{{count}} day",
+    "streakDays_other": "{{count}} days",
+    "rules": "Daily goals: {{meals}} meals logged, {{glasses}} glasses of water and {{steps}} steps. They start again each day.",
+    "mealsOf": "{{done}} of {{goal}} meals",
+    "glassesOf": "{{done}} of {{goal}} glasses",
+    "stepsOf": "{{done}} of {{goal}}",
+    "allDonePast": "All three goals done this day ✓"
   }
 }
