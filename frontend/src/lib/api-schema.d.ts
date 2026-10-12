@@ -392,6 +392,117 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/food/calories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Calories today (by meal), this week (from Monday) and this month, against her daily guide. No numbers when calories are off. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Calories"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/food/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query: {
+                    q: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Known foods matching the text */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["FoodSearch"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/food/estimate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["FoodEstimateRequest"];
+                };
+            };
+            responses: {
+                /** @description Grams and kcal for a quantity (not saved). found=false means it will be looked up when saved. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["FoodEstimate"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/food/logs/{id}": {
         parameters: {
             query?: never;
@@ -1220,6 +1331,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Overall progress from all logs: today so far, this week vs last week, each habit and the last 30 days */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Overview"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/insights/{id}/dismiss": {
         parameters: {
             query?: never;
@@ -1538,6 +1684,7 @@ export interface components {
             tamil_address_form: "casual" | "respectful";
             /** @enum {string} */
             calorie_display: "show" | "hide";
+            calorie_target: number | null;
             goals: string[];
             diet_type: string | null;
             allergies: string[];
@@ -1564,6 +1711,7 @@ export interface components {
             tamil_address_form?: "casual" | "respectful";
             /** @enum {string} */
             calorie_display?: "show" | "hide";
+            calorie_target?: number | null;
             goals?: string[];
             diet_type?: string | null;
             allergies?: string[];
@@ -1590,6 +1738,7 @@ export interface components {
                 tamil_address_form?: "casual" | "respectful";
                 /** @enum {string} */
                 calorie_display?: "show" | "hide";
+                calorie_target?: number | null;
                 goals?: string[];
                 diet_type?: string | null;
                 allergies?: string[];
@@ -1733,6 +1882,59 @@ export interface components {
             day: string;
             /** @enum {string} */
             source: "photo" | "manual";
+        };
+        Calories: {
+            hidden: boolean;
+            target: number;
+            target_is_default: boolean;
+            today: {
+                day: string;
+                kcal: number;
+                by_meal: {
+                    /** @enum {string} */
+                    meal: "breakfast" | "lunch" | "snack" | "dinner" | "other";
+                    kcal: number;
+                }[];
+                unknown_items: number;
+            } | null;
+            week: {
+                from: string;
+                days: {
+                    day: string;
+                    kcal: number;
+                }[];
+                total: number;
+                average: number | null;
+            } | null;
+            month: {
+                from: string;
+                days: {
+                    day: string;
+                    kcal: number;
+                }[];
+                total: number;
+                average: number | null;
+            } | null;
+        };
+        FoodSearch: {
+            results: {
+                name: string;
+                kcal_per_100g: number;
+                serving_g: number | null;
+                piece_g: number | null;
+            }[];
+        };
+        FoodEstimate: {
+            found: boolean;
+            name: string | null;
+            grams: number | null;
+            kcal: number | null;
+            is_estimate: boolean;
+        };
+        FoodEstimateRequest: {
+            name: string;
+            quantity: number | null;
+            unit: string | null;
         };
         Ok: {
             /** @enum {boolean} */
@@ -2015,6 +2217,30 @@ export interface components {
                 exercise_minutes_total: number;
                 medication_doses_taken: number;
             };
+        };
+        Overview: {
+            today: string;
+            today_score: number;
+            week: {
+                score: number;
+                previous: number;
+                change: number;
+                /** @enum {string} */
+                trend: "up" | "down" | "steady";
+            };
+            factors: {
+                /** @enum {string} */
+                key: "meals" | "water" | "steps" | "meds" | "checkin" | "sleep";
+                score: number | null;
+                previous: number | null;
+                /** @enum {string} */
+                trend: "up" | "down" | "steady";
+            }[];
+            days: {
+                day: string;
+                score: number;
+            }[];
+            active_days: number;
         };
         PushSubscription: {
             /** Format: uri */

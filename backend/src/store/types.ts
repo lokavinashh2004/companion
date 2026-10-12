@@ -25,6 +25,8 @@ export interface ProfileDoc extends Owned {
   persona_tone: 'bestie' | 'calm' | 'coach';
   tamil_address_form: 'casual' | 'respectful';
   calorie_display: 'show' | 'hide';
+  /** Daily calorie guide she set (kcal); null → the default guide. Absent on profiles made before it existed. */
+  calorie_target?: number | null;
   goals: string[];
   diet_type: string | null;
   allergies: string[];

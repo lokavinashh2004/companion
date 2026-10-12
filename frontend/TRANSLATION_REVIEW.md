@@ -500,6 +500,106 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `cyclePage.saveEnd` | Save end date | முடிவு தேதியைச் சேமிக்கவும் |
 | [ ] | `cyclePage.confirmDelete` | Yes, delete | ஆம், நீக்கவும் |
 | [ ] | `cyclePage.range` | {{start}} → {{end}} | {{start}} → {{end}} |
+| [ ] | `food.calories` | Calories | கலோரிகள் |
+| [ ] | `food.caloriesOff` | Calories are turned off. Turn them on to see today’s total, this week and this month. | கலோரிகள் அணைக்கப்பட்டுள்ளன. இன்றைய, இந்த வார, இந்த மாத மொத்தத்தைக் காண அவற்றை இயக்குங்கள். |
+| [ ] | `food.showCalories` | Show calories | கலோரிகளைக் காட்டு |
+| [ ] | `food.today` | Calories today | இன்றைய கலோரிகள் |
+| [ ] | `food.todayLabel` | Calories today against your daily guide | உங்கள் தினசரி வழிகாட்டுதலுக்கு எதிராக இன்றைய கலோரிகள் |
+| [ ] | `food.ofGuide` | of {{target}} kcal | / {{target}} kcal |
+| [ ] | `food.left` | {{n}} kcal left today | இன்று இன்னும் {{n}} kcal |
+| [ ] | `food.over` | {{n}} kcal over your guide | வழிகாட்டுதலை விட {{n}} kcal அதிகம் |
+| [ ] | `food.byMeal` | Calories by meal | உணவு வாரியாக கலோரிகள் |
+| [ ] | `food.unknownItems_one` | {{count}} item has no calorie information and isn’t counted. | {{count}} உணவுக்கு கலோரி தகவல் இல்லை, அது கணக்கில் சேர்க்கப்படவில்லை. |
+| [ ] | `food.unknownItems_other` | {{count}} items have no calorie information and aren’t counted. | {{count}} உணவுகளுக்கு கலோரி தகவல் இல்லை, அவை கணக்கில் சேர்க்கப்படவில்லை. |
+| [ ] | `food.guideDefault` | Daily guide: {{n}} kcal (a general guide) | தினசரி வழிகாட்டுதல்: {{n}} kcal (பொதுவானது) |
+| [ ] | `food.guideOwn` | Your daily guide: {{n}} kcal | உங்கள் தினசரி வழிகாட்டுதல்: {{n}} kcal |
+| [ ] | `food.editGuide` | Change | மாற்று |
+| [ ] | `food.guideTitle` | Daily calorie guide | தினசரி கலோரி வழிகாட்டுதல் |
+| [ ] | `food.guideLabel` | Calories per day (kcal) | நாளொன்றுக்கு கலோரிகள் (kcal) |
+| [ ] | `food.guideHint` | Between 1,000 and 4,000. Your doctor or dietitian can suggest the right number for you. | 1,000 முதல் 4,000 வரை. சரியான அளவை உங்கள் மருத்துவர் அல்லது உணவியல் நிபுணர் சொல்லலாம். |
+| [ ] | `food.guideInvalid` | Please enter a number between 1,000 and 4,000. | 1,000 முதல் 4,000 வரையிலான எண்ணை உள்ளிடவும். |
+| [ ] | `food.useDefault` | Use the general guide | பொது வழிகாட்டுதலைப் பயன்படுத்து |
+| [ ] | `food.trend` | Calories over time | காலப்போக்கில் கலோரிகள் |
+| [ ] | `food.range` | Period | காலம் |
+| [ ] | `food.thisWeek` | This week | இந்த வாரம் |
+| [ ] | `food.thisMonth` | This month | இந்த மாதம் |
+| [ ] | `food.noFoodPeriod` | No food logged in this period yet. | இந்தக் காலத்தில் இன்னும் உணவு பதிவு இல்லை. |
+| [ ] | `food.total` | Total kcal | மொத்த kcal |
+| [ ] | `food.average` | Daily average | தினசரி சராசரி |
+| [ ] | `food.overDays` | Days over guide | அதிகமான நாட்கள் |
+| [ ] | `food.trendNote` | From {{from}}. Dashed line: your {{n}} kcal guide. The average counts only days with food logged. | {{from}} முதல். புள்ளிக்கோடு: உங்கள் {{n}} kcal வழிகாட்டுதல். உணவு பதிவு செய்த நாட்களை மட்டுமே சராசரி கணக்கிடும். |
+| [ ] | `food.logButton` | Log food | உணவைப் பதிவு செய் |
+| [ ] | `food.logTitle` | Log food | உணவைப் பதிவு செய் |
+| [ ] | `food.saved` | Food logged ✓ | உணவு பதிவு செய்யப்பட்டது ✓ |
+| [ ] | `food.meal` | Meal | உணவு வேளை |
+| [ ] | `food.name` | Food | உணவு |
+| [ ] | `food.namePlaceholder` | e.g. idli, sambar rice, apple | எ.கா. இட்லி, சாம்பார் சாதம், ஆப்பிள் |
+| [ ] | `food.suggestions` | Suggestions | பரிந்துரைகள் |
+| [ ] | `food.quantity` | How many | எவ்வளவு |
+| [ ] | `food.unit` | Unit | அளவு |
+| [ ] | `food.size` | Portion size | பரிமாறும் அளவு |
+| [ ] | `food.sizes.small` | Small | சிறியது |
+| [ ] | `food.sizes.regular` | Regular | வழக்கமானது |
+| [ ] | `food.sizes.large` | Large | பெரியது |
+| [ ] | `food.units.piece` | piece(s) | எண்ணிக்கை |
+| [ ] | `food.units.bowl` | bowl | கிண்ணம் |
+| [ ] | `food.units.cup` | cup | கப் |
+| [ ] | `food.units.plate` | plate | தட்டு |
+| [ ] | `food.units.karandi` | ladle (karandi) | கரண்டி |
+| [ ] | `food.units.tumbler` | tumbler | டம்ளர் |
+| [ ] | `food.units.glass` | glass | கிளாஸ் |
+| [ ] | `food.units.slice` | slice | துண்டு |
+| [ ] | `food.units.tablespoon` | tablespoon | மேசைக்கரண்டி |
+| [ ] | `food.units.teaspoon` | teaspoon | தேக்கரண்டி |
+| [ ] | `food.units.handful` | handful | கைப்பிடி |
+| [ ] | `food.units.g` | grams | கிராம் |
+| [ ] | `food.units.ml` | ml | மி.லி |
+| [ ] | `food.kcal` | {{n}} kcal | {{n}} kcal |
+| [ ] | `food.grams` | {{n}} g | {{n}} கி |
+| [ ] | `food.notInList` | Not in the food list yet. It will be looked up when you save. | இது இன்னும் உணவுப் பட்டியலில் இல்லை. சேமிக்கும்போது தேடப்படும். |
+| [ ] | `food.nameMissing` | Please enter what you ate. | நீங்கள் என்ன சாப்பிட்டீர்கள் என்று உள்ளிடவும். |
+| [ ] | `food.qtyInvalid` | Please enter an amount between 0.25 and 50. | 0.25 முதல் 50 வரையிலான அளவை உள்ளிடவும். |
+| [ ] | `food.save` | Save | சேமி |
+| [ ] | `food.manualHint` | Calories are worked out from the amount and portion size. | அளவு மற்றும் பரிமாறும் அளவைக் கொண்டு கலோரிகள் கணக்கிடப்படும். |
+| [ ] | `games.title` | Feel a little better | கொஞ்சம் நன்றாக உணருங்கள் |
+| [ ] | `games.intro` | A few minutes of something gentle can lift a low moment. | சில நிமிடங்கள் மென்மையான ஒன்று மனதை லேசாக்கும். |
+| [ ] | `games.start` | Start | தொடங்கு |
+| [ ] | `games.stop` | Stop | நிறுத்து |
+| [ ] | `games.again` | Play again | மீண்டும் விளையாடு |
+| [ ] | `games.feelNow` | How do you feel now? | இப்போது எப்படி உணர்கிறீர்கள்? |
+| [ ] | `games.thanks` | Thanks for checking in 💜 | பகிர்ந்ததற்கு நன்றி 💜 |
+| [ ] | `games.breathe.title` | Breathe | மூச்சு |
+| [ ] | `games.breathe.body` | A one-minute calm breath | ஒரு நிமிட அமைதியான மூச்சு |
+| [ ] | `games.breathe.ready` | Tap Start and follow the circle | தொடங்கு அழுத்தி வட்டத்தைப் பின்தொடருங்கள் |
+| [ ] | `games.breathe.in` | Breathe in | மூச்சை உள்ளிழுங்கள் |
+| [ ] | `games.breathe.hold` | Hold | நிறுத்துங்கள் |
+| [ ] | `games.breathe.out` | Breathe out | மூச்சை விடுங்கள் |
+| [ ] | `games.breathe.rest` | Rest | ஓய்வு |
+| [ ] | `games.breathe.round` | Round {{round}} of {{total}} | {{total}}-இல் சுற்று {{round}} |
+| [ ] | `games.breathe.done` | Well done 🌿 | அருமை 🌿 |
+| [ ] | `games.bubbles.title` | Bubble pop | குமிழி உடை |
+| [ ] | `games.bubbles.body` | Pop bubbles, let go of stress | குமிழிகளை உடைத்து மன அழுத்தத்தை விடுங்கள் |
+| [ ] | `games.bubbles.count_one` | {{count}} bubble popped | {{count}} குமிழி உடைந்தது |
+| [ ] | `games.bubbles.count_other` | {{count}} bubbles popped | {{count}} குமிழிகள் உடைந்தன |
+| [ ] | `games.bubbles.pop` | Pop bubble {{n}} | குமிழி {{n}}-ஐ உடை |
+| [ ] | `games.memory.title` | Memory match | நினைவு ஜோடி |
+| [ ] | `games.memory.body` | Find the pairs, rest your mind | ஜோடிகளைக் கண்டுபிடித்து மனதை ஓய்வெடுங்கள் |
+| [ ] | `games.memory.status` | {{pairs}} of {{total}} pairs · {{moves}} moves | {{total}}-இல் {{pairs}} ஜோடிகள் · {{moves}} நகர்வுகள் |
+| [ ] | `games.memory.won` | All pairs found in {{moves}} moves! 🎉 | {{moves}} நகர்வுகளில் எல்லா ஜோடிகளும் கிடைத்தன! 🎉 |
+| [ ] | `games.memory.hidden` | Card {{n}}, face down | அட்டை {{n}}, மூடியுள்ளது |
+| [ ] | `games.words.title` | Kind words | அன்பான வார்த்தைகள் |
+| [ ] | `games.words.body` | Something nice to hear | கேட்க இனிமையான ஒன்று |
+| [ ] | `games.words.next` | Another one | இன்னொன்று |
+| [ ] | `games.words.list.0` | You are doing better than you think. | நீங்கள் நினைப்பதை விட நன்றாகச் செய்கிறீர்கள். |
+| [ ] | `games.words.list.1` | Your body is working hard for you. Be gentle with it today. | உங்கள் உடல் உங்களுக்காகக் கடினமாக உழைக்கிறது. இன்று அதனிடம் மென்மையாக இருங்கள். |
+| [ ] | `games.words.list.2` | Small steps still move you forward. | சிறிய அடிகளும் உங்களை முன்னேற்றுகின்றன. |
+| [ ] | `games.words.list.3` | It’s okay to rest. Rest is part of getting better. | ஓய்வெடுப்பது சரிதான். ஓய்வும் குணமாவதன் ஒரு பகுதி. |
+| [ ] | `games.words.list.4` | You don’t have to be perfect to be proud of yourself. | உங்களைப் பற்றிப் பெருமைப்பட நீங்கள் முழுமையாக இருக்க வேண்டியதில்லை. |
+| [ ] | `games.words.list.5` | Bad days end. You have got through every one so far. | கடினமான நாட்கள் முடியும். இதுவரை ஒவ்வொன்றையும் கடந்து வந்திருக்கிறீர்கள். |
+| [ ] | `games.words.list.6` | You deserve the same kindness you give others. | மற்றவர்களுக்குக் காட்டும் அதே அன்பு உங்களுக்கும் உரியது. |
+| [ ] | `games.words.list.7` | One glass of water, one deep breath, one small win. | ஒரு டம்ளர் தண்ணீர், ஒரு ஆழ்ந்த மூச்சு, ஒரு சிறிய வெற்றி. |
+| [ ] | `games.words.list.8` | Your worth isn’t measured by a number on any scale. | உங்கள் மதிப்பு எந்த எடை எண்ணாலும் அளவிடப்படுவதில்லை. |
+| [ ] | `games.words.list.9` | Today counts, even if all you did was keep going. | தொடர்ந்து முன்னேறியது மட்டுமே என்றாலும் இன்றைய நாள் முக்கியமானதுதான். |
 | [ ] | `insightsPage.recap` | Your weekly recap | உன் வாராந்திரச் சுருக்கம் |
 | [ ] | `insightsPage.trends` | Trends | போக்குகள் |
 | [ ] | `insightsPage.labsHint` | Values from your reports, over time. | உன் ரிப்போர்ட்டுகளில் உள்ள மதிப்புகள், காலப்போக்கில். |
@@ -550,6 +650,33 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `mePage.labs.deleteConfirm` | Delete this result? | இந்த முடிவை நீக்கவா? |
 | [ ] | `mePage.labs.trend` | {{name}} over time | காலப்போக்கில் {{name}} |
 | [ ] | `mePage.labs.insightsLink` | See insights | நுண்ணறிவுகளைப் பார் |
+| [ ] | `progress.title` | Your progress | உங்கள் முன்னேற்றம் |
+| [ ] | `progress.subtitle` | How consistent you’ve been, from everything you log. | நீங்கள் பதிவு செய்யும் எல்லாவற்றிலிருந்தும் உங்கள் தொடர்ச்சி. |
+| [ ] | `progress.weekScore` | This week {{n}} out of 100 | இந்த வாரம் 100-இல் {{n}} |
+| [ ] | `progress.thisWeek` | This week (last 7 days) | இந்த வாரம் (கடந்த 7 நாட்கள்) |
+| [ ] | `progress.vsLastWeek` | Last week: {{n}} | கடந்த வாரம்: {{n}} |
+| [ ] | `progress.trend.up` | Going up | ஏறுமுகம் |
+| [ ] | `progress.trend.down` | Going down | இறங்குமுகம் |
+| [ ] | `progress.trend.steady` | Steady | நிலையானது |
+| [ ] | `progress.trendBy.up` | Up {{n}} points | {{n}} புள்ளிகள் உயர்வு |
+| [ ] | `progress.trendBy.down` | Down {{n}} points | {{n}} புள்ளிகள் குறைவு |
+| [ ] | `progress.message.up` | You’re more consistent than last week. Keep it going 💪 | கடந்த வாரத்தை விட அதிகத் தொடர்ச்சி. இப்படியே தொடருங்கள் 💪 |
+| [ ] | `progress.message.down` | A little lower than last week, and that’s okay. Pick one small habit today. | கடந்த வாரத்தை விட கொஞ்சம் குறைவு, பரவாயில்லை. இன்று ஒரு சிறிய பழக்கத்தைத் தேர்ந்தெடுங்கள். |
+| [ ] | `progress.message.steady` | About the same as last week. Small daily steps add up. | கடந்த வாரம் போலவே. சிறிய தினசரி அடிகள் சேர்ந்து பெரிதாகும். |
+| [ ] | `progress.today` | Today so far | இன்று இதுவரை |
+| [ ] | `progress.todayNote` | Today isn’t counted in this week’s score until it’s over. | இன்றைய நாள் முடியும் வரை இந்த வார மதிப்பெண்ணில் சேர்க்கப்படாது. |
+| [ ] | `progress.habits` | Habits this week | இந்த வாரப் பழக்கங்கள் |
+| [ ] | `progress.factor.meals` | Meals logged | உணவுப் பதிவு |
+| [ ] | `progress.factor.water` | Water | தண்ணீர் |
+| [ ] | `progress.factor.steps` | Steps | அடிகள் |
+| [ ] | `progress.factor.meds` | Medicines taken | மருந்துகள் |
+| [ ] | `progress.factor.checkin` | Mood check-in | மனநிலை பதிவு |
+| [ ] | `progress.factor.sleep` | Sleep logged | தூக்கப் பதிவு |
+| [ ] | `progress.was` | Last week: {{n}}% | கடந்த வாரம்: {{n}}% |
+| [ ] | `progress.last30` | Last 30 days | கடந்த 30 நாட்கள் |
+| [ ] | `progress.activeDays` | You logged something on {{n}} of the last {{total}} days. | கடந்த {{total}} நாட்களில் {{n}} நாட்கள் ஏதாவது பதிவு செய்தீர்கள். |
+| [ ] | `progress.howTitle` | How this is worked out | இது எப்படிக் கணக்கிடப்படுகிறது |
+| [ ] | `progress.how` | Each day, each habit scores up to 100%: 3 meals logged, 8 glasses of water, 5,000 steps, your medicine doses taken (only on days they were due), a mood check-in, and your sleep logged. The day’s score is the average. This week is the last 7 full days, compared with the 7 before; a change of 5 points or more counts as up or down. It updates every day from your logs. | ஒவ்வொரு நாளும், ஒவ்வொரு பழக்கமும் 100% வரை மதிப்பெண் பெறும்: 3 உணவுகள் பதிவு, 8 டம்ளர் தண்ணீர், 5,000 அடிகள், மருந்து அளவுகள் (அவை தேவைப்பட்ட நாட்களில் மட்டும்), ஒரு மனநிலை பதிவு, தூக்கப் பதிவு. நாளின் மதிப்பெண் இவற்றின் சராசரி. இந்த வாரம் என்பது கடந்த 7 முழு நாட்கள், அதற்கு முந்தைய 7 நாட்களுடன் ஒப்பிடப்படும்; 5 புள்ளிகள் அல்லது அதற்கு மேல் மாற்றம் ஏற்றம் அல்லது இறக்கமாகக் கணக்கிடப்படும். உங்கள் பதிவுகளிலிருந்து தினமும் புதுப்பிக்கப்படும். |
 | [ ] | `onboardingPage.selectedDate` | Selected: {{date}} | தேர்ந்தெடுத்தது: {{date}} |
 | [ ] | `onboardingPage.noDate` | No date picked. That's okay, you can skip this. | தேதி எதுவும் தேர்வு செய்யல. பரவாயில்ல, இதை விட்டுடலாம். |
 | [ ] | `onboardingPage.notSureSkip` | Not sure, skip | தெரியல, விட்டுடு |
@@ -659,6 +786,28 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `walk.saving` | Saving your walk… | உங்கள் நடை சேமிக்கப்படுகிறது… |
 | [ ] | `walk.saved` | Saved to your walking history ✓ | உங்கள் நடை வரலாற்றில் சேமிக்கப்பட்டது ✓ |
 | [ ] | `walk.saveFailed` | Couldn't save this walk. | இந்த நடையைச் சேமிக்க முடியவில்லை. |
+| [ ] | `walk.howLong` | How long will you walk? A bell rings when the time is up. | எவ்வளவு நேரம் நடப்பீர்கள்? நேரம் முடிந்ததும் மணி ஒலிக்கும். |
+| [ ] | `walk.noTimer` | No timer | டைமர் இல்லை |
+| [ ] | `walk.minutes_one` | {{count}} min | {{count}} நிமி |
+| [ ] | `walk.minutes_other` | {{count}} min | {{count}} நிமி |
+| [ ] | `walk.other` | Other | வேறு |
+| [ ] | `walk.otherLabel` | Minutes (1–{{max}}) | நிமிடங்கள் (1–{{max}}) |
+| [ ] | `walk.otherInvalid` | Please enter whole minutes from 1 to {{max}}. | 1 முதல் {{max}} வரையிலான முழு நிமிடங்களை உள்ளிடவும். |
+| [ ] | `walk.startFor_one` | Start a {{count}}-minute walk | {{count}} நிமிட நடையைத் தொடங்கு |
+| [ ] | `walk.startFor_other` | Start a {{count}}-minute walk | {{count}} நிமிட நடையைத் தொடங்கு |
+| [ ] | `walk.left` | left | மீதம் |
+| [ ] | `walk.timeProgress_one` | Time towards your {{count}}-minute walk | உங்கள் {{count}} நிமிட நடையின் நேரம் |
+| [ ] | `walk.timeProgress_other` | Time towards your {{count}}-minute walk | உங்கள் {{count}} நிமிட நடையின் நேரம் |
+| [ ] | `walk.bellNotice_one` | {{count}} minute done! Keep going, or stop when you’re ready. | {{count}} நிமிடம் முடிந்தது! தொடருங்கள், அல்லது தயாரானதும் நிறுத்துங்கள். |
+| [ ] | `walk.bellNotice_other` | {{count}} minutes done! Keep going, or stop when you’re ready. | {{count}} நிமிடங்கள் முடிந்தன! தொடருங்கள், அல்லது தயாரானதும் நிறுத்துங்கள். |
+| [ ] | `walk.bellTitle_one` | Your {{count}}-minute walk is done 🔔 | உங்கள் {{count}} நிமிட நடை முடிந்தது 🔔 |
+| [ ] | `walk.bellTitle_other` | Your {{count}}-minute walk is done 🔔 | உங்கள் {{count}} நிமிட நடை முடிந்தது 🔔 |
+| [ ] | `walk.bellBody` | Great job! Open Companion to stop and save your walk. | அருமை! நடையை நிறுத்திச் சேமிக்க Companion-ஐத் திறங்கள். |
+| [ ] | `walk.goal` | Walk length | நடை நேரம் |
+| [ ] | `walk.goalMet_one` | {{count}} min ✓ | {{count}} நிமி ✓ |
+| [ ] | `walk.goalMet_other` | {{count}} min ✓ | {{count}} நிமி ✓ |
+| [ ] | `walk.goalPart_one` | {{done}} of {{count}} min | {{count}}-இல் {{done}} நிமி |
+| [ ] | `walk.goalPart_other` | {{done}} of {{count}} min | {{count}}-இல் {{done}} நிமி |
 | [ ] | `todayHub.label` | Your day | உங்கள் நாள் |
 | [ ] | `todayHub.back` | Today | இன்று |
 | [ ] | `todayHub.food` | Food | உணவு |

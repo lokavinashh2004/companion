@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router';
 
+import { CaloriesCard } from '@/components/food/CaloriesCard';
+import { MoodGames } from '@/components/mood/MoodGames';
+import { ManualFoodSheet } from '@/components/food/ManualFoodSheet';
 import { BalanceCard, MealsCard } from '@/components/today/BalanceCard';
 import { MedsCard, MoodCard, WaterCard, WeightCard } from '@/components/today/DayCards';
 import { QuickLogSheet } from '@/components/today/QuickLogSheet';
@@ -61,12 +64,16 @@ function SectionBody({ section, today }: { section: Section; today: Today }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [quickOpen, setQuickOpen] = useState(false);
+  const [foodOpen, setFoodOpen] = useState(false);
   const [logged, setLogged] = useState(false);
 
   switch (section) {
     case 'food':
       return (
         <>
+          {logged ? <Notice>{t('food.saved')}</Notice> : null}
+          <Button onClick={() => setFoodOpen(true)}>＋ {t('food.logButton')}</Button>
+          <CaloriesCard />
           <BalanceCard today={today} />
           <MealsCard today={today} />
           {today.foods.length ? (
@@ -74,6 +81,16 @@ function SectionBody({ section, today }: { section: Section; today: Today }) {
               💬 {t('todayHub.logFood')}
             </Button>
           ) : null}
+          <ManualFoodSheet
+            open={foodOpen}
+            day={today.day}
+            showKcal={today.calorie_display === 'show'}
+            onClose={() => setFoodOpen(false)}
+            onSaved={() => {
+              setFoodOpen(false);
+              setLogged(true);
+            }}
+          />
         </>
       );
     case 'water':
@@ -102,6 +119,7 @@ function SectionBody({ section, today }: { section: Section; today: Today }) {
           <Button kind="secondary" onClick={() => setQuickOpen(true)}>
             ✏️ {t('todayHub.moreCheckIn')}
           </Button>
+          <MoodGames day={today.day} />
           <QuickLogSheet
             open={quickOpen}
             day={today.day}

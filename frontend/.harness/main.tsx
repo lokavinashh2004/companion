@@ -13,6 +13,7 @@ import { Cycle } from '@/routes/Cycle';
 import { Layout } from '@/routes/Layout';
 import { Me } from '@/routes/Me';
 import { Goals } from '@/routes/Goals';
+import { Progress } from '@/routes/Progress';
 import { Today } from '@/routes/Today';
 import { TodaySection } from '@/routes/TodaySection';
 import { Walks } from '@/routes/Walks';
@@ -83,6 +84,28 @@ const ROUTES: Record<string, unknown> = {
         : [];
     return { month, today: DAY, goals: { meals: 3, water_ml: 2000, steps: 5000 }, days, complete_days: days.filter((d) => d.complete).length, streak: 4 };
   },
+  'GET /food/calories': {
+    hidden: false, target: 1800, target_is_default: true,
+    today: { day: DAY, kcal: 1240, by_meal: [{ meal: 'breakfast', kcal: 340 }, { meal: 'lunch', kcal: 900 }], unknown_items: 0 },
+    week: { from: '2026-10-05', days: [1650, 2100, 1720, 1240].map((kcal, i) => ({ day: `2026-10-0${5 + i}`, kcal })), total: 6710, average: 1678 },
+    month: { from: '2026-10-01', days: [1500, 1820, 1690, 1400, 1650, 2100, 1720, 1240].map((kcal, i) => ({ day: `2026-10-0${1 + i}`, kcal })), total: 13120, average: 1640 },
+  },
+  'GET /food/search': { results: [{ name: 'idli', kcal_per_100g: 146, serving_g: 120, piece_g: 40 }, { name: 'idiyappam', kcal_per_100g: 150, serving_g: 100, piece_g: 30 }] },
+  'POST /food/estimate': { found: true, name: 'idli', grams: 120, kcal: 175, is_estimate: false },
+  'GET /overview': {
+    today: DAY, today_score: 46,
+    week: { score: 68, previous: 55, change: 13, trend: 'up' },
+    factors: [
+      { key: 'meals', score: 76, previous: 62, trend: 'up' },
+      { key: 'water', score: 71, previous: 69, trend: 'steady' },
+      { key: 'steps', score: 48, previous: 57, trend: 'down' },
+      { key: 'meds', score: 93, previous: 86, trend: 'up' },
+      { key: 'checkin', score: 71, previous: 43, trend: 'up' },
+      { key: 'sleep', score: 57, previous: 57, trend: 'steady' },
+    ],
+    days: Array.from({ length: 30 }, (_, i) => ({ day: new Date(Date.UTC(2026, 8, 9 + i)).toISOString().slice(0, 10), score: Math.round(45 + i * 0.8 + 12 * Math.sin(i / 2)) })),
+    active_days: 27,
+  },
   'GET /cycle': {
     today: DAY,
     status: { kind: 'cycle', cycle_day: 29, period_day: null, days_late: null, phase: 'luteal' },
@@ -110,6 +133,7 @@ const router = createBrowserRouter([
       { path: '/today', element: <Today /> },
       { path: '/today/walk', element: <Walks /> },
       { path: '/today/goals', element: <Goals /> },
+      { path: '/me/progress', element: <Progress /> },
       { path: '/today/:section', element: <TodaySection /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },

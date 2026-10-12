@@ -54,5 +54,42 @@
       "trend": "{{name}} over time",
       "insightsLink": "See insights"
     }
+  },
+  "progress": {
+    "title": "Your progress",
+    "subtitle": "How consistent you’ve been, from everything you log.",
+    "weekScore": "This week {{n}} out of 100",
+    "thisWeek": "This week (last 7 days)",
+    "vsLastWeek": "Last week: {{n}}",
+    "trend": {
+      "up": "Going up",
+      "down": "Going down",
+      "steady": "Steady"
+    },
+    "trendBy": {
+      "up": "Up {{n}} points",
+      "down": "Down {{n}} points"
+    },
+    "message": {
+      "up": "You’re more consistent than last week. Keep it going 💪",
+      "down": "A little lower than last week, and that’s okay. Pick one small habit today.",
+      "steady": "About the same as last week. Small daily steps add up."
+    },
+    "today": "Today so far",
+    "todayNote": "Today isn’t counted in this week’s score until it’s over.",
+    "habits": "Habits this week",
+    "factor": {
+      "meals": "Meals logged",
+      "water": "Water",
+      "steps": "Steps",
+      "meds": "Medicines taken",
+      "checkin": "Mood check-in",
+      "sleep": "Sleep logged"
+    },
+    "was": "Last week: {{n}}%",
+    "last30": "Last 30 days",
+    "activeDays": "You logged something on {{n}} of the last {{total}} days.",
+    "howTitle": "How this is worked out",
+    "how": "Each day, each habit scores up to 100%: 3 meals logged, 8 glasses of water, 5,000 steps, your medicine doses taken (only on days they were due), a mood check-in, and your sleep logged. The day’s score is the average. This week is the last 7 full days, compared with the 7 before; a change of 5 points or more counts as up or down. It updates every day from your logs."
   }
 }

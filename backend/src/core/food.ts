@@ -80,12 +80,22 @@ const NUMBER_WORDS: Record<string, number> = {
   half: 0.5, ara: 0.5, arai: 0.5, அரை: 0.5,
 };
 
-export function stripQuantityWords(normalized: string): { name: string; quantity: number | null } {
-  const [first, ...rest] = normalized.split(' ');
-  if (first !== undefined && rest.length > 0 && first in NUMBER_WORDS) {
-    return { name: rest.join(' '), quantity: NUMBER_WORDS[first]! };
-  }
-  return { name: normalized, quantity: null };
+/** Size words scale a portion: "big dosai", "chinna idli", "large bowl". */
+const SIZE_WORDS: Record<string, number> = {
+  small: 0.7, chinna: 0.7, sinna: 0.7, siriya: 0.7, mini: 0.7, சின்ன: 0.7, சிறிய: 0.7,
+  medium: 1, regular: 1, normal: 1,
+  large: 1.4, big: 1.4, periya: 1.4, perusa: 1.4, பெரிய: 1.4,
+  half: 0.5, ara: 0.5, arai: 0.5, அரை: 0.5, quarter: 0.25, kaal: 0.25, கால்: 0.25, full: 1, mulu: 1,
+};
+
+/** Leading number word, then an optional size word: "rendu periya dosai" → 2 × 1.4 × dosai. */
+export function stripQuantityWords(normalized: string): { name: string; quantity: number | null; size: number | null } {
+  const words = normalized.split(' ');
+  let quantity: number | null = null;
+  let size: number | null = null;
+  if (words.length > 1 && words[0]! in NUMBER_WORDS) quantity = NUMBER_WORDS[words.shift()!]!;
+  if (words.length > 1 && words[0]! in SIZE_WORDS) size = SIZE_WORDS[words.shift()!]!;
+  return { name: words.join(' '), quantity, size };
 }
 
 const UNIT_ALIASES: Record<string, string> = {
@@ -94,8 +104,15 @@ const UNIT_ALIASES: Record<string, string> = {
   tumblers: 'tumbler', டம்ளர்: 'tumbler', glasses: 'glass',
   cups: 'cup', bowls: 'bowl', kinnam: 'bowl', plates: 'plate', thattu: 'plate',
   gram: 'g', grams: 'g', gm: 'g', gms: 'g', millilitre: 'ml', milliliter: 'ml',
-  spoons: 'spoon', tbsp: 'tablespoon', tsp: 'teaspoon',
+  spoons: 'spoon', tbsp: 'tablespoon', tsp: 'teaspoon', tbsps: 'tablespoon', tsps: 'teaspoon',
+  tablespoons: 'tablespoon', teaspoons: 'teaspoon', slices: 'slice', katori: 'bowl', katoris: 'bowl',
+  kilogram: 'kg', kilograms: 'kg', kgs: 'kg', kilo: 'kg', milligram: 'mg', milligrams: 'mg',
+  litre: 'l', liter: 'l', litres: 'l', liters: 'l', ltr: 'l', ounce: 'oz', ounces: 'oz', pound: 'lb', pounds: 'lb', lbs: 'lb',
+  ml: 'ml', mls: 'ml',
 };
+
+/** Weight/volume units with a fixed size in grams (ml counted as grams). */
+const METRIC: Record<string, number> = { g: 1, ml: 1, kg: 1000, mg: 0.001, l: 1000, oz: 28.35, lb: 453.6 };
 
 export function canonicalUnit(unit: string | null | undefined): string | null {
   if (!unit) return null;
@@ -104,29 +121,39 @@ export function canonicalUnit(unit: string | null | undefined): string | null {
 }
 
 /**
- * Grams (or ml) for a quantity + unit. Food-specific unit rows win over generic ones.
- * No unit means "pieces/servings": use the food's piece weight, then its typical serving.
+ * Grams (or ml) for a quantity + unit, and whether the unit was understood. Metric/imperial units convert exactly;
+ * household units use food-specific rows first, then generic ones. A size word in the unit scales it ("large bowl",
+ * "half plate"). No unit means "pieces/servings": the food's piece weight, then its typical serving. An unknown
+ * unit falls back to one typical serving per quantity and is reported as not understood (so it's an estimate).
  */
-export function toGrams(
+export function measure(
   quantity: number | null,
   unit: string | null,
   food: Pick<FoodRow, 'id' | 'typical_serving_g'>,
   units: UnitRow[],
-): number {
+): { grams: number; known: boolean } {
   const qty = quantity && quantity > 0 ? quantity : 1;
-  const u = canonicalUnit(unit);
-  if (u === 'g' || u === 'ml') return qty;
+  let size = 1;
+  let u: string | null = null;
+  if (unit) {
+    const words = normalizeFoodName(unit).split(' ').filter(Boolean);
+    while (words.length > 0 && words[0]! in SIZE_WORDS) size *= SIZE_WORDS[words.shift()!]!;
+    u = words.length ? canonicalUnit(words.join(' ')) : null;
+  }
+  const g = (x: number) => Math.round(x * 10) / 10;
+  if (u && u in METRIC) return { grams: g(qty * size * METRIC[u]!), known: true };
 
-  const lookup = (name: string) =>
-    units.find((r) => r.unit_name === name && r.applies_to === food.id) ??
-    units.find((r) => r.unit_name === name && r.applies_to === null);
-
+  const serving = food.typical_serving_g ?? 100;
   if (u === null || u === 'piece') {
     const piece = units.find((r) => r.unit_name === 'piece' && r.applies_to === food.id);
-    return qty * (piece?.grams_or_ml ?? food.typical_serving_g ?? 100);
+    return { grams: g(qty * size * (piece?.grams_or_ml ?? serving)), known: true };
   }
-  const row = lookup(u);
-  return qty * (row?.grams_or_ml ?? food.typical_serving_g ?? 100);
+  const row = units.find((r) => r.unit_name === u && r.applies_to === food.id) ?? units.find((r) => r.unit_name === u && r.applies_to === null);
+  return { grams: g(qty * size * (row?.grams_or_ml ?? serving)), known: !!row };
+}
+
+export function toGrams(quantity: number | null, unit: string | null, food: Pick<FoodRow, 'id' | 'typical_serving_g'>, units: UnitRow[]): number {
+  return measure(quantity, unit, food, units).grams;
 }
 
 export function nutrientsFor(food: FoodRow, grams: number): Nutrients {

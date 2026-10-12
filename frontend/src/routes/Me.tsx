@@ -2,6 +2,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { LinkRow } from '@/components/me/common';
+import { ProgressSummary } from '@/components/me/ProgressSummary';
 import s from '@/components/me/me.module.css';
 import { Button, Card, ErrorState, Loading, Muted, Page } from '@/components/ui';
 import { signOut } from '@/lib/firebase';
@@ -23,6 +24,8 @@ export function Me() {
           <Muted small>{t('mePage.privacyNote')}</Muted>
         </Card>
       ) : null}
+
+      <ProgressSummary />
 
       <Card>
         <nav className={s.linkList} aria-label={t('me.title')}>

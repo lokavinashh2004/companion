@@ -1,8 +1,11 @@
 // Walk session: steps counted from 0 at Start, live while walking, a summary after Stop. The session lives in
 // memory; the Walk card saves the finished walk to the server.
 // The screen is kept awake during a walk because browsers pause motion readings when the page is hidden.
+// An optional walk length rings a bell when the time is up (the walk keeps going until she stops it).
 import { create } from 'zustand';
 
+import i18n from '@/i18n';
+import { ringBell, unlockAudio } from './bell';
 import { uuid } from './format';
 import { requestMotionAccess, startStepSensor } from './steps';
 
@@ -30,14 +33,33 @@ export function clock(ms: number): string {
 
 export type WalkStatus = 'idle' | 'starting' | 'walking' | 'done' | 'denied' | 'unsupported';
 /** clientId makes a retried save idempotent on the server. */
-export type WalkSummary = { clientId: string; startedAt: number; steps: number; durationMs: number };
+export type WalkSummary = { clientId: string; startedAt: number; steps: number; durationMs: number; goalMinutes: number | null };
+
+export const WALK_MINUTES = [10, 15, 20, 30, 45, 60] as const;
+export const MAX_WALK_MINUTES = 180;
+const MINUTES_KEY = 'walk_minutes'; // the last walk length she picked (a display preference)
+
+function readMinutes(): number | null {
+  try {
+    const n = Number(localStorage.getItem(MINUTES_KEY));
+    return Number.isInteger(n) && n >= 1 && n <= MAX_WALK_MINUTES ? n : null;
+  } catch {
+    return null;
+  }
+}
 
 type WalkState = {
   status: WalkStatus;
   startedAt: number | null;
   steps: number;
   summary: WalkSummary | null;
-  start: () => Promise<void>;
+  /** Walk length for this walk (null = no timer), and whether its bell has rung. */
+  goalMinutes: number | null;
+  bellRang: boolean;
+  /** Last picked walk length, offered next time. */
+  preferredMinutes: number | null;
+  setPreferredMinutes: (minutes: number | null) => void;
+  start: (minutes?: number | null) => Promise<void>;
   /** Ends the walk and returns its summary (null when no walk was running). */
   stop: () => WalkSummary | null;
   reset: () => void;
@@ -45,6 +67,38 @@ type WalkState = {
 
 let stopSensor: (() => void) | null = null;
 let wakeLock: WakeLockSentinel | null = null;
+let bellTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Rings the bell at startedAt + minutes. Each check works from the clock, not from elapsed timer ticks, so a
+ * delayed timer can't make it drift; it re-checks at least once a minute and whenever the page comes back.
+ */
+function armBell() {
+  if (bellTimer) clearTimeout(bellTimer);
+  bellTimer = null;
+  const { status, startedAt, goalMinutes, bellRang } = useWalk.getState();
+  if (status !== 'walking' || startedAt == null || goalMinutes == null || bellRang) return;
+  const left = startedAt + goalMinutes * 60_000 - Date.now();
+  if (left > 0) {
+    bellTimer = setTimeout(armBell, Math.min(left, 60_000));
+    return;
+  }
+  useWalk.setState({ bellRang: true });
+  ringBell();
+  notifyIfHidden(goalMinutes);
+}
+
+/** If the app is in the background, also show a notification (when she has allowed them). */
+function notifyIfHidden(minutes: number) {
+  try {
+    if (document.visibilityState !== 'hidden' || typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    void navigator.serviceWorker?.ready.then((r) =>
+      r.showNotification(i18n.t('walk.bellTitle', { count: minutes }), { body: i18n.t('walk.bellBody'), tag: 'walk-bell' }),
+    );
+  } catch {
+    // notifications unavailable; the bell and vibration still ran
+  }
+}
 
 async function keepAwake() {
   try {
@@ -62,13 +116,17 @@ function releaseAwake() {
 // The wake lock is dropped when the page is hidden; take it again when the walker comes back.
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && useWalk.getState().status === 'walking') void keepAwake();
+    if (document.visibilityState !== 'visible' || useWalk.getState().status !== 'walking') return;
+    void keepAwake();
+    armBell(); // rings straight away if the time passed while the page was hidden
   });
 }
 
 function teardown() {
   stopSensor?.();
   stopSensor = null;
+  if (bellTimer) clearTimeout(bellTimer);
+  bellTimer = null;
   releaseAwake();
 }
 
@@ -77,9 +135,22 @@ export const useWalk = create<WalkState>((set, get) => ({
   startedAt: null,
   steps: 0,
   summary: null,
-  start: async () => {
+  goalMinutes: null,
+  bellRang: false,
+  preferredMinutes: readMinutes(),
+  setPreferredMinutes: (minutes) => {
+    try {
+      if (minutes == null) localStorage.removeItem(MINUTES_KEY);
+      else localStorage.setItem(MINUTES_KEY, String(minutes));
+    } catch {
+      // ignore
+    }
+    set({ preferredMinutes: minutes });
+  },
+  start: async (minutes = null) => {
     if (get().status === 'walking' || get().status === 'starting') return;
-    set({ status: 'starting', summary: null });
+    unlockAudio(); // still inside the Start tap, so the bell may ring later
+    set({ status: 'starting', summary: null, goalMinutes: minutes, bellRang: false });
     const access = await requestMotionAccess();
     if (access !== 'granted') {
       set({ status: access });
@@ -94,17 +165,18 @@ export const useWalk = create<WalkState>((set, get) => ({
       },
     );
     void keepAwake();
+    armBell();
   },
   stop: () => {
-    const { status, startedAt, steps } = get();
+    const { status, startedAt, steps, goalMinutes } = get();
     if (status !== 'walking' || startedAt == null) return null;
     teardown();
-    const summary = { clientId: uuid(), startedAt, steps, durationMs: Date.now() - startedAt };
+    const summary = { clientId: uuid(), startedAt, steps, durationMs: Date.now() - startedAt, goalMinutes };
     set({ status: 'done', startedAt: null, summary });
     return summary;
   },
   reset: () => {
     teardown();
-    set({ status: 'idle', startedAt: null, steps: 0, summary: null });
+    set({ status: 'idle', startedAt: null, steps: 0, summary: null, goalMinutes: null, bellRang: false });
   },
 }));

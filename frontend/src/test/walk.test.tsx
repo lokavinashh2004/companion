@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WalkCard } from '@/components/today/WalkCard';
+import { ringBell } from '@/lib/bell';
 import i18n from '@/i18n';
 import { createStepDetector } from '@/lib/steps';
 import { clock, useWalk, walkCheerKey, walkKcal } from '@/lib/walk';
@@ -10,6 +11,7 @@ import { ME, mockApi, PROFILE, renderPage } from './utils';
 
 vi.mock('@/lib/auth', () => ({ useAuth: () => ({ user: { uid: 'u1' }, ready: true }) }));
 vi.mock('@/lib/firebase', () => ({ idToken: async () => 'token' }));
+vi.mock('@/lib/bell', () => ({ ringBell: vi.fn(), unlockAudio: vi.fn() }));
 
 const DAY = '2026-10-08';
 
@@ -91,12 +93,14 @@ describe('WalkCard', () => {
   afterEach(() => {
     cleanup();
     useWalk.getState().reset();
+    useWalk.getState().setPreferredMinutes(null);
+    vi.mocked(ringBell).mockClear();
     vi.useRealTimers();
     vi.unstubAllGlobals();
   });
 
   const startWalk = async () => {
-    fireEvent.click(screen.getByRole('button', { name: /start walking/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^▶ start/i }));
     await settle();
   };
   const stopWalk = async () => {
@@ -188,6 +192,87 @@ describe('WalkCard', () => {
     await startWalk();
     await act(() => vi.advanceTimersByTimeAsync(3500));
     expect(screen.getByText(/doesn't share motion data/i)).toBeTruthy();
+  });
+});
+
+describe('Walk timer', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('en');
+    vi.useFakeTimers({ toFake: ['setTimeout', 'setInterval', 'Date'] });
+    vi.setSystemTime(new Date('2026-10-08T07:00:00Z'));
+    vi.stubGlobal('DeviceMotionEvent', class {});
+  });
+  afterEach(() => {
+    cleanup();
+    useWalk.getState().reset();
+    useWalk.getState().setPreferredMinutes(null);
+    vi.mocked(ringBell).mockClear();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  const begin = async (minutes: string) => {
+    mockApi({ 'GET /walks': WALKS, 'POST /walks': (b: unknown) => ({ id: 'w9', day: DAY, ...(b as object) }) });
+    renderPage(<WalkCard showKcal={false} />);
+    await settle();
+    fireEvent.click(screen.getByRole('button', { name: minutes }));
+    fireEvent.click(screen.getByRole('button', { name: /^▶ start/i }));
+    await settle();
+    // the sensor needs a reading within 3 s, as on a real phone
+    act(() => motion(9.81, 0));
+  };
+
+  it('rings the bell exactly when the chosen time is up, and the walk carries on', async () => {
+    await begin('30 min');
+    expect(screen.getByText('30:00')).toBeTruthy();
+    expect(screen.getByRole('progressbar', { name: /30-minute walk/ })).toBeTruthy();
+    await act(() => vi.advanceTimersByTimeAsync(30 * 60_000 - 1000));
+    expect(ringBell).not.toHaveBeenCalled();
+    expect(screen.getByText('0:01')).toBeTruthy();
+    await act(() => vi.advanceTimersByTimeAsync(1000));
+    expect(ringBell).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/30 minutes done! Keep going/)).toBeTruthy();
+    expect(useWalk.getState().status).toBe('walking');
+    await act(() => vi.advanceTimersByTimeAsync(5 * 60_000));
+    expect(ringBell).toHaveBeenCalledTimes(1); // only once
+    expect(screen.getByText('35:00')).toBeTruthy(); // now counting time walked
+    fireEvent.click(screen.getByRole('button', { name: /stop walking/i }));
+    await settle();
+    expect(screen.getByText('30 min ✓')).toBeTruthy();
+  });
+
+  it('never rings after an early stop, and shows how far she got', async () => {
+    await begin('20 min');
+    await act(() => vi.advanceTimersByTimeAsync(12 * 60_000));
+    fireEvent.click(screen.getByRole('button', { name: /stop walking/i }));
+    await settle();
+    expect(screen.getByText('12 of 20 min')).toBeTruthy();
+    await act(() => vi.advanceTimersByTimeAsync(30 * 60_000));
+    expect(ringBell).not.toHaveBeenCalled();
+  });
+
+  it('rings straight away on return if the time passed while the app was hidden', async () => {
+    await begin('10 min');
+    // Timers don't run while the phone sleeps: move the clock without firing them.
+    vi.setSystemTime(new Date(Date.now() + 11 * 60_000));
+    expect(ringBell).not.toHaveBeenCalled();
+    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    expect(ringBell).toHaveBeenCalledTimes(1);
+  });
+
+  it('takes a custom length, and remembers the choice for next time', async () => {
+    mockApi({ 'GET /walks': WALKS });
+    renderPage(<WalkCard showKcal={false} />);
+    await settle();
+    fireEvent.click(screen.getByRole('button', { name: 'Other' }));
+    fireEvent.change(screen.getByLabelText(/Minutes/), { target: { value: '0' } });
+    expect(screen.getByText(/whole minutes from 1 to 180/)).toBeTruthy();
+    fireEvent.change(screen.getByLabelText(/Minutes/), { target: { value: '25' } });
+    expect(screen.getByRole('button', { name: '▶ Start a 25-minute walk' })).toBeTruthy();
+    expect(localStorage.getItem('walk_minutes')).toBe('25');
+    fireEvent.click(screen.getByRole('button', { name: 'No timer' }));
+    expect(screen.getByRole('button', { name: '▶ Start walking' })).toBeTruthy();
+    expect(localStorage.getItem('walk_minutes')).toBeNull();
   });
 });
 

@@ -1,7 +1,7 @@
 // Food resolver wiring (synonyms → cache → USDA → Open Food Facts → LLM ingredient breakdown) and turning
 // resolved foods into food_logs. The LLM only names foods; every number is computed here.
 import { offSearch, resolveFood, usdaSearch, type NewFood, type ResolverDeps } from '../core/food-resolver.ts';
-import { canonicalUnit, nutrientsFor, toGrams, type FoodRow, type UnitRow } from '../core/food.ts';
+import { canonicalUnit, measure, nutrientsFor, type FoodRow, type UnitRow } from '../core/food.ts';
 import { ingredientBreakdownPrompt } from '../core/prompts/companion.ts';
 import { IngredientBreakdown } from '../core/schemas.ts';
 import { DuplicateKeyError } from '../store/collection.ts';
@@ -123,14 +123,15 @@ export async function logFoods(
       });
       continue;
     }
-    const grams = item.grams ?? toGrams(quantity, item.unit, r.food, units);
+    const m = item.grams ? { grams: item.grams, known: true } : measure(quantity, item.unit, r.food, units);
+    const grams = m.grams * (item.grams ? 1 : (r.sizeFromName ?? 1));
     rows.push({
       ...base,
       matched_food_id: r.food.id,
       grams: Math.round(grams),
       ...nutrientsFor(r.food, grams),
       gi_band: r.food.gi_band,
-      is_estimate: r.isEstimate || source === 'photo',
+      is_estimate: r.isEstimate || source === 'photo' || !m.known,
     });
   }
   return u.food_logs.insertMany(rows);

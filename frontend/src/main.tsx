@@ -26,6 +26,7 @@ import { Me } from './routes/Me';
 import { Medications } from './routes/Medications';
 import { NotFound } from './routes/NotFound';
 import { Onboarding } from './routes/Onboarding';
+import { Progress } from './routes/Progress';
 import { Remembers } from './routes/Remembers';
 import { Admin } from './routes/Admin';
 import { RequireAuth } from './routes/RequireAuth';
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },
       { path: '/me', element: <Me /> },
+      { path: '/me/progress', element: <Progress /> },
       { path: '/me/settings', element: <Settings /> },
       { path: '/me/remembers', element: <Remembers /> },
       { path: '/me/medications', element: <Medications /> },

@@ -28,6 +28,8 @@ export interface Resolved {
   via: 'synonym' | 'fold' | 'cache' | 'usda' | 'off' | 'llm' | 'none';
   /** Quantity found inside the name ("rendu dosai"), if the model left it there. */
   quantityFromName: number | null;
+  /** Size word inside the name ("periya dosai" → 1.4), as a portion multiplier. */
+  sizeFromName: number | null;
   name: string;
 }
 
@@ -50,8 +52,8 @@ async function lookupLocal(name: string, deps: ResolverDeps): Promise<{ food: Fo
 }
 
 export async function resolveFood(raw: string, deps: ResolverDeps, allowLLM = true): Promise<Resolved> {
-  const { name, quantity } = stripQuantityWords(normalizeFoodName(raw));
-  const base = { quantityFromName: quantity, name };
+  const { name, quantity, size } = stripQuantityWords(normalizeFoodName(raw));
+  const base = { quantityFromName: quantity, sizeFromName: size, name };
   if (!name) return { ...base, food: null, isEstimate: true, via: 'none' };
 
   const local = await lookupLocal(name, deps);

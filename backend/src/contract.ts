@@ -29,6 +29,7 @@ export const ProfileSchema = z
     persona_tone: z.enum(['bestie', 'calm', 'coach']),
     tamil_address_form: z.enum(['casual', 'respectful']),
     calorie_display: z.enum(['show', 'hide']),
+    calorie_target: z.number().int().nullable(),
     goals: z.array(z.string()),
     diet_type: z.string().nullable(),
     allergies: z.array(z.string()),
@@ -54,6 +55,7 @@ const profileFields = {
   persona_tone: z.enum(['bestie', 'calm', 'coach']),
   tamil_address_form: z.enum(['casual', 'respectful']),
   calorie_display: z.enum(['show', 'hide']),
+  calorie_target: z.number().int().min(1000).max(4000).nullable(),
   goals: z.array(z.string().max(60)).max(10),
   diet_type: z.string().max(40).nullable(),
   allergies: z.array(z.string().max(40)).max(20),
@@ -186,6 +188,32 @@ export const LogFoodsSchema = z
   })
   .openapi('LogFoods');
 export const FoodLogsSchema = z.object({ logs: z.array(FoodLogSchema) }).openapi('FoodLogs');
+
+const kcalDay = z.object({ day: date, kcal: z.number().int() });
+const kcalPeriod = z.object({ from: date, days: z.array(kcalDay), total: z.number().int(), average: z.number().int().nullable() });
+export const CaloriesSchema = z
+  .object({
+    /** True when she has calories turned off: no numbers are sent. */
+    hidden: z.boolean(),
+    target: z.number().int(),
+    target_is_default: z.boolean(),
+    today: z
+      .object({ day: date, kcal: z.number().int(), by_meal: z.array(z.object({ meal, kcal: z.number().int() })), unknown_items: z.number().int() })
+      .nullable(),
+    week: kcalPeriod.nullable(),
+    month: kcalPeriod.nullable(),
+  })
+  .openapi('Calories');
+export const FoodSearchQuery = z.object({ q: z.string().trim().min(1).max(40) });
+export const FoodSearchSchema = z
+  .object({ results: z.array(z.object({ name: z.string(), kcal_per_100g: z.number(), serving_g: z.number().nullable(), piece_g: z.number().nullable() })) })
+  .openapi('FoodSearch');
+export const FoodEstimateRequest = z
+  .object({ name: z.string().trim().min(1).max(80), quantity: z.number().min(0).max(50).nullable(), unit: z.string().max(20).nullable() })
+  .openapi('FoodEstimateRequest');
+export const FoodEstimateSchema = z
+  .object({ found: z.boolean(), name: z.string().nullable(), grams: z.number().nullable(), kcal: z.number().nullable(), is_estimate: z.boolean() })
+  .openapi('FoodEstimate');
 
 // ---------------------------------------------------------------- cycle
 
@@ -422,6 +450,25 @@ export const InsightsSchema = z
     }),
   })
   .openapi('Insights');
+
+// ---------------------------------------------------------------- overall progress (Me)
+
+const trend = z.enum(['up', 'down', 'steady']);
+export const OverviewSchema = z
+  .object({
+    today: date,
+    /** Today so far, 0–100. */
+    today_score: z.number().int(),
+    /** The last 7 full days vs the 7 before, 0–100. */
+    week: z.object({ score: z.number().int(), previous: z.number().int(), change: z.number().int(), trend }),
+    factors: z.array(
+      z.object({ key: z.enum(['meals', 'water', 'steps', 'meds', 'checkin', 'sleep']), score: z.number().int().nullable(), previous: z.number().int().nullable(), trend }),
+    ),
+    /** Daily score for the last 30 days, oldest first. */
+    days: z.array(z.object({ day: date, score: z.number().int() })),
+    active_days: z.number().int(),
+  })
+  .openapi('Overview');
 
 // ---------------------------------------------------------------- push
 

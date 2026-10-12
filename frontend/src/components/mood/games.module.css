@@ -1,0 +1,182 @@
+/* Mood games: the game picker, and each game's play area. Phone-first; big tap targets; motion is optional. */
+.picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pick {
+  width: 100%;
+  height: 100%;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: var(--space-3);
+  border: 1px solid var(--chip-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pick:active {
+  transform: scale(0.97);
+}
+.pickIcon {
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+.pickTitle {
+  font-weight: 700;
+}
+.pickBody {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.play {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+.score {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- breathing */
+.breathStage {
+  display: grid;
+  place-items: center;
+  width: min(72vw, 260px);
+  aspect-ratio: 1;
+}
+.breathCircle {
+  grid-area: 1 / 1;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, #c4b5fd, #7c3aed 60%, #4c1d95);
+  box-shadow: 0 0 40px rgb(124 58 237 / 0.45);
+  transform: scale(0.55);
+  transition: transform 4s linear;
+}
+.breathText {
+  grid-area: 1 / 1;
+  z-index: 1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.breathCount {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .breathCircle {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- bubble pop */
+.bubbles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 340px;
+}
+.bubble {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.85) 0 12%, hsl(var(--h) 85% 72%) 13%, hsl(var(--h) 75% 55%));
+  box-shadow: inset 0 -6px 12px rgb(0 0 0 / 0.15);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+.bubble:active {
+  transform: scale(0.9);
+}
+.popped {
+  transform: scale(1.35);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- memory match */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 340px;
+}
+.card {
+  aspect-ratio: 3 / 4;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(150deg, #7c3aed, #ec4899);
+  color: transparent;
+  font-size: 1.8rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.faceUp {
+  background: var(--surface-alt);
+  color: inherit;
+  border: 2px solid var(--primary);
+}
+.matched {
+  background: var(--calm);
+  border-color: transparent;
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------------- kind words */
+.quote {
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(150deg, #efe9ff, #ffe6f1);
+  color: #2a2450;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.35;
+  min-height: 8rem;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------------------------------------------------------------- after a game */
+.after {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+.faces {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.face {
+  min-height: 48px;
+  border: 1px solid var(--chip-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  font-size: 1.5rem;
+  cursor: pointer;
+}

@@ -1,7 +1,7 @@
 import { assert, assertEquals, assertThrows } from './assert.ts';
 import { test } from 'vitest';
 import { checkReply, detectScript, hasTamilScript, resolveReplyLanguage } from '../src/core/language.ts';
-import { canonicalUnit, foldTanglish, normalizeFoodName, nutrientsFor, stripQuantityWords, toGrams, type FoodRow } from '../src/core/food.ts';
+import { canonicalUnit, foldTanglish, measure, normalizeFoodName, nutrientsFor, stripQuantityWords, toGrams, type FoodRow } from '../src/core/food.ts';
 import { balanceScore } from '../src/core/score.ts';
 import { matchesCrisis, scrubPII } from '../src/core/safety.ts';
 import { CompanionResponse, extractJson, PhotoResponse } from '../src/core/schemas.ts';
@@ -41,8 +41,12 @@ test('food normalisation and folding', () => {
   assertEquals(fold('kuzhambu'), fold('kulambu'));
   assertEquals(fold('chapathi'), fold('chapati'));
   assertEquals(fold('இட்லி'), 'இட்லி');
-  assertEquals(stripQuantityWords('rendu dosai'), { name: 'dosai', quantity: 2 });
-  assertEquals(stripQuantityWords('dosai'), { name: 'dosai', quantity: null });
+  assertEquals(stripQuantityWords('rendu dosai'), { name: 'dosai', quantity: 2, size: null });
+  assertEquals(stripQuantityWords('dosai'), { name: 'dosai', quantity: null, size: null });
+  assertEquals(stripQuantityWords('rendu periya dosai'), { name: 'dosai', quantity: 2, size: 1.4 });
+  assertEquals(stripQuantityWords('small idli'), { name: 'idli', quantity: null, size: 0.7 });
+  // a size word alone is the food's name, not a size
+  assertEquals(stripQuantityWords('big'), { name: 'big', quantity: null, size: null });
   assertEquals(canonicalUnit('Ladles'), 'karandi');
   assertEquals(canonicalUnit(null), null);
 });
@@ -66,6 +70,20 @@ test('unit conversion', () => {
   assertEquals(toGrams(null, null, rice, units), 150);
   assertEquals(toGrams(1, 'bucket', rice, units), 150);
   assertEquals(nutrientsFor(dosai, 160).kcal, 269);
+});
+
+test('unit conversion: metric, sizes, fractions and unknown units', () => {
+  assertEquals(toGrams(1, 'kg', rice, units), 1000);
+  assertEquals(toGrams(0.5, 'litre', rice, units), 500);
+  assertEquals(toGrams(2, 'oz', rice, units), 56.7);
+  assertEquals(toGrams(1, 'Kgs', rice, units), 1000);
+  assertEquals(toGrams(2, 'large cup', rice, units), 420);
+  assertEquals(toGrams(1, 'half cup', rice, units), 75);
+  assertEquals(toGrams(1, 'small', dosai, units), 56);
+  assertEquals(toGrams(3, 'big piece', dosai, units), 336);
+  assertEquals(measure(1, 'cup', rice, units), { grams: 150, known: true });
+  assertEquals(measure(1, 'bucket', rice, units), { grams: 150, known: false });
+  assertEquals(measure(2, null, dosai, units), { grams: 160, known: true });
 });
 
 test('balance score', () => {

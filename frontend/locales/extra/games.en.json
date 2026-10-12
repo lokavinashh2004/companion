@@ -1,0 +1,53 @@
+{
+  "games": {
+    "title": "Feel a little better",
+    "intro": "A few minutes of something gentle can lift a low moment.",
+    "start": "Start",
+    "stop": "Stop",
+    "again": "Play again",
+    "feelNow": "How do you feel now?",
+    "thanks": "Thanks for checking in 💜",
+    "breathe": {
+      "title": "Breathe",
+      "body": "A one-minute calm breath",
+      "ready": "Tap Start and follow the circle",
+      "in": "Breathe in",
+      "hold": "Hold",
+      "out": "Breathe out",
+      "rest": "Rest",
+      "round": "Round {{round}} of {{total}}",
+      "done": "Well done 🌿"
+    },
+    "bubbles": {
+      "title": "Bubble pop",
+      "body": "Pop bubbles, let go of stress",
+      "count_one": "{{count}} bubble popped",
+      "count_other": "{{count}} bubbles popped",
+      "pop": "Pop bubble {{n}}"
+    },
+    "memory": {
+      "title": "Memory match",
+      "body": "Find the pairs, rest your mind",
+      "status": "{{pairs}} of {{total}} pairs · {{moves}} moves",
+      "won": "All pairs found in {{moves}} moves! 🎉",
+      "hidden": "Card {{n}}, face down"
+    },
+    "words": {
+      "title": "Kind words",
+      "body": "Something nice to hear",
+      "next": "Another one",
+      "list": {
+        "0": "You are doing better than you think.",
+        "1": "Your body is working hard for you. Be gentle with it today.",
+        "2": "Small steps still move you forward.",
+        "3": "It’s okay to rest. Rest is part of getting better.",
+        "4": "You don’t have to be perfect to be proud of yourself.",
+        "5": "Bad days end. You have got through every one so far.",
+        "6": "You deserve the same kindness you give others.",
+        "7": "One glass of water, one deep breath, one small win.",
+        "8": "Your worth isn’t measured by a number on any scale.",
+        "9": "Today counts, even if all you did was keep going."
+      }
+    }
+  }
+}

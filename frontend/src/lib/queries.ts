@@ -29,6 +29,8 @@ export const keys = {
   insights: ['insights'] as const,
   walks: (days: number) => ['walks', days] as const,
   progress: (month: string) => ['progress', month] as const,
+  calories: ['calories'] as const,
+  overview: ['overview'] as const,
 };
 
 /** After logging anything, these views may change. */
@@ -37,8 +39,9 @@ const LOG_VIEWS = [['today'], keys.cycle, keys.insights, keys.messages] as const
 function useInvalidate() {
   const qc = useQueryClient();
   return (...ks: readonly (readonly unknown[])[]) => {
-    // Anything that changes Today (food, water, steps) also changes the daily-goals calendar.
-    const all = ks.some((k) => k[0] === 'today') ? [...ks, ['progress']] : ks;
+    // Anything that changes Today (food, water, steps, doses, mood) also changes the goals calendar,
+    // calories and the overall progress dashboard.
+    const all = ks.some((k) => k[0] === 'today') ? [...ks, ['progress'], keys.calories, keys.overview] : ks;
     return Promise.all(all.map((k) => qc.invalidateQueries({ queryKey: k })));
   };
 }
@@ -61,6 +64,7 @@ export function useUpdateProfile() {
     onSuccess: (profile) => {
       qc.setQueriesData({ queryKey: keys.me }, (old: Me | undefined) => (old ? { ...old, profile } : old));
       void qc.invalidateQueries({ queryKey: ['today'] });
+      void qc.invalidateQueries({ queryKey: keys.calories });
     },
   });
 }
@@ -176,6 +180,38 @@ export function useSaveWeight() {
   return useMutation({
     mutationFn: async (body: { day: string; weight_kg: number }) => unwrap(await api.POST('/today/weight', { body })),
     onSuccess: () => inv(['today'], keys.insights),
+  });
+}
+
+// ---------------------------------------------------------------- calories
+
+/** Calories today, this week and this month against her daily guide (no numbers when calories are off). */
+export function useCalories() {
+  const { user } = useAuth();
+  return useQuery({ queryKey: keys.calories, enabled: !!user, queryFn: async () => unwrap(await api.GET('/food/calories')) });
+}
+
+/** Known foods matching `q` (pass a debounced value). */
+export function useFoodSearch(q: string) {
+  const { user } = useAuth();
+  const text = q.trim();
+  return useQuery({
+    queryKey: ['food-search', text.toLowerCase()],
+    enabled: !!user && text.length >= 2,
+    staleTime: 5 * 60_000,
+    queryFn: async () => unwrap(await api.GET('/food/search', { params: { query: { q: text } } })),
+  });
+}
+
+/** Grams and kcal for a food + quantity before saving (pass a debounced value). */
+export function useFoodEstimate(body: { name: string; quantity: number | null; unit: string | null }) {
+  const { user } = useAuth();
+  const name = body.name.trim();
+  return useQuery({
+    queryKey: ['food-estimate', name.toLowerCase(), body.quantity, body.unit],
+    enabled: !!user && name.length >= 2,
+    staleTime: 5 * 60_000,
+    queryFn: async () => unwrap(await api.POST('/food/estimate', { body: { ...body, name } })),
   });
 }
 
@@ -302,6 +338,12 @@ export function useEditFact() {
 export function useDeleteFact() {
   const inv = useInvalidate();
   return useMutation({ mutationFn: async (id: string) => unwrap(await api.DELETE('/facts/{id}', { params: { path: { id } } })), onSuccess: () => inv(keys.facts) });
+}
+
+/** Overall progress from all logs: today so far, this week vs last week, each habit, the last 30 days. */
+export function useOverview() {
+  const { user } = useAuth();
+  return useQuery({ queryKey: keys.overview, enabled: !!user, queryFn: async () => unwrap(await api.GET('/overview')) });
 }
 
 export function useInsights() {

@@ -1,11 +1,12 @@
 // Insights: trends computed in code from her logs, plus patterns ("you might notice…", only with 3+
-// completed cycles) and active delay / red-flag / weekly cards.
+// completed cycles) and active delay / red-flag / weekly cards. /overview is the overall progress dashboard on Me.
 import { createRoute } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
-import { IdParam, InsightsSchema, OkSchema } from '../contract.ts';
+import { IdParam, InsightsSchema, OkSchema, OverviewSchema } from '../contract.ts';
 import { cycleLengths } from '../core/cycle.ts';
-import { addDays, localMidnight } from '../core/dates.ts';
+import { addDays, localMidnight, todayIn } from '../core/dates.ts';
+import { overview } from '../core/discipline.ts';
 import { findPatterns } from '../core/patterns.ts';
 import { balanceScore, type ScoreItem } from '../core/score.ts';
 import { jsonRes, profileOf, todayFor, toInsight, type App, type AppDeps } from './shared.ts';
@@ -78,6 +79,61 @@ export function registerInsights(app: App, { services: s }: AppDeps) {
         },
         200,
       );
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: 'get',
+      path: '/overview',
+      tags: ['insights'],
+      security: sec,
+      responses: { 200: jsonRes(OverviewSchema, 'Overall progress from all logs: today so far, this week vs last week, each habit and the last 30 days') },
+    }),
+    async (c) => {
+      const u = s.store.user(c.get('uid'));
+      const p = await profileOf(u);
+      const today = todayFor(s, p);
+      const from = addDays(today, -29);
+      const [foods, life, moods, meds, intake] = await Promise.all([
+        u.food_logs.find({ day: { $gte: from } }),
+        u.lifestyle_logs.find({ day: { $gte: from } }),
+        u.mood_logs.find({ day: { $gte: from } }),
+        u.medications.find({}),
+        u.med_intake.find({ taken: true, scheduled_for: { $gte: localMidnight(from, p.timezone) } }),
+      ]);
+      const meals = new Map<string, Set<string>>();
+      for (const f of foods) meals.set(f.day, (meals.get(f.day) ?? new Set()).add(f.meal));
+      const lifeBy = new Map(life.map((l) => [l.day, l]));
+      const moodDays = new Set(moods.filter((m) => m.mood != null).map((m) => m.day));
+      const taken = new Map<string, number>();
+      for (const i of intake) {
+        const day = todayIn(p.timezone, new Date(i.scheduled_for));
+        taken.set(day, (taken.get(day) ?? 0) + 1);
+      }
+      // Doses due on a day: medicines started by then (start date, else the day added) and not stopped before it.
+      const dosesDue = (day: string) =>
+        meds.reduce((n, m) => {
+          const start = m.start_date ?? todayIn(p.timezone, new Date(m.created_at));
+          const stopped = m.end_date ? m.end_date < day : !m.active;
+          return start <= day && !stopped ? n + m.schedule_times.length : n;
+        }, 0);
+      const facts = [];
+      for (let d = from; d <= today; d = addDays(d, 1)) {
+        const l = lifeBy.get(d);
+        const due = dosesDue(d);
+        facts.push({
+          day: d,
+          meals: meals.get(d)?.size ?? 0,
+          water_ml: l?.water_ml ?? 0,
+          steps: l?.steps ?? 0,
+          doses_due: due,
+          doses_taken: Math.min(due, taken.get(d) ?? 0),
+          mood_logged: moodDays.has(d),
+          sleep_logged: l?.sleep_hours != null,
+        });
+      }
+      return c.json(overview(facts, today), 200);
     },
   );
 
