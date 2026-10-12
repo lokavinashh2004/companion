@@ -148,6 +148,15 @@ export interface LifestyleDoc extends Owned {
   travel: boolean | null;
 }
 
+export interface WalkDoc extends Owned {
+  /** Browser-made id so a retried save doesn't store the walk twice. */
+  client_id: string;
+  day: string; // local date the walk started
+  started_at: string; // ISO
+  duration_s: number;
+  steps: number;
+}
+
 export interface WeightDoc extends Owned {
   day: string;
   weight_kg: number;

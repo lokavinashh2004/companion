@@ -1,10 +1,15 @@
-// Walk session card: Start → live steps and time → Stop → summary with steps, duration, calories and a cheer.
+// Walk session card: Start → live steps and time → Stop → saved summary with steps, duration, calories and a cheer.
+// Before a walk it shows today's steps towards the goal and links to the walking dashboard.
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 
 import { Button, Card, Muted, Notice } from '@/components/ui';
+import { StepProgress } from '@/components/walks/StepProgress';
+import w from '@/components/walks/walks.module.css';
 import type { Today } from '@/lib/api';
-import { clock, DEFAULT_WEIGHT_KG, useWalk, walkCheerKey, walkKcal } from '@/lib/walk';
+import { useSaveWalk, useWalks } from '@/lib/queries';
+import { clock, DEFAULT_WEIGHT_KG, useWalk, walkCheerKey, walkKcal, type WalkSummary } from '@/lib/walk';
 import s from './today.module.css';
 
 function useNow(active: boolean) {
@@ -20,9 +25,29 @@ function useNow(active: boolean) {
 export function WalkCard({ today }: { today: Today }) {
   const { t } = useTranslation();
   const { status, startedAt, steps, summary, start, stop, reset } = useWalk();
+  const walks = useWalks(7);
+  const save = useSaveWalk();
   const walking = status === 'walking';
   const now = useNow(walking);
   const showKcal = today.calorie_display === 'show';
+  const weightKg = walks.data?.weight_kg ?? DEFAULT_WEIGHT_KG;
+  const todaySteps = walks.data?.days.find((d) => d.day === walks.data?.today)?.steps;
+
+  const persist = (w: WalkSummary) =>
+    save.mutate({ client_id: w.clientId, started_at: new Date(w.startedAt).toISOString(), duration_s: Math.round(w.durationMs / 1000), steps: w.steps });
+  const onStop = () => {
+    const w = stop();
+    if (w) persist(w);
+  };
+  const onStart = () => {
+    save.reset();
+    void start();
+  };
+  const historyLink = (
+    <Link className={w.link} to="/walks">
+      {t('walk.history')} ›
+    </Link>
+  );
 
   return (
     <Card title={t('walk.title')} icon="🚶‍♀️" tint="peach">
@@ -37,7 +62,7 @@ export function WalkCard({ today }: { today: Today }) {
             </p>
           </div>
           <Muted small>{t('walk.keepOpen')}</Muted>
-          <Button kind="secondary" onClick={stop}>
+          <Button kind="secondary" onClick={onStop}>
             ⏹ {t('walk.stop')}
           </Button>
         </>
@@ -56,24 +81,38 @@ export function WalkCard({ today }: { today: Today }) {
             {showKcal ? (
               <div>
                 <dt>{t('walk.calories')}</dt>
-                <dd>{t('walk.kcal', { value: walkKcal(summary.steps) })}</dd>
+                <dd>{t('walk.kcal', { value: walkKcal(summary.steps, weightKg) })}</dd>
               </div>
             ) : null}
           </dl>
-          {showKcal ? <Muted small>{t('walk.kcalNote', { kg: DEFAULT_WEIGHT_KG })}</Muted> : null}
-          <Button onClick={() => void start()}>▶ {t('walk.again')}</Button>
-          <Button kind="ghost" small onClick={reset}>
+          {showKcal ? <Muted small>{t('walk.kcalNote', { kg: weightKg })}</Muted> : null}
+          {save.isPending ? <Muted small>{t('walk.saving')}</Muted> : null}
+          {save.isSuccess ? <Muted small>{t('walk.saved')}</Muted> : null}
+          {save.isError ? (
+            <Notice tone="warn">
+              {t('walk.saveFailed')}{' '}
+              <Button kind="ghost" small onClick={() => persist(summary)}>
+                {t('common.retry')}
+              </Button>
+            </Notice>
+          ) : null}
+          <Button onClick={onStart} disabled={save.isPending}>
+            ▶ {t('walk.again')}
+          </Button>
+          <Button kind="ghost" small onClick={reset} disabled={save.isPending}>
             {t('common.close')}
           </Button>
+          {historyLink}
         </>
       ) : (
         <>
           {status === 'denied' ? <Notice tone="warn">{t('walk.denied')}</Notice> : null}
           {status === 'unsupported' ? <Notice tone="warn">{t('walk.unsupported')}</Notice> : null}
-          <Muted small>{t('walk.intro')}</Muted>
-          <Button busy={status === 'starting'} onClick={() => void start()}>
+          {walks.data && todaySteps != null ? <StepProgress steps={todaySteps} goal={walks.data.goal} /> : <Muted small>{t('walk.intro')}</Muted>}
+          <Button busy={status === 'starting'} onClick={onStart}>
             ▶ {t('walk.start')}
           </Button>
+          {historyLink}
         </>
       )}
     </Card>

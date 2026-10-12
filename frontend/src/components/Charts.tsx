@@ -54,27 +54,42 @@ export function LineChart({ data, title, min, max }: { data: Point[]; title: str
   );
 }
 
-export function BarChart({ data, title }: { data: Point[]; title: string }) {
+/** With many bars, values move to the hidden table and only some labels show. `goal` draws a dashed line. */
+export function BarChart({ data, title, goal, color = 'var(--period)' }: { data: Point[]; title: string; goal?: number; color?: string }) {
   if (data.length === 0) return null;
-  const { y } = scale([0, ...data.map((d) => d.value)], 0);
+  const { y } = scale([0, goal ?? 0, ...data.map((d) => d.value)], 0);
   const slot = (W - PAD.left - PAD.right) / data.length;
   const bw = Math.min(34, slot * 0.6);
+  const dense = data.length > 10;
+  const labelEvery = dense ? Math.ceil(data.length / 6) : 1;
   return (
     <figure style={{ margin: 0 }}>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={title} style={{ maxHeight: 220 }}>
         <line x1={PAD.left} x2={W - PAD.right} y1={H - PAD.bottom} y2={H - PAD.bottom} stroke="var(--border)" />
+        {goal ? (
+          <g>
+            <line x1={PAD.left} x2={W - PAD.right} y1={y(goal)} y2={y(goal)} stroke="var(--text-muted)" strokeDasharray="4 4" />
+            <text x={PAD.left - 4} y={y(goal) + 3} fontSize="9.5" textAnchor="end" fill="var(--text-muted)">
+              {goal >= 1000 ? `${goal / 1000}k` : goal}
+            </text>
+          </g>
+        ) : null}
         {data.map((d, i) => {
           const cx = PAD.left + slot * i + slot / 2;
           const top = y(d.value);
           return (
             <g key={i}>
-              <rect x={cx - bw / 2} y={top} width={bw} height={H - PAD.bottom - top} rx="5" fill="var(--period)" />
-              <text x={cx} y={top - 4} fontSize="10" textAnchor="middle" fill="var(--text)">
-                {d.value}
-              </text>
-              <text x={cx} y={H - 8} fontSize="9.5" textAnchor="middle" fill="var(--text-muted)">
-                {d.label}
-              </text>
+              <rect x={cx - bw / 2} y={top} width={bw} height={H - PAD.bottom - top} rx={dense ? 2 : 5} fill={color} />
+              {dense ? null : (
+                <text x={cx} y={top - 4} fontSize="10" textAnchor="middle" fill="var(--text)">
+                  {d.value}
+                </text>
+              )}
+              {i % labelEvery === 0 || i === data.length - 1 ? (
+                <text x={cx} y={H - 8} fontSize="9.5" textAnchor="middle" fill="var(--text-muted)">
+                  {d.label}
+                </text>
+              ) : null}
             </g>
           );
         })}

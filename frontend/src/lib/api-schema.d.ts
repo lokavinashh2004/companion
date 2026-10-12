@@ -583,6 +583,103 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/walks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    days?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Daily walking totals for the last `days` days (default 30), the goal streak and recent walks */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Walks"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["WalkInput"];
+                };
+            };
+            responses: {
+                /** @description Saved (saving the same client_id again returns the first save) */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Walk"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/walks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Deleted (its steps are taken off that day) */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Ok"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/cycle": {
         parameters: {
             query?: never;
@@ -1687,6 +1784,43 @@ export interface components {
         Weight: {
             day: string;
             weight_kg: number;
+        };
+        Walk: {
+            id: string;
+            day: string;
+            started_at: string;
+            duration_s: number;
+            steps: number;
+        };
+        WalkInput: {
+            /** Format: uuid */
+            client_id: string;
+            /** Format: date-time */
+            started_at: string;
+            duration_s: number;
+            steps: number;
+        };
+        Walks: {
+            today: string;
+            goal: number;
+            weight_kg: number | null;
+            days: components["schemas"]["WalkDay"][];
+            streak: number;
+            totals: {
+                steps: number;
+                duration_s: number;
+                sessions: number;
+                active_days: number;
+                goal_days: number;
+            };
+            best: components["schemas"]["WalkDay"] | null;
+            recent: components["schemas"]["Walk"][];
+        };
+        WalkDay: {
+            day: string;
+            steps: number;
+            duration_s: number;
+            sessions: number;
         };
         Cycle: {
             today: string;

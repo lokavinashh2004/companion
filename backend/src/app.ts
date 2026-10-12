@@ -18,6 +18,7 @@ import { registerPush } from './routes/push.ts';
 import { registerRecords } from './routes/records.ts';
 import { ensureUser, jsonRes, type AppDeps, type AppEnv } from './routes/shared.ts';
 import { registerToday } from './routes/today.ts';
+import { registerWalks } from './routes/walks.ts';
 
 export const VERSION = '0.2.0';
 export type { AppDeps, AppEnv };
@@ -88,6 +89,7 @@ export function createApp(deps: AppDeps) {
   registerChat(app, deps);
   registerFood(app, deps);
   registerToday(app, deps);
+  registerWalks(app, deps);
   registerCycle(app, deps);
   registerRecords(app, deps);
   registerInsights(app, deps);

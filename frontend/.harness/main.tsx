@@ -13,6 +13,7 @@ import { Cycle } from '@/routes/Cycle';
 import { Layout } from '@/routes/Layout';
 import { Me } from '@/routes/Me';
 import { Today } from '@/routes/Today';
+import { Walks } from '@/routes/Walks';
 import { Insights } from '@/routes/Insights';
 import { Admin } from '@/routes/Admin';
 
@@ -55,6 +56,20 @@ const ROUTES: Record<string, unknown> = {
       { id: 'm3', role: 'user', content: 'I think my period started', created_at: '2026-10-08T08:42:00.000Z', status: 'done', meta: {} },
     ],
   },
+  'GET /walks': (url: URL) => {
+    const steps = [4200, 0, 6100, 5300, 2800, 7400, 5050, 0, 3900, 6600, 5200, 1800, 5600, 3100, 0, 4800, 6900, 5400, 2200, 0, 5800, 6300, 4100, 0, 5200, 5900, 6100, 3500, 5100, 2400];
+    const days = steps.slice(-Number(url.searchParams.get('days') ?? 30)).map((n, i) => ({ day: new Date(Date.UTC(2026, 9, 8 - (Math.min(30, Number(url.searchParams.get('days') ?? 30)) - 1) + i)).toISOString().slice(0, 10), steps: n, duration_s: Math.round(n * 0.55), sessions: n ? 1 : 0 }));
+    const sum = (k: 'steps' | 'duration_s' | 'sessions', xs = days) => xs.reduce((a, d) => a + d[k], 0);
+    return {
+      today: DAY, goal: 5000, weight_kg: null, days, streak: 0,
+      totals: { steps: sum('steps'), duration_s: sum('duration_s'), sessions: sum('sessions'), active_days: days.filter((d) => d.sessions).length, goal_days: days.filter((d) => d.steps >= 5000).length },
+      best: days.reduce((b, d) => (d.steps > b.steps ? d : b)), recent: [
+        { id: 'w3', day: DAY, started_at: '2026-10-08T01:30:00Z', duration_s: 1320, steps: 2400 },
+        { id: 'w2', day: '2026-10-07', started_at: '2026-10-07T12:10:00Z', duration_s: 2805, steps: 5100 },
+        { id: 'w1', day: '2026-10-06', started_at: '2026-10-06T01:00:00Z', duration_s: 1925, steps: 3500 },
+      ],
+    };
+  },
   'GET /cycle': {
     today: DAY,
     status: { kind: 'cycle', cycle_day: 29, period_day: null, days_late: null, phase: 'luteal' },
@@ -68,7 +83,8 @@ globalThis.fetch = (async (input: Request | string, init?: RequestInit) => {
   const req = typeof input === 'string' ? new Request(input, init) : input;
   const url = new URL(req.url);
   if (url.port !== '8787') return realFetch(input, init);
-  const out = ROUTES[req.method + ' ' + url.pathname];
+  const route = ROUTES[req.method + ' ' + url.pathname];
+  const out = typeof route === 'function' ? (route as (u: URL) => unknown)(url) : route;
   return new Response(JSON.stringify(out ?? { error: 'not_found' }), { status: out ? 200 : 404, headers: { 'Content-Type': 'application/json' } });
 }) as typeof fetch;
 
@@ -79,6 +95,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
+      { path: '/walks', element: <Walks /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },
       { path: '/me', element: <Me /> },

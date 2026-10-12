@@ -1,7 +1,9 @@
-// Walk session: steps counted from 0 at Start, live while walking, a summary after Stop. Kept in memory only.
+// Walk session: steps counted from 0 at Start, live while walking, a summary after Stop. The session lives in
+// memory; the Walk card saves the finished walk to the server.
 // The screen is kept awake during a walk because browsers pause motion readings when the page is hidden.
 import { create } from 'zustand';
 
+import { uuid } from './format';
 import { requestMotionAccess, startStepSensor } from './steps';
 
 export const DEFAULT_WEIGHT_KG = 70;
@@ -27,7 +29,8 @@ export function clock(ms: number): string {
 }
 
 export type WalkStatus = 'idle' | 'starting' | 'walking' | 'done' | 'denied' | 'unsupported';
-export type WalkSummary = { steps: number; durationMs: number };
+/** clientId makes a retried save idempotent on the server. */
+export type WalkSummary = { clientId: string; startedAt: number; steps: number; durationMs: number };
 
 type WalkState = {
   status: WalkStatus;
@@ -35,7 +38,8 @@ type WalkState = {
   steps: number;
   summary: WalkSummary | null;
   start: () => Promise<void>;
-  stop: () => void;
+  /** Ends the walk and returns its summary (null when no walk was running). */
+  stop: () => WalkSummary | null;
   reset: () => void;
 };
 
@@ -93,9 +97,11 @@ export const useWalk = create<WalkState>((set, get) => ({
   },
   stop: () => {
     const { status, startedAt, steps } = get();
-    if (status !== 'walking') return;
+    if (status !== 'walking' || startedAt == null) return null;
     teardown();
-    set({ status: 'done', startedAt: null, summary: { steps, durationMs: Date.now() - (startedAt ?? Date.now()) } });
+    const summary = { clientId: uuid(), startedAt, steps, durationMs: Date.now() - startedAt };
+    set({ status: 'done', startedAt: null, summary });
+    return summary;
   },
   reset: () => {
     teardown();

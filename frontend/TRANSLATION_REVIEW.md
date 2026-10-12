@@ -327,6 +327,7 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `me.delete` | Delete everything | எல்லாத்தையும் நீக்கு |
 | [ ] | `me.version` | Version {{version}} | பதிப்பு {{version}} |
 | [ ] | `me.signedInAs` | Signed in as {{email}} | {{email}} ஆக உள்நுழைந்துள்ளாய் |
+| [ ] | `me.walks` | Walking | நடை |
 | [ ] | `remembers.title` | What {{name}} remembers | {{name}} நினைவில் வைத்திருப்பவை |
 | [ ] | `remembers.hint` | Short notes your companion keeps so it can follow up like a friend. Edit or delete anything. | ஒரு நண்பர் மாதிரி விசாரிக்க உன் துணை வைத்திருக்கும் சின்ன குறிப்புகள். எதை வேணும்னாலும் திருத்தலாம் அல்லது நீக்கலாம். |
 | [ ] | `remembers.empty` | Nothing yet. As you chat, little things worth remembering will show up here. | இன்னும் எதுவும் இல்லை. நீ பேசப் பேச, நினைவில் வைக்க வேண்டிய சின்ன விஷயங்கள் இங்கே வரும். |
@@ -659,6 +660,43 @@ Tick each line once it reads right. Edit `frontend/locales/ta.json` (website) or
 | [ ] | `walk.cheerAmazing` | Amazing effort! You crushed it 🔥 | அசத்திட்டீங்க! சூப்பர் முயற்சி 🔥 |
 | [ ] | `walk.denied` | Companion needs motion access to count steps. You can allow it in your browser settings and try again. | அடிகளை எண்ண Companion-க்கு அசைவு அனுமதி வேண்டும். உங்கள் பிரவுசர் அமைப்புகளில் அனுமதித்து மீண்டும் முயற்சி செய்யுங்கள். |
 | [ ] | `walk.unsupported` | This device doesn't share motion data, so steps can't be counted here. Try on your phone. | இந்தச் சாதனம் அசைவுத் தரவைத் தருவதில்லை, அதனால் இங்கே அடிகளை எண்ண முடியாது. உங்கள் போனில் முயற்சி செய்யுங்கள். |
+| [ ] | `walk.history` | See walking history | நடை வரலாற்றைப் பாருங்கள் |
+| [ ] | `walk.saving` | Saving your walk… | உங்கள் நடை சேமிக்கப்படுகிறது… |
+| [ ] | `walk.saved` | Saved to your walking history ✓ | உங்கள் நடை வரலாற்றில் சேமிக்கப்பட்டது ✓ |
+| [ ] | `walk.saveFailed` | Couldn't save this walk. | இந்த நடையைச் சேமிக்க முடியவில்லை. |
+| [ ] | `walks.title` | Walking | நடை |
+| [ ] | `walks.subtitle` | Your steps, day by day. | நாள்தோறும் உங்கள் அடிகள். |
+| [ ] | `walks.backToday` | Today | இன்று |
+| [ ] | `walks.today` | Today | இன்று |
+| [ ] | `walks.ofGoal` | of {{goal}} steps | / {{goal}} அடிகள் |
+| [ ] | `walks.todayProgress` | Today's steps towards your goal | உங்கள் இலக்கை நோக்கி இன்றைய அடிகள் |
+| [ ] | `walks.goalReached` | Goal reached today 🎉 | இன்றைய இலக்கை அடைந்துவிட்டீர்கள் 🎉 |
+| [ ] | `walks.toGo_one` | {{n}} step to go | இன்னும் {{n}} அடி |
+| [ ] | `walks.toGo_other` | {{n}} steps to go | இன்னும் {{n}} அடிகள் |
+| [ ] | `walks.streak_one` | {{count}}-day streak | {{count}} நாள் தொடர்ச்சி |
+| [ ] | `walks.streak_other` | {{count}}-day streak | {{count}} நாள் தொடர்ச்சி |
+| [ ] | `walks.period` | Your progress | உங்கள் முன்னேற்றம் |
+| [ ] | `walks.range` | Time range | கால அளவு |
+| [ ] | `walks.last7` | 7 days | 7 நாட்கள் |
+| [ ] | `walks.last30` | 30 days | 30 நாட்கள் |
+| [ ] | `walks.totalSteps` | Total steps | மொத்த அடிகள் |
+| [ ] | `walks.dailyAverage` | Daily average | தினசரி சராசரி |
+| [ ] | `walks.goalDays` | Goal days | இலக்கு நாட்கள் |
+| [ ] | `walks.daysOf` | {{n}} of {{total}} | {{total}}-இல் {{n}} |
+| [ ] | `walks.activeTime` | Time walking | நடந்த நேரம் |
+| [ ] | `walks.walksCount` | Walks | நடைகள் |
+| [ ] | `walks.bestDay` | Best day | சிறந்த நாள் |
+| [ ] | `walks.bestOn` | Best day: {{date}} | சிறந்த நாள்: {{date}} |
+| [ ] | `walks.dailySteps` | Daily steps | தினசரி அடிகள் |
+| [ ] | `walks.goalLine` | Dashed line: daily goal of {{goal}} steps. | புள்ளிக்கோடு: தினசரி இலக்கு {{goal}} அடிகள். |
+| [ ] | `walks.empty` | No walks in this period yet. Start one from the Walk card on Today. | இந்தக் காலத்தில் இன்னும் நடை இல்லை. இன்று பக்கத்தில் உள்ள நடை கார்டில் தொடங்குங்கள். |
+| [ ] | `walks.recent` | Recent walks | சமீபத்திய நடைகள் |
+| [ ] | `walks.noWalks` | No walks yet. | இன்னும் நடை இல்லை. |
+| [ ] | `walks.stepsCount` | {{n}} steps | {{n}} அடிகள் |
+| [ ] | `walks.walkMeta` | {{date}} · {{time}} · {{duration}} | {{date}} · {{time}} · {{duration}} |
+| [ ] | `walks.removeLabel` | Remove the walk on {{date}} at {{time}} | {{date}} அன்று {{time}} நடையை நீக்கவும் |
+| [ ] | `walks.removeTitle` | Remove this walk? | இந்த நடையை நீக்கவா? |
+| [ ] | `walks.removeBody` | Its steps will be taken off that day's total. | இதன் அடிகள் அந்த நாளின் மொத்தத்திலிருந்து கழிக்கப்படும். |
 
 ## Server messages (fallbacks, pushes, delay check-in)
 

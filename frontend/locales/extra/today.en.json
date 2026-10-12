@@ -58,6 +58,10 @@
     "cheerGreat": "Great walk! Keep it up 💪",
     "cheerAmazing": "Amazing effort! You crushed it 🔥",
     "denied": "Companion needs motion access to count steps. You can allow it in your browser settings and try again.",
-    "unsupported": "This device doesn't share motion data, so steps can't be counted here. Try on your phone."
+    "unsupported": "This device doesn't share motion data, so steps can't be counted here. Try on your phone.",
+    "history": "See walking history",
+    "saving": "Saving your walk…",
+    "saved": "Saved to your walking history ✓",
+    "saveFailed": "Couldn't save this walk."
   }
 }

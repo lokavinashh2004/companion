@@ -32,6 +32,7 @@ import { RequireAuth } from './routes/RequireAuth';
 import { Settings } from './routes/Settings';
 import { SignIn } from './routes/SignIn';
 import { Today } from './routes/Today';
+import { Walks } from './routes/Walks';
 
 // Cache lives in memory only (no health data persisted in the browser).
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1 } } });
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Chat /> },
       { path: '/today', element: <Today /> },
+      { path: '/walks', element: <Walks /> },
       { path: '/cycle', element: <Cycle /> },
       { path: '/insights', element: <Insights /> },
       { path: '/me', element: <Me /> },

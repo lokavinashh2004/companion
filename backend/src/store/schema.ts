@@ -19,6 +19,7 @@ export const USER_COLLECTIONS = {
   mood_logs: { unique: [], indexes: [['user_id', 'day']] },
   lifestyle_logs: { unique: [['user_id', 'day']] },
   weight_logs: { unique: [['user_id', 'day']] },
+  walks: { unique: [['user_id', 'client_id']], indexes: [['user_id', 'day']] },
   medications: { unique: [], indexes: [['user_id']] },
   med_intake: { unique: [['medication_id', 'scheduled_for']], indexes: [['user_id', 'scheduled_for']] },
   lab_results: { unique: [], indexes: [['user_id', 'test_date']] },
@@ -53,6 +54,7 @@ export interface UserDocs {
   mood_logs: T.MoodDoc;
   lifestyle_logs: T.LifestyleDoc;
   weight_logs: T.WeightDoc;
+  walks: T.WalkDoc;
   medications: T.MedicationDoc;
   med_intake: T.MedIntakeDoc;
   lab_results: T.LabDoc;

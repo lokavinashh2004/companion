@@ -305,6 +305,37 @@ export const QuickLogSchema = z
   .openapi('QuickLog');
 export const WeightSchema = z.object({ day: date, weight_kg: z.number().min(20).max(300) }).openapi('Weight');
 
+// ---------------------------------------------------------------- walks
+
+export const WalkInputSchema = z
+  .object({
+    client_id: z.string().uuid(),
+    started_at: z.string().datetime({ offset: true }),
+    duration_s: z.number().int().min(0).max(12 * 3600),
+    steps: z.number().int().min(0).max(100_000),
+  })
+  .openapi('WalkInput');
+export const WalkSchema = z
+  .object({ id: z.string(), day: date, started_at: z.string(), duration_s: z.number().int(), steps: z.number().int() })
+  .openapi('Walk');
+export const WalkDaySchema = z
+  .object({ day: date, steps: z.number().int(), duration_s: z.number().int(), sessions: z.number().int() })
+  .openapi('WalkDay');
+export const WalksQuery = z.object({ days: z.coerce.number().int().min(7).max(90).optional() });
+export const WalksSchema = z
+  .object({
+    today: date,
+    goal: z.number().int(),
+    /** Latest logged weight, for the calorie estimate (null when none is logged). */
+    weight_kg: z.number().nullable(),
+    days: z.array(WalkDaySchema),
+    streak: z.number().int(),
+    totals: z.object({ steps: z.number().int(), duration_s: z.number().int(), sessions: z.number().int(), active_days: z.number().int(), goal_days: z.number().int() }),
+    best: WalkDaySchema.nullable(),
+    recent: z.array(WalkSchema),
+  })
+  .openapi('Walks');
+
 // ---------------------------------------------------------------- medicines, labs, facts
 
 export const MedicationsSchema = z.object({ medications: z.array(MedicationSchema) }).openapi('Medications');

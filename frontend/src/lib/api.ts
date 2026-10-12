@@ -31,6 +31,9 @@ export type LabInput = S['LabInput'];
 export type Fact = S['Fact'];
 export type Onboarding = S['Onboarding'];
 export type QuickLog = S['QuickLog'];
+export type Walk = S['Walk'];
+export type WalkInput = S['WalkInput'];
+export type Walks = S['Walks'];
 export type Meal = FoodLog['meal'];
 
 export const API_URL = ((import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8787').replace(/\/$/, '');

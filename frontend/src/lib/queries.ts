@@ -14,6 +14,7 @@ import {
   type ProfilePatch,
   type QuickLog,
   type SendResult,
+  type WalkInput,
 } from './api';
 import { useAuth } from './auth';
 
@@ -26,6 +27,7 @@ export const keys = {
   labs: ['labs'] as const,
   facts: ['facts'] as const,
   insights: ['insights'] as const,
+  walks: (days: number) => ['walks', days] as const,
 };
 
 /** After logging anything, these views may change. */
@@ -169,6 +171,27 @@ export function useSaveWeight() {
   return useMutation({
     mutationFn: async (body: { day: string; weight_kg: number }) => unwrap(await api.POST('/today/weight', { body })),
     onSuccess: () => inv(['today'], keys.insights),
+  });
+}
+
+// ---------------------------------------------------------------- walks
+
+export function useWalks(days = 30) {
+  const { user } = useAuth();
+  return useQuery({ queryKey: keys.walks(days), enabled: !!user, queryFn: async () => unwrap(await api.GET('/walks', { params: { query: { days } } })) });
+}
+
+/** Saving the same client_id twice is safe (the server keeps the first). */
+export function useSaveWalk() {
+  const inv = useInvalidate();
+  return useMutation({ mutationFn: async (body: WalkInput) => unwrap(await api.POST('/walks', { body })), onSuccess: () => inv(['walks'], ['today'], keys.insights) });
+}
+
+export function useDeleteWalk() {
+  const inv = useInvalidate();
+  return useMutation({
+    mutationFn: async (id: string) => unwrap(await api.DELETE('/walks/{id}', { params: { path: { id } } })),
+    onSuccess: () => inv(['walks'], ['today'], keys.insights),
   });
 }
 

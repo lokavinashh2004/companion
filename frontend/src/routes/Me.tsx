@@ -28,6 +28,7 @@ export function Me() {
         <nav className={s.linkList} aria-label={t('me.title')}>
           <LinkRow to="/me/remembers" icon="💭" label={t('me.remembers', { name })} />
           <LinkRow to="/insights" icon="📈" label={t('me.insights')} />
+          <LinkRow to="/walks" icon="👟" label={t('me.walks')} />
           <LinkRow to="/me/medications" icon="💊" label={t('me.medications')} />
           <LinkRow to="/me/labs" icon="🧪" label={t('me.labs')} />
           <LinkRow to="/me/settings" icon="⚙️" label={t('me.settings')} />
